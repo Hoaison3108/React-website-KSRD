@@ -123,9 +123,9 @@ export default function RecruitmentDetail() {
       <Breadcrumb customLastSegment={job.title} />
 
       <div className="container-custom py-12">
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid lg:grid-cols-12 gap-8">
           {/* Main Content */}
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-7 xl:col-span-8">
             <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl overflow-hidden border border-gray-100 dark:border-slate-700">
               {/* Header */}
               <div className="p-8 border-b border-gray-100 dark:border-slate-700 bg-gradient-to-r from-blue-50 to-white dark:from-slate-800 dark:to-slate-800">
@@ -220,9 +220,9 @@ export default function RecruitmentDetail() {
                       <User size={20} className="text-secondary" />
                       <span className="font-bold">{job.contactName}</span>
                     </div>
-                    <div className="flex items-center gap-3 text-gray-700 dark:text-gray-300">
-                      <Mail size={20} className="text-secondary" />
-                      <a href={`mailto:${job.contactEmail}`} className="hover:text-primary font-medium">{job.contactEmail}</a>
+                    <div className="flex items-center gap-3 text-gray-700 dark:text-gray-300 min-w-0">
+                      <Mail size={20} className="text-secondary shrink-0" />
+                      <a href={`mailto:${job.contactEmail}`} className="hover:text-primary font-medium text-sm lg:text-base lg:whitespace-nowrap transition-colors truncate">{job.contactEmail}</a>
                     </div>
                     <div className="flex items-center gap-3 text-gray-700 dark:text-gray-300">
                       <Phone size={20} className="text-secondary" />
@@ -243,7 +243,7 @@ export default function RecruitmentDetail() {
           </div>
 
           {/* Sidebar */}
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-5 xl:col-span-4">
             <div className="sticky top-24 space-y-6">
               {/* Summary Card */}
               <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-lg border border-gray-100 dark:border-slate-700">

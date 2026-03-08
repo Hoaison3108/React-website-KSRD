@@ -1,11 +1,17 @@
 import React, { useState } from 'react';
-import { Phone, Mail, MapPin, Send, Navigation, CheckCircle2 } from 'lucide-react';
+import { Phone, Mail, MapPin, Send, Navigation } from 'lucide-react';
 import { useSiteSettings } from '../hooks/useSiteSettings';
 import { saveContactMessage } from '../utils/firestoreUtils';
+import Toast from './Toast';
 
 export default function Contact() {
   const { settings } = useSiteSettings();
-  const [formStatus, setFormStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  const [formStatus, setFormStatus] = useState<'idle' | 'submitting'>('idle');
+  const [toast, setToast] = useState<{ show: boolean; message: string; type: 'success' | 'error' }>({
+    show: false,
+    message: '',
+    type: 'success'
+  });
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -28,13 +34,23 @@ export default function Contact() {
         ...formData,
         email: '' // Home page form doesn't have email field in current UI, adding empty string
       });
-      setFormStatus('success');
+      
+      setToast({
+        show: true,
+        message: 'Cảm ơn bạn! Yêu cầu của bạn đã được gửi thành công.',
+        type: 'success'
+      });
+      
       setFormData({ name: '', phone: '', service: '', message: '' });
-      // Reset after 5 seconds
-      setTimeout(() => setFormStatus('idle'), 5000);
+      setFormStatus('idle');
     } catch (error) {
       console.error("Error submitting form:", error);
-      setFormStatus('error');
+      setToast({
+        show: true,
+        message: 'Có lỗi xảy ra khi gửi yêu cầu. Vui lòng thử lại sau.',
+        type: 'error'
+      });
+      setFormStatus('idle');
     }
   };
 
@@ -62,6 +78,12 @@ export default function Contact() {
         </div>
 
         <div className="grid lg:grid-cols-12 gap-8 lg:gap-12">
+          <Toast 
+            show={toast.show}
+            message={toast.message}
+            type={toast.type}
+            onClose={() => setToast(prev => ({ ...prev, show: false }))}
+          />
           {/* Contact Info & Map */}
           <div className="lg:col-span-5 flex flex-col gap-8">
             {/* Info Cards */}
@@ -139,24 +161,8 @@ export default function Contact() {
                 Điền thông tin vào biểu mẫu bên dưới, chúng tôi sẽ liên hệ lại trong thời gian sớm nhất.
               </p>
               
-              {formStatus === 'success' ? (
-                <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl p-8 text-center animate-fade-in">
-                  <div className="w-16 h-16 bg-green-100 dark:bg-green-800 rounded-full flex items-center justify-center mx-auto mb-4 text-green-600 dark:text-green-300">
-                    <CheckCircle2 size={32} />
-                  </div>
-                  <h4 className="text-xl font-bold text-green-800 dark:text-green-300 mb-2">Gửi thành công!</h4>
-                  <p className="text-green-700 dark:text-green-400">
-                    Cảm ơn bạn đã liên hệ. Chúng tôi sẽ phản hồi sớm nhất có thể.
-                  </p>
-                </div>
-              ) : (
-                <form className="space-y-5" onSubmit={handleSubmit}>
-                  {formStatus === 'error' && (
-                    <div className="p-4 bg-red-50 text-red-600 rounded-lg text-sm mb-4">
-                      Có lỗi xảy ra khi gửi tin nhắn. Vui lòng thử lại sau.
-                    </div>
-                  )}
-                  <div className="grid sm:grid-cols-2 gap-5">
+              <form className="space-y-5" onSubmit={handleSubmit}>
+                <div className="grid sm:grid-cols-2 gap-5">
                     <div className="space-y-2">
                       <label className="text-xs font-bold text-gray-700 dark:text-gray-300 uppercase tracking-wider">Họ và tên <span className="text-red-500">*</span></label>
                       <input 
@@ -235,7 +241,6 @@ export default function Contact() {
                     )}
                   </button>
                 </form>
-              )}
             </div>
           </div>
         </div>

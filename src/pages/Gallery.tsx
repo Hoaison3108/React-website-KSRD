@@ -31,8 +31,8 @@ const galleryItems = [
     id: 4,
     type: 'image',
     category: 'Dự án',
-    src: 'https://images.unsplash.com/photo-1590082766668-3f8215967d7e?q=80&w=1000&auto=format&fit=crop',
-    title: 'Thi công đường cao tốc Bắc Nam'
+    src: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2022/12/5/1124197/1.JPG',
+    title: 'Thi công cao tốc Vĩnh Hảo - Phan Thiết'
   },
   {
     id: 5,
@@ -52,8 +52,8 @@ const galleryItems = [
     id: 7,
     type: 'image',
     category: 'Dự án',
-    src: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=1000&auto=format&fit=crop',
-    title: 'Cung cấp vật liệu cho Resort Mũi Né'
+    src: 'https://images.unsplash.com/photo-1582719508461-905c673771fd?q=80&w=1000&auto=format&fit=crop',
+    title: 'Cung cấp vật liệu cho Centara Mirage Resort'
   },
   {
     id: 8,
@@ -61,6 +61,35 @@ const galleryItems = [
     category: 'Đội ngũ',
     src: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=1000&auto=format&fit=crop',
     title: 'Họp giao ban công trường'
+  },
+  {
+    id: 9,
+    type: 'image',
+    category: 'Dự án',
+    src: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1000&auto=format&fit=crop',
+    title: 'Hạ tầng khu công nghiệp VSIP III'
+  },
+  {
+    id: 10,
+    type: 'image',
+    category: 'Sản xuất',
+    src: 'https://images.unsplash.com/photo-1513828583688-c52646db42da?q=80&w=1000&auto=format&fit=crop',
+    title: 'Khai thác đá tại mỏ'
+  },
+  {
+    id: 11,
+    type: 'video',
+    category: 'Hoạt động',
+    src: 'https://images.unsplash.com/photo-1541888946425-d81bb19480c5?q=80&w=1000&auto=format&fit=crop',
+    title: 'Giới thiệu năng lực sản xuất Rạng Đông',
+    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
+  },
+  {
+    id: 12,
+    type: 'image',
+    category: 'Dự án',
+    src: 'https://images.unsplash.com/photo-1466611653911-95081537e5b7?q=80&w=1000&auto=format&fit=crop',
+    title: 'Móng trụ điện gió Hồng Phong'
   }
 ];
 

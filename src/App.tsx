@@ -9,6 +9,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import BackToTop from './components/BackToTop';
+import ScrollToTop from './components/ScrollToTop';
 import PageLoader from './components/PageLoader';
 import { AuthProvider } from './contexts/AuthContext';
 import AdminLayout from './components/admin/AdminLayout';
@@ -57,6 +58,7 @@ export default function App() {
     <HelmetProvider>
       <ErrorBoundary>
         <Router>
+          <ScrollToTop />
           <Routes>
           {/* Admin Routes */}
           <Route path="/admin/login" element={<Login />} />

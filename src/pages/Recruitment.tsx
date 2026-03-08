@@ -95,8 +95,8 @@ export default function RecruitmentPage() {
 
       {/* Jobs List */}
       <section className="py-16 container-custom">
-        <div className="grid lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 space-y-6">
+        <div className="grid lg:grid-cols-12 gap-8">
+          <div className="lg:col-span-7 xl:col-span-8 space-y-6">
             <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-6 flex items-center gap-2">
               <Briefcase className="text-primary" /> Vị trí đang tuyển
             </h2>
@@ -160,7 +160,7 @@ export default function RecruitmentPage() {
           </div>
 
           {/* Sidebar */}
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-5 xl:col-span-4">
             <div className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-md border border-gray-100 dark:border-slate-700 sticky top-24">
               <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-4">Thông tin liên hệ</h3>
               <p className="text-gray-600 dark:text-gray-400 text-sm mb-6">
@@ -172,9 +172,9 @@ export default function RecruitmentPage() {
                   <div className="w-8 h-8 bg-blue-50 dark:bg-blue-900/30 rounded-full flex items-center justify-center text-primary shrink-0">
                     <Send size={16} />
                   </div>
-                  <div>
+                  <div className="min-w-0 flex-1">
                     <p className="text-xs text-gray-500 uppercase font-bold">Email nhận CV</p>
-                    <a href="mailto:tuyendung@rangdonggroup.vn" className="font-bold text-gray-800 dark:text-white hover:text-primary">tuyendung@rangdonggroup.vn</a>
+                    <a href="mailto:khoangsanrangdong@rangdonggroup.vn" className="font-semibold text-gray-800 dark:text-white hover:text-primary text-sm lg:text-base lg:whitespace-nowrap transition-colors">khoangsanrangdong@rangdonggroup.vn</a>
                   </div>
                 </div>
                 
@@ -184,7 +184,7 @@ export default function RecruitmentPage() {
                   </div>
                   <div>
                     <p className="text-xs text-gray-500 uppercase font-bold">Hotline Tuyển dụng</p>
-                    <a href="tel:0917630863" className="font-bold text-gray-800 dark:text-white hover:text-primary">091.7630.863</a>
+                    <a href="tel:0917630863" className="font-semibold text-gray-800 dark:text-white hover:text-primary">091.7630.863</a>
                   </div>
                 </div>
               </div>

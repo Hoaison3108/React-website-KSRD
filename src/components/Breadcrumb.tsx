@@ -8,6 +8,8 @@ const routeNameMap: Record<string, string> = {
   'projects': 'Dự án',
   'news': 'Tin tức',
   'contact': 'Liên hệ',
+  'recruitment': 'Tuyển dụng',
+  'gallery': 'Thư viện ảnh',
 };
 
 interface BreadcrumbProps {

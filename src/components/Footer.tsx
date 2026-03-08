@@ -1,14 +1,24 @@
-import React from 'react';
-import { Facebook, Youtube, MessageCircle, ChevronRight, MapPin, Phone, Mail } from 'lucide-react';
+import React, { useState } from 'react';
+import { Facebook, Youtube, MessageCircle, ChevronRight, MapPin, Phone, Mail, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useSiteSettings } from '../hooks/useSiteSettings';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { db } from '../firebase';
+import Toast from './Toast';
 
 export default function Footer() {
   const { settings } = useSiteSettings();
+  const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [toast, setToast] = useState<{ show: boolean; message: string; type: 'success' | 'error' }>({
+    show: false,
+    message: '',
+    type: 'success'
+  });
   
   const links = [
     { label: 'Trang chủ', path: '/' },
-    { label: 'Về chúng tôi', path: '/about' },
+    { label: 'Giới thiệu', path: '/about' },
     { label: 'Sản phẩm', path: '/products' },
     { label: 'Dự án', path: '/projects' },
     { label: 'Tin tức', path: '/news' },
@@ -21,8 +31,49 @@ export default function Footer() {
     email: 'chautm@rangdonggroup.vn'
   };
 
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email || loading) return;
+
+    setLoading(true);
+
+    try {
+      await addDoc(collection(db, 'messages'), {
+        name: 'Khách hàng nhận báo giá',
+        email: email,
+        phone: 'N/A',
+        subject: 'Yêu cầu nhận báo giá từ Footer',
+        message: `Khách hàng muốn nhận báo giá qua email: ${email}`,
+        createdAt: serverTimestamp(),
+        status: 'new'
+      });
+      
+      setToast({
+        show: true,
+        message: 'Yêu cầu nhận báo giá của bạn đã được gửi thành công!',
+        type: 'success'
+      });
+      setEmail('');
+    } catch (error) {
+      console.error('Error subscribing:', error);
+      setToast({
+        show: true,
+        message: 'Có lỗi xảy ra khi gửi yêu cầu. Vui lòng thử lại sau.',
+        type: 'error'
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <footer className="bg-bg-footer text-white pt-24 pb-8">
+      <Toast 
+        show={toast.show}
+        message={toast.message}
+        type={toast.type}
+        onClose={() => setToast(prev => ({ ...prev, show: false }))}
+      />
       <div className="container-custom">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
           {/* Col 1: Logo & Desc */}
@@ -106,15 +157,25 @@ export default function Footer() {
             <p className="text-gray-400 text-sm mb-4">
               Nhận thông tin báo giá và ưu đãi mới nhất từ chúng tôi.
             </p>
-            <form className="flex" onSubmit={(e) => e.preventDefault()}>
-              <input 
-                type="email" 
-                placeholder="Email của bạn..." 
-                className="flex-1 bg-white p-4 rounded-l-md text-gray-800 text-sm outline-none"
-              />
-              <button className="bg-primary hover:bg-primary-dark text-white px-5 rounded-r-md transition-colors">
-                <ChevronRight size={20} />
-              </button>
+            <form className="flex flex-col gap-3" onSubmit={handleSubscribe}>
+              <div className="flex">
+                <input 
+                  type="email" 
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Email của bạn..." 
+                  className="flex-1 bg-white p-4 rounded-l-md text-gray-800 text-sm outline-none"
+                  disabled={loading}
+                />
+                <button 
+                  type="submit"
+                  disabled={loading}
+                  className="bg-primary hover:bg-primary-dark text-white px-5 rounded-r-md transition-colors flex items-center justify-center min-w-[60px]"
+                >
+                  {loading ? <Loader2 size={20} className="animate-spin" /> : <ChevronRight size={20} />}
+                </button>
+              </div>
             </form>
           </div>
         </div>
