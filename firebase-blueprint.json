@@ -1,0 +1,134 @@
+{
+  "entities": {
+    "products": {
+      "title": "Sản phẩm",
+      "description": "Các sản phẩm vật liệu xây dựng",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Tên sản phẩm" },
+        "description": { "type": "string", "description": "Mô tả sản phẩm" },
+        "price": { "type": "number", "description": "Giá sản phẩm" },
+        "category": { "type": "string", "description": "Danh mục sản phẩm", "enum": ["Xi măng", "Sắt thép", "Gạch", "Cát đá", "Sơn", "Khác"] },
+        "images": { "type": "array", "items": { "type": "string" }, "description": "Danh sách URL hình ảnh" },
+        "specifications": { "type": "object", "description": "Thông số kỹ thuật" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Ngày tạo" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Ngày cập nhật" }
+      },
+      "required": ["name", "category", "images"]
+    },
+    "projects": {
+      "title": "Dự án",
+      "description": "Các dự án đã thực hiện",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Tên dự án" },
+        "description": { "type": "string", "description": "Mô tả dự án" },
+        "location": { "type": "string", "description": "Địa điểm" },
+        "year": { "type": "number", "description": "Năm thực hiện" },
+        "images": { "type": "array", "items": { "type": "string" }, "description": "Hình ảnh dự án" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Ngày tạo" }
+      },
+      "required": ["name", "images"]
+    },
+    "news": {
+      "title": "Tin tức",
+      "description": "Tin tức và bài viết",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "description": "Tiêu đề bài viết" },
+        "content": { "type": "string", "description": "Nội dung bài viết" },
+        "author": { "type": "string", "description": "Tác giả" },
+        "image": { "type": "string", "description": "Hình ảnh đại diện" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Ngày tạo" }
+      },
+      "required": ["title", "content"]
+    },
+    "users": {
+      "title": "Người dùng",
+      "description": "Thông tin người dùng quản trị",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string", "format": "email", "description": "Email người dùng" },
+        "role": { "type": "string", "enum": ["admin", "editor"], "description": "Vai trò" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Ngày tạo" }
+      },
+      "required": ["email", "role"]
+    },
+    "messages": {
+      "title": "Tin nhắn liên hệ",
+      "description": "Thông tin khách hàng gửi qua form liên hệ",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Tên khách hàng" },
+        "email": { "type": "string", "format": "email", "description": "Email khách hàng" },
+        "phone": { "type": "string", "description": "Số điện thoại" },
+        "subject": { "type": "string", "description": "Tiêu đề" },
+        "message": { "type": "string", "description": "Nội dung tin nhắn" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Ngày gửi" },
+        "status": { "type": "string", "enum": ["new", "read", "replied"], "description": "Trạng thái" }
+      },
+      "required": ["name", "email", "message"]
+    },
+    "site_settings": {
+      "title": "Cài đặt website",
+      "description": "Cấu hình nội dung trang chủ và thông tin chung",
+      "type": "object",
+      "properties": {
+        "hero": {
+          "type": "object",
+          "properties": {
+            "title": { "type": "string" },
+            "subtitle": { "type": "string" },
+            "backgroundImage": { "type": "string" }
+          }
+        },
+        "services": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "title": { "type": "string" },
+              "description": { "type": "string" },
+              "icon": { "type": "string" }
+            }
+          }
+        },
+        "contactInfo": {
+          "type": "object",
+          "properties": {
+            "address": { "type": "string" },
+            "phone": { "type": "string" },
+            "email": { "type": "string" },
+            "workingHours": { "type": "string" }
+          }
+        }
+      }
+    }
+  },
+  "firestore": {
+    "products/{productId}": {
+      "schema": "products",
+      "description": "Collection chứa danh sách sản phẩm"
+    },
+    "projects/{projectId}": {
+      "schema": "projects",
+      "description": "Collection chứa danh sách dự án"
+    },
+    "news/{newsId}": {
+      "schema": "news",
+      "description": "Collection chứa tin tức"
+    },
+    "users/{userId}": {
+      "schema": "users",
+      "description": "Collection chứa thông tin người dùng"
+    },
+    "messages/{messageId}": {
+      "schema": "messages",
+      "description": "Collection chứa tin nhắn liên hệ"
+    },
+    "site_settings/{settingId}": {
+      "schema": "site_settings",
+      "description": "Collection chứa cấu hình website"
+    }
+  }
+}

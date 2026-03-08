@@ -1,0 +1,140 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+
+    // Check if the user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Check if the user is an admin
+    // For simplicity in this initial setup, we'll allow the specific email provided in context
+    // In a production app, this should check a 'role' field in a 'users' collection
+    function isAdmin() {
+      return isAuthenticated() && 
+        (request.auth.token.email == "hoaison3108@gmail.com" || 
+         (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && 
+          get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin'));
+    }
+
+    // Validate string length
+    function validStringLength(field, minLen, maxLen) {
+      return request.resource.data[field] is string &&
+        request.resource.data[field].size() >= minLen &&
+        request.resource.data[field].size() <= maxLen;
+    }
+
+    // Validate required fields exist
+    function hasRequiredFields(fields) {
+      return request.resource.data.keys().hasAll(fields);
+    }
+
+    // Validate that the document contains only the allowed fields
+    function hasOnlyAllowedFields(fields) {
+      return request.resource.data.keys().hasOnly(fields);
+    }
+
+    // Validate URL format (must start with https:// or http://)
+    function isValidUrl(url) {
+      return url is string &&
+        (url.matches("^https://.*") || url.matches("^http://.*"));
+    }
+
+    // Validate number is positive
+    function isPositive(field) {
+      return request.resource.data[field] is number && request.resource.data[field] >= 0;
+    }
+
+    // ===============================================================
+    // Domain Validators
+    // ===============================================================
+
+    function isValidProduct(data) {
+      return hasRequiredFields(['title', 'category', 'image']) &&
+        validStringLength('title', 1, 200) &&
+        validStringLength('category', 1, 100);
+    }
+
+    function isValidProject(data) {
+      return hasRequiredFields(['title', 'category', 'image']) &&
+        validStringLength('title', 1, 200) &&
+        validStringLength('category', 1, 100);
+    }
+
+    function isValidNews(data) {
+      return hasRequiredFields(['title', 'content', 'author', 'date']) &&
+        validStringLength('title', 1, 300);
+    }
+
+    function isValidRecruitment(data) {
+      return hasRequiredFields(['title', 'location', 'type', 'deadline']) &&
+        validStringLength('title', 1, 200);
+    }
+
+    // ===============================================================
+    // Collection Rules
+    // ===============================================================
+
+    // Products Collection
+    match /products/{productId} {
+      allow read: if true; // Public read access for products
+      
+      allow create: if isAdmin() && isValidProduct(request.resource.data);
+      allow update: if isAdmin() && isValidProduct(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    // Projects Collection
+    match /projects/{projectId} {
+      allow read: if true; // Public read access for projects
+
+      allow create: if isAdmin() && isValidProject(request.resource.data);
+      allow update: if isAdmin() && isValidProject(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    // News Collection
+    match /news/{newsId} {
+      allow read: if true; // Public read access for news
+
+      allow create: if isAdmin() && isValidNews(request.resource.data);
+      allow update: if isAdmin() && isValidNews(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    // Recruitment Collection
+    match /recruitment/{jobId} {
+      allow read: if true; // Public read access for job postings
+      allow create: if isAdmin() && isValidRecruitment(request.resource.data);
+      allow update: if isAdmin() && isValidRecruitment(request.resource.data);
+      allow delete: if isAdmin();
+    }
+
+    // Users Collection (Strictly for Admins)
+    match /users/{userId} {
+      allow read: if isAdmin() || (isAuthenticated() && request.auth.uid == userId);
+      allow create: if isAdmin();
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // Messages Collection
+    match /messages/{messageId} {
+      allow read: if isAdmin();
+      allow create: if true; // Allow public contact form submission
+      allow update: if isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // Site Settings Collection
+    match /site_settings/{settingId} {
+      allow read: if true; // Public read for site configuration
+      allow write: if isAdmin();
+    }
+  }
+}

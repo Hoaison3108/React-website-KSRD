@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+@import "tailwindcss";
+
+@variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "Montserrat", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: "Lexend Deca", sans-serif;
+  
+  --color-primary: #0f4f8c;
+  --color-primary-dark: #0d3c6e;
+  --color-secondary: #fca311;
+  
+  --color-bg-footer: #0a1118;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply text-gray-900 font-sans antialiased;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading;
+  }
+}
+
+@layer components {
+  .container-custom {
+    @apply max-w-[1280px] mx-auto px-4 sm:px-6;
+  }
+  .section-padding {
+    @apply py-16 md:py-24;
+  }
+.heading-xl {
+  @apply text-3xl md:text-4xl lg:text-5xl font-bold text-primary leading-tight mb-8;
+}
+  .heading-default {
+    @apply text-gray-900;
+  }
+  .text-subtitle {
+    @apply text-primary text-sm font-bold uppercase tracking-wider mb-4 inline-block;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center px-7 py-3 rounded-md font-bold text-sm transition-all duration-300 cursor-pointer;
+  }
+  .btn-primary {
+    @apply bg-primary text-white hover:bg-primary-dark;
+  }
+  .btn-secondary {
+    @apply border border-white bg-transparent text-white hover:bg-white hover:text-primary;
+  }
+}
+
+@layer utilities {
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
