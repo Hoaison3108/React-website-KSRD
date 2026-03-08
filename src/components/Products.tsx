@@ -210,7 +210,7 @@ export default function Products({ viewMode = 'slider', hideHeader = false }: Pr
           {!hideHeader && (
             <div className="max-w-3xl mx-auto flex flex-col items-center text-center">
               <span className="text-subtitle">DANH MỤC CUNG ỨNG</span>
-              <h2 className="heading-xl dark:text-white mb-4 whitespace-nowrap">
+              <h2 className="heading-xl dark:text-white mb-4 lg:whitespace-nowrap">
                 SẢN PHẨM & <span className="text-secondary">NĂNG LỰC CUNG ỨNG</span>
               </h2>
               <div className="w-24 h-1 bg-secondary mb-6 mx-auto"></div>
