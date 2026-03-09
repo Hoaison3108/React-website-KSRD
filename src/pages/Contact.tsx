@@ -22,8 +22,8 @@ export default function ContactPage() {
 
   const contactInfo = settings?.contactInfo || {
     address: 'Km09 QL28B - xã Lương Sơn - tỉnh Lâm Đồng',
-    phone: '091.7630.863',
-    email: 'chautm@rangdonggroup.vn',
+    phone: '0252 652 6666',
+    email: 'khoangsanrangdong@rangdonggroup.vn',
     workingHours: '7:00 - 17:00'
   };
 

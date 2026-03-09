@@ -27,11 +27,11 @@ export const DEFAULT_SETTINGS = {
       icon: 'Phone'
     }
   ],
-  contact: {
-    address: 'Số 123, Đường ABC, Phường XYZ, Quận 1, TP. Hồ Chí Minh',
-    phone: '0909 123 456',
-    email: 'info@rangdongminerals.com.vn',
-    workingHours: 'Thứ 2 - Thứ 7: 07:30 - 17:00'
+  contactInfo: {
+    address: 'Km09 QL28B - xã Lương Sơn - tỉnh Lâm Đồng',
+    phone: '0252 652 6666',
+    email: 'khoangsanrangdong@rangdonggroup.vn',
+    workingHours: '7:00 - 17:00'
   }
 };
 

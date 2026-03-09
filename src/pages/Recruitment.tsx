@@ -174,7 +174,9 @@ export default function RecruitmentPage() {
                   </div>
                   <div className="min-w-0 flex-1">
                     <p className="text-xs text-gray-500 uppercase font-bold">Email nhận CV</p>
-                    <a href="mailto:khoangsanrangdong@rangdonggroup.vn" className="font-semibold text-gray-800 dark:text-white hover:text-primary text-sm lg:text-base lg:whitespace-nowrap transition-colors">khoangsanrangdong@rangdonggroup.vn</a>
+                    <a href="mailto:khoangsanrangdong@rangdonggroup.vn" className="font-semibold text-gray-800 dark:text-white hover:text-primary text-[14px] sm:text-sm lg:text-[15px] xl:text-base tracking-tight transition-colors block break-all">
+                      khoangsanrangdong@rangdonggroup.vn
+                    </a>
                   </div>
                 </div>
                 

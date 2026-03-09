@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { uploadImage } from '../../utils/uploadImage';
-import { Save, Image as ImageIcon, Plus, Trash2, Layout, Info, Phone, RotateCcw } from 'lucide-react';
+import { resetAllData } from '../../utils/seedData';
+import { Save, Image as ImageIcon, Plus, Trash2, Layout, Info, Phone, RotateCcw, Database } from 'lucide-react';
 
 const DEFAULT_SETTINGS: SiteSettings = {
   hero: {
@@ -16,10 +17,10 @@ const DEFAULT_SETTINGS: SiteSettings = {
     { title: 'Gạch & Ngói', description: 'Đa dạng mẫu mã, độ bền vượt trội.', icon: 'Layout' }
   ],
   contactInfo: {
-    address: 'Số 123, Đường ABC, Quận XYZ, TP. Hồ Chí Minh',
-    phone: '0123 456 789',
-    email: 'info@hoaison.vn',
-    workingHours: 'Thứ 2 - Thứ 7: 07:30 - 17:30'
+    address: 'Km09 QL28B - xã Lương Sơn - tỉnh Lâm Đồng',
+    phone: '0252 652 6666',
+    email: 'khoangsanrangdong@rangdonggroup.vn',
+    workingHours: '7:00 - 17:00'
   }
 };
 
@@ -112,6 +113,23 @@ const Settings = () => {
     }
   };
 
+  const handleResetData = async () => {
+    if (!window.confirm('CẢNH BÁO: Hành động này sẽ XÓA TOÀN BỘ dữ liệu hiện tại và tạo lại dữ liệu mẫu ban đầu (Sản phẩm, Dự án, Tin tức, Cài đặt). Bạn có chắc chắn muốn tiếp tục?')) {
+      return;
+    }
+    setSaving(true);
+    try {
+      await resetAllData();
+      await fetchSettings();
+      alert('Đã khôi phục toàn bộ dữ liệu mẫu thành công!');
+    } catch (error) {
+      console.error("Error resetting data:", error);
+      alert('Có lỗi xảy ra khi khôi phục dữ liệu.');
+    } finally {
+      setSaving(false);
+    }
+  };
+
   const handleServiceChange = (index: number, field: string, value: string) => {
     const updatedServices = [...settings.services];
     updatedServices[index] = { ...updatedServices[index], [field]: value };
@@ -147,6 +165,14 @@ const Settings = () => {
           <p className="text-gray-500 dark:text-gray-400 mt-1">Tùy chỉnh nội dung trang chủ và thông tin liên hệ</p>
         </div>
         <div className="flex gap-3">
+          <button
+            onClick={handleResetData}
+            disabled={saving}
+            className="flex items-center px-4 py-3 bg-red-100 text-red-700 rounded-xl hover:bg-red-200 transition-all font-bold disabled:opacity-50 border border-red-200"
+          >
+            <Database size={20} className="mr-2" />
+            Tạo dữ liệu mẫu
+          </button>
           <button
             onClick={handleRestoreDefaults}
             disabled={saving}

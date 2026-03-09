@@ -27,8 +27,8 @@ export default function Footer() {
 
   const contactInfo = settings?.contactInfo || {
     address: 'Km09 QL28B - xã Lương Sơn - tỉnh Lâm Đồng',
-    phone: '091.7630.863 (Mr.Châu)',
-    email: 'chautm@rangdonggroup.vn'
+    phone: '0252 652 6666',
+    email: 'khoangsanrangdong@rangdonggroup.vn'
   };
 
   const handleSubscribe = async (e: React.FormEvent) => {
@@ -75,9 +75,9 @@ export default function Footer() {
         onClose={() => setToast(prev => ({ ...prev, show: false }))}
       />
       <div className="container-custom">
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+        <div className="grid md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8 mb-12">
           {/* Col 1: Logo & Desc */}
-          <div>
+          <div className="lg:col-span-3 lg:pr-8">
             <div className="flex items-center gap-2 mb-8">
               <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center text-primary font-bold text-xl">
                 RĐ
@@ -104,7 +104,7 @@ export default function Footer() {
           </div>
 
           {/* Col 2: Quick Links */}
-          <div>
+          <div className="lg:col-span-2">
             <h4 className="text-lg font-extrabold text-secondary uppercase tracking-wider mb-8">LIÊN KẾT</h4>
             <ul className="space-y-4">
               {links.map((item, index) => (
@@ -133,7 +133,7 @@ export default function Footer() {
           </div>
 
           {/* Col 3: Contact */}
-          <div>
+          <div className="lg:col-span-4">
             <h4 className="text-lg font-extrabold text-secondary uppercase tracking-wider mb-8">THÔNG TIN</h4>
             <ul className="space-y-6">
               <li className="flex gap-4 text-gray-400 text-sm">
@@ -146,13 +146,13 @@ export default function Footer() {
               </li>
               <li className="flex gap-4 text-gray-400 text-sm">
                 <Mail size={20} className="text-secondary shrink-0" />
-                <span>{contactInfo.email}</span>
+                <span className="break-all">{contactInfo.email}</span>
               </li>
             </ul>
           </div>
 
           {/* Col 4: Newsletter */}
-          <div>
+          <div className="lg:col-span-3 lg:pl-4">
             <h4 className="text-lg font-extrabold text-secondary uppercase tracking-wider mb-8">NHẬN BÁO GIÁ</h4>
             <p className="text-gray-400 text-sm mb-4">
               Nhận thông tin báo giá và ưu đãi mới nhất từ chúng tôi.

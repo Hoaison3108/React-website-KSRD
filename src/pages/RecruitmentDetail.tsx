@@ -222,7 +222,9 @@ export default function RecruitmentDetail() {
                     </div>
                     <div className="flex items-center gap-3 text-gray-700 dark:text-gray-300 min-w-0">
                       <Mail size={20} className="text-secondary shrink-0" />
-                      <a href={`mailto:${job.contactEmail}`} className="hover:text-primary font-medium text-sm lg:text-base lg:whitespace-nowrap transition-colors truncate">{job.contactEmail}</a>
+                      <a href={`mailto:${job.contactEmail}`} className="hover:text-primary font-medium text-[14px] sm:text-sm lg:text-[15px] xl:text-base tracking-tight transition-colors block break-all">
+                        {job.contactEmail}
+                      </a>
                     </div>
                     <div className="flex items-center gap-3 text-gray-700 dark:text-gray-300">
                       <Phone size={20} className="text-secondary" />
