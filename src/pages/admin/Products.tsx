@@ -25,7 +25,7 @@ const Products = () => {
     price: 0,
     category: 'Xi măng',
     images: [] as File[],
-    specifications: {} as Record<string, string>
+    specificationsList: [] as { key: string, value: string }[]
   });
   const [uploading, setUploading] = useState(false);
 
@@ -66,6 +66,24 @@ const Products = () => {
     }
   };
 
+  const handleAddSpec = () => {
+    setFormData(prev => ({
+      ...prev,
+      specificationsList: [...prev.specificationsList, { key: '', value: '' }]
+    }));
+  };
+
+  const handleSpecChange = (index: number, field: 'key' | 'value', value: string) => {
+    const newList = [...formData.specificationsList];
+    newList[index][field] = value;
+    setFormData(prev => ({ ...prev, specificationsList: newList }));
+  };
+
+  const handleRemoveSpec = (index: number) => {
+    const newList = formData.specificationsList.filter((_, i) => i !== index);
+    setFormData(prev => ({ ...prev, specificationsList: newList }));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setUploading(true);
@@ -79,13 +97,20 @@ const Products = () => {
         imageUrls = [...imageUrls, ...newUrls];
       }
 
+      const specsRecord: Record<string, string> = {};
+      formData.specificationsList.forEach(item => {
+        if (item.key.trim() && item.value.trim()) {
+          specsRecord[item.key.trim()] = item.value.trim();
+        }
+      });
+
       const productData = {
         name: formData.name,
         description: formData.description,
         price: formData.price,
         category: formData.category,
         images: imageUrls,
-        specifications: formData.specifications,
+        specifications: specsRecord,
         updatedAt: new Date().toISOString()
       };
 
@@ -123,13 +148,18 @@ const Products = () => {
 
   const openEditModal = (product: Product) => {
     setCurrentProduct(product);
+    
+    const specsList = product.specifications 
+      ? Object.entries(product.specifications).map(([key, value]) => ({ key, value }))
+      : [];
+
     setFormData({
       name: product.name,
       description: product.description,
       price: product.price,
       category: product.category,
       images: [],
-      specifications: product.specifications || {}
+      specificationsList: specsList
     });
     setIsModalOpen(true);
   };
@@ -142,7 +172,7 @@ const Products = () => {
       price: 0,
       category: 'Xi măng',
       images: [],
-      specifications: {}
+      specificationsList: []
     });
   };
 
@@ -153,6 +183,7 @@ const Products = () => {
         <button
           onClick={() => { resetForm(); setIsModalOpen(true); }}
           className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          title="Thêm một sản phẩm mới vào danh sách"
         >
           <Plus size={20} className="mr-2" />
           Thêm mới
@@ -177,7 +208,7 @@ const Products = () => {
               {products.map((product) => (
                 <tr key={product.id}>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    {product.images && product.images.length > 0 ? (
+                    {product.images && product.images.length > 0 && product.images[0] ? (
                       <img src={product.images[0]} alt={product.name} className="h-12 w-12 object-cover rounded-md" />
                     ) : (
                       <div className="h-12 w-12 bg-gray-200 rounded-md flex items-center justify-center text-gray-400">
@@ -189,10 +220,10 @@ const Products = () => {
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{product.category}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{product.price.toLocaleString()} đ</td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <button onClick={() => openEditModal(product)} className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 mr-4">
+                    <button onClick={() => openEditModal(product)} className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 mr-4" title="Chỉnh sửa thông tin sản phẩm này">
                       <Edit size={18} />
                     </button>
-                    <button onClick={() => handleDelete(product.id)} className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">
+                    <button onClick={() => handleDelete(product.id)} className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300" title="Xóa sản phẩm này khỏi hệ thống">
                       <Trash2 size={18} />
                     </button>
                   </td>
@@ -211,7 +242,7 @@ const Products = () => {
               <h2 className="text-xl font-bold text-gray-800 dark:text-white">
                 {currentProduct ? 'Cập nhật sản phẩm' : 'Thêm sản phẩm mới'}
               </h2>
-              <button onClick={() => setIsModalOpen(false)} className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+              <button onClick={() => setIsModalOpen(false)} className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200" title="Đóng cửa sổ">
                 <X size={24} />
               </button>
             </div>
@@ -273,11 +304,61 @@ const Products = () => {
                   {currentProduct && currentProduct.images && (
                     <div className="mt-2 flex space-x-2 overflow-x-auto">
                       {currentProduct.images.map((img, idx) => (
-                        <img key={idx} src={img} alt={`Preview ${idx}`} className="h-16 w-16 object-cover rounded-md border" />
+                        img ? <img key={idx} src={img} alt={`Preview ${idx}`} className="h-16 w-16 object-cover rounded-md border" /> : null
                       ))}
                     </div>
                   )}
                 </div>
+              </div>
+
+              <div>
+                <div className="flex justify-between items-center mb-2">
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Thông số kỹ thuật</label>
+                  <button
+                    type="button"
+                    onClick={handleAddSpec}
+                    className="text-xs flex items-center text-blue-600 hover:text-blue-800 dark:text-blue-400"
+                    title="Thêm một thông số kỹ thuật mới (VD: Kích thước - 60x60)"
+                  >
+                    <Plus size={14} className="mr-1" /> Thêm thông số
+                  </button>
+                </div>
+                <p className="text-xs text-gray-500 mb-2">Nhập các thông số kỹ thuật của sản phẩm (ví dụ: Kích thước, Chất liệu, Màu sắc...).</p>
+                
+                {formData.specificationsList.length === 0 ? (
+                  <div className="text-sm text-gray-500 italic p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg text-center">
+                    Chưa có thông số kỹ thuật nào. Bấm "Thêm thông số" để bắt đầu.
+                  </div>
+                ) : (
+                  <div className="space-y-2">
+                    {formData.specificationsList.map((spec, index) => (
+                      <div key={index} className="flex gap-2 items-start">
+                        <input
+                          type="text"
+                          placeholder="Tên thông số (VD: Kích thước)"
+                          value={spec.key}
+                          onChange={(e) => handleSpecChange(index, 'key', e.target.value)}
+                          className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white text-sm"
+                        />
+                        <input
+                          type="text"
+                          placeholder="Giá trị (VD: 60x60 cm)"
+                          value={spec.value}
+                          onChange={(e) => handleSpecChange(index, 'value', e.target.value)}
+                          className="flex-1 px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white text-sm"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveSpec(index)}
+                          className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                          title="Xóa thông số này"
+                        >
+                          <Trash2 size={18} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <div>
@@ -288,6 +369,7 @@ const Products = () => {
                   onChange={handleInputChange}
                   rows={4}
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                  placeholder="Nhập mô tả chi tiết về sản phẩm..."
                 ></textarea>
               </div>
 
@@ -296,6 +378,7 @@ const Products = () => {
                   type="button"
                   onClick={() => setIsModalOpen(false)}
                   className="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+                  title="Hủy bỏ và đóng cửa sổ"
                 >
                   Hủy
                 </button>
@@ -303,6 +386,7 @@ const Products = () => {
                   type="submit"
                   disabled={uploading}
                   className="px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors disabled:opacity-50"
+                  title={currentProduct ? 'Lưu các thay đổi' : 'Lưu sản phẩm mới'}
                 >
                   {uploading ? 'Đang lưu...' : (currentProduct ? 'Cập nhật' : 'Thêm mới')}
                 </button>

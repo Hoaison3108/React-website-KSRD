@@ -185,6 +185,7 @@ const Settings = () => {
             onClick={handleSave}
             disabled={saving}
             className="flex items-center px-6 py-3 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-900/20 font-bold disabled:opacity-50"
+            title="Lưu tất cả các thay đổi cài đặt"
           >
             {saving ? (
               <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin mr-2"></div>
@@ -231,7 +232,7 @@ const Settings = () => {
                   <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 uppercase mb-2">Ảnh nền</label>
                   <div className="relative group h-48">
                     <div className="w-full h-full bg-gray-50 dark:bg-gray-700 border-2 border-dashed border-gray-200 dark:border-gray-600 rounded-2xl flex flex-col items-center justify-center overflow-hidden transition-all group-hover:border-emerald-500/50">
-                      {heroImage || settings.hero.backgroundImage ? (
+                      {heroImage || (settings.hero.backgroundImage && settings.hero.backgroundImage.trim() !== '') ? (
                         <img 
                           src={heroImage ? URL.createObjectURL(heroImage) : settings.hero.backgroundImage} 
                           alt="Hero Preview" 

@@ -174,6 +174,7 @@ const News = () => {
         <button
           onClick={() => { resetForm(); setIsModalOpen(true); }}
           className="flex items-center px-6 py-3 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-900/20 font-bold"
+          title="Tạo một bài viết tin tức mới"
         >
           <Plus size={20} className="mr-2" />
           Thêm bài viết
@@ -215,7 +216,7 @@ const News = () => {
                 {paginatedNews.map((item) => (
                   <tr key={item.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
                     <td className="px-6 py-4 whitespace-nowrap">
-                      {item.image ? (
+                      {item.image && item.image.trim() !== '' ? (
                         <img src={item.image} alt={item.title} className="h-14 w-14 object-cover rounded-xl border border-gray-100 dark:border-gray-600" />
                       ) : (
                         <div className="h-14 w-14 bg-gray-100 dark:bg-gray-700 rounded-xl flex items-center justify-center text-gray-400">
@@ -233,14 +234,14 @@ const News = () => {
                         <button 
                           onClick={() => openEditModal(item)} 
                           className="p-2 text-blue-600 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
-                          title="Chỉnh sửa"
+                          title="Chỉnh sửa bài viết này"
                         >
                           <Edit size={18} />
                         </button>
                         <button 
                           onClick={() => handleDelete(item.id)} 
                           className="p-2 text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20 rounded-lg transition-colors"
-                          title="Xóa"
+                          title="Xóa bài viết này"
                         >
                           <Trash2 size={18} />
                         </button>
@@ -280,6 +281,7 @@ const News = () => {
               <button 
                 onClick={() => setIsModalOpen(false)} 
                 className="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-all"
+                title="Đóng cửa sổ"
               >
                 <X size={24} />
               </button>
@@ -314,9 +316,10 @@ const News = () => {
 
                 <div>
                   <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 uppercase mb-2">Hình ảnh đại diện</label>
+                  <p className="text-xs text-gray-500 mb-2">Chọn một hình ảnh đẹp để làm ảnh bìa cho bài viết.</p>
                   <div className="relative group">
                     <div className="w-full h-40 bg-gray-50 dark:bg-gray-700 border-2 border-dashed border-gray-200 dark:border-gray-600 rounded-2xl flex flex-col items-center justify-center overflow-hidden transition-all group-hover:border-emerald-500/50">
-                      {formData.image || (currentNews && currentNews.image) ? (
+                      {formData.image || (currentNews && currentNews.image && currentNews.image.trim() !== '') ? (
                         <img 
                           src={formData.image ? URL.createObjectURL(formData.image) : currentNews?.image} 
                           alt="Preview" 
@@ -357,6 +360,7 @@ const News = () => {
                   type="button"
                   onClick={() => setIsModalOpen(false)}
                   className="px-6 py-3 text-gray-600 bg-gray-100 hover:bg-gray-200 rounded-xl font-bold transition-all dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+                  title="Hủy bỏ và đóng cửa sổ"
                 >
                   Hủy bỏ
                 </button>
@@ -364,6 +368,7 @@ const News = () => {
                   type="submit"
                   disabled={uploading}
                   className="px-8 py-3 text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl font-bold transition-all disabled:opacity-50 shadow-lg shadow-emerald-900/20 flex items-center gap-2"
+                  title={currentNews ? 'Lưu các thay đổi' : 'Đăng bài viết mới'}
                 >
                   {uploading ? (
                     <>

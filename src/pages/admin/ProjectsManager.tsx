@@ -235,7 +235,7 @@ export default function ProjectsManager() {
             projects.map((project) => (
               <div key={project.id} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
                 <div className="h-48 bg-gray-100 relative">
-                  {project.image ? (
+                  {project.image && project.image.trim() !== '' ? (
                     <img src={project.image} alt={project.title} className="w-full h-full object-cover" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-gray-400">

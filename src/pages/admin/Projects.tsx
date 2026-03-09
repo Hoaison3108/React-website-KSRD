@@ -148,6 +148,7 @@ const Projects = () => {
         <button
           onClick={() => { resetForm(); setIsModalOpen(true); }}
           className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          title="Thêm một dự án mới vào danh sách"
         >
           <Plus size={20} className="mr-2" />
           Thêm mới
@@ -172,7 +173,7 @@ const Projects = () => {
               {projects.map((project) => (
                 <tr key={project.id}>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    {project.images && project.images.length > 0 ? (
+                    {project.images && project.images.length > 0 && project.images[0] ? (
                       <img src={project.images[0]} alt={project.name} className="h-12 w-12 object-cover rounded-md" />
                     ) : (
                       <div className="h-12 w-12 bg-gray-200 rounded-md flex items-center justify-center text-gray-400">
@@ -184,10 +185,10 @@ const Projects = () => {
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{project.location}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{project.year}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <button onClick={() => openEditModal(project)} className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 mr-4">
+                    <button onClick={() => openEditModal(project)} className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300 mr-4" title="Chỉnh sửa thông tin dự án này">
                       <Edit size={18} />
                     </button>
-                    <button onClick={() => handleDelete(project.id)} className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300">
+                    <button onClick={() => handleDelete(project.id)} className="text-red-600 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300" title="Xóa dự án này khỏi hệ thống">
                       <Trash2 size={18} />
                     </button>
                   </td>
@@ -206,7 +207,7 @@ const Projects = () => {
               <h2 className="text-xl font-bold text-gray-800 dark:text-white">
                 {currentProject ? 'Cập nhật dự án' : 'Thêm dự án mới'}
               </h2>
-              <button onClick={() => setIsModalOpen(false)} className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+              <button onClick={() => setIsModalOpen(false)} className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200" title="Đóng cửa sổ">
                 <X size={24} />
               </button>
             </div>
@@ -263,7 +264,7 @@ const Projects = () => {
                   {currentProject && currentProject.images && (
                     <div className="mt-2 flex space-x-2 overflow-x-auto">
                       {currentProject.images.map((img, idx) => (
-                        <img key={idx} src={img} alt={`Preview ${idx}`} className="h-16 w-16 object-cover rounded-md border" />
+                        img ? <img key={idx} src={img} alt={`Preview ${idx}`} className="h-16 w-16 object-cover rounded-md border" /> : null
                       ))}
                     </div>
                   )}
@@ -278,6 +279,7 @@ const Projects = () => {
                   onChange={handleInputChange}
                   rows={4}
                   className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
+                  placeholder="Nhập mô tả chi tiết về dự án..."
                 ></textarea>
               </div>
 
@@ -286,6 +288,7 @@ const Projects = () => {
                   type="button"
                   onClick={() => setIsModalOpen(false)}
                   className="px-4 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+                  title="Hủy bỏ và đóng cửa sổ"
                 >
                   Hủy
                 </button>
@@ -293,6 +296,7 @@ const Projects = () => {
                   type="submit"
                   disabled={uploading}
                   className="px-4 py-2 text-white bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors disabled:opacity-50"
+                  title={currentProject ? 'Lưu các thay đổi' : 'Lưu dự án mới'}
                 >
                   {uploading ? 'Đang lưu...' : (currentProject ? 'Cập nhật' : 'Thêm mới')}
                 </button>

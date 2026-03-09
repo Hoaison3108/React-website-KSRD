@@ -258,7 +258,7 @@ export default function ProductsManager() {
                   <tr key={product.id} className="hover:bg-gray-50">
                     <td className="py-3 px-4">
                       <div className="h-12 w-12 rounded bg-gray-100 overflow-hidden">
-                        {product.image ? (
+                        {product.image && product.image.trim() !== '' ? (
                           <img src={product.image} alt={product.title} className="h-full w-full object-cover" />
                         ) : (
                           <div className="h-full w-full flex items-center justify-center text-gray-400">

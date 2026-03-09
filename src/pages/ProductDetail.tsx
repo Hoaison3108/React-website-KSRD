@@ -163,8 +163,8 @@ export default function ProductDetail() {
   }, [id]);
 
   const getImageUrl = (image: any) => {
-    if (typeof image === 'string') return image;
-    return '';
+    if (typeof image === 'string' && image.trim() !== '') return image;
+    return undefined;
   };
 
   const nextImage = () => {

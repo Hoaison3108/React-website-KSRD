@@ -193,7 +193,7 @@ export default function NewsManager() {
             news.map((item) => (
               <div key={item.id} className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 flex gap-4 hover:shadow-md transition-shadow">
                 <div className="h-24 w-32 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
-                  {item.image ? (
+                  {item.image && item.image.trim() !== '' ? (
                     <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-gray-400">

@@ -121,8 +121,8 @@ export default function NewsDetail() {
   }, [id]);
 
   const getImageUrl = (image: any) => {
-    if (typeof image === 'string') return image;
-    return '';
+    if (typeof image === 'string' && image.trim() !== '') return image;
+    return undefined;
   };
 
   if (loading) {
