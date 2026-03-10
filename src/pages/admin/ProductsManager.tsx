@@ -301,8 +301,8 @@ export default function ProductsManager() {
       {/* Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-xl shadow-xl w-full max-w-lg overflow-hidden">
-            <div className="flex justify-between items-center p-6 border-b">
+          <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col">
+            <div className="flex justify-between items-center p-6 border-b shrink-0">
               <h3 className="text-xl font-bold text-gray-800">
                 {editingId ? 'Chỉnh sửa sản phẩm' : 'Thêm sản phẩm mới'}
               </h3>
@@ -311,17 +311,18 @@ export default function ProductsManager() {
               </button>
             </div>
             
-            <form onSubmit={handleSubmit} className="p-6 space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Tên sản phẩm</label>
-                <input
-                  type="text"
-                  value={formData.title}
-                  onChange={(e) => setFormData({...formData, title: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
-                  required
-                />
-              </div>
+            <form onSubmit={handleSubmit} className="flex flex-col flex-1 overflow-hidden">
+              <div className="overflow-y-auto p-6 space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Tên sản phẩm</label>
+                  <input
+                    type="text"
+                    value={formData.title}
+                    onChange={(e) => setFormData({...formData, title: e.target.value})}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
+                    required
+                  />
+                </div>
               
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -414,18 +415,19 @@ export default function ProductsManager() {
                   placeholder="Mô tả ứng dụng của sản phẩm..."
                 ></textarea>
               </div>
+              </div>
               
-              <div className="flex justify-end gap-3 pt-4">
+              <div className="flex justify-end gap-3 p-6 border-t bg-gray-50 shrink-0">
                 <button
                   type="button"
                   onClick={handleCloseModal}
-                  className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                  className="px-4 py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors font-medium"
                 >
                   Hủy bỏ
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-900 transition-colors flex items-center gap-2"
+                  className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-900 transition-colors flex items-center gap-2 font-medium shadow-sm"
                 >
                   <Save size={18} />
                   <span>Lưu lại</span>

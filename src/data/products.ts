@@ -15,8 +15,8 @@ export const products = [
     image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1000&auto=format&fit=crop',
     gallery: [
       'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1000&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1590082766668-3f8215967d7e?q=80&w=1000&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1535732759880-bbd5c7265e3f?q=80&w=1000&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=1000&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1000&auto=format&fit=crop'
     ],
     badge: 'Chủ lực',
     color: 'blue',
@@ -41,11 +41,11 @@ export const products = [
     title: 'Đá Xây Dựng',
     category: 'Đá & Cát',
     desc: 'Khai thác và chế biến đá xây dựng các loại: đá 1x2, 4x6, đá mi, đá hộc... đảm bảo tiêu chuẩn cơ lý.',
-    image: 'https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?q=80&w=1000&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?q=80&w=1000&auto=format&fit=crop',
     gallery: [
-      'https://images.unsplash.com/photo-1525609004556-c46c7d6cf023?q=80&w=1000&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1599708153386-62e27c54d726?q=80&w=1000&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1629196914375-f7e48f477b6d?q=80&w=1000&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1581094794329-c8112a89af12?q=80&w=1000&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1545139224-79b176937ee9?q=80&w=1000&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?q=80&w=1000&auto=format&fit=crop'
     ],
     badge: 'Sẵn hàng',
     color: 'orange',
@@ -107,8 +107,8 @@ export const products = [
     image: 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=1000&auto=format&fit=crop',
     gallery: [
       'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=1000&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1595846519845-68e298c2edd8?q=80&w=1000&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1569683795645-b62e50fbf103?q=80&w=1000&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=1000&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=1000&auto=format&fit=crop'
     ],
     badge: 'Tiêu chuẩn xanh',
     color: 'green',
@@ -137,11 +137,11 @@ export const products = [
     title: 'Cát Xây Dựng',
     category: 'Đá & Cát',
     desc: 'Cát vàng, cát đen đã qua sàng lọc, loại bỏ tạp chất, đảm bảo chất lượng cho vữa xây trát và bê tông.',
-    image: 'https://images.unsplash.com/photo-1621262985837-77003d6076b6?q=80&w=1000&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=1000&auto=format&fit=crop',
     gallery: [
-      'https://images.unsplash.com/photo-1621262985837-77003d6076b6?q=80&w=1000&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1516934898144-d8974581d644?q=80&w=1000&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1533240332313-0db49b459ad6?q=80&w=1000&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=1000&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1000&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1581094794329-c8112a89af12?q=80&w=1000&auto=format&fit=crop'
     ],
     badge: 'Chất lượng',
     color: 'orange',
@@ -166,11 +166,11 @@ export const products = [
     title: 'Xi Măng Công Nghiệp',
     category: 'Xi Măng & Thép',
     desc: 'Cung cấp các loại xi măng PCB30, PCB40 từ các thương hiệu uy tín, đảm bảo độ kết dính và độ bền cao.',
-    image: 'https://images.unsplash.com/photo-1565008447742-97f6f38c985c?q=80&w=1000&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1545139224-79b176937ee9?q=80&w=1000&auto=format&fit=crop',
     gallery: [
-      'https://images.unsplash.com/photo-1565008447742-97f6f38c985c?q=80&w=1000&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?q=80&w=1000&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1624821588855-a2266c552c7c?q=80&w=1000&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1545139224-79b176937ee9?q=80&w=1000&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?q=80&w=1000&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=1000&auto=format&fit=crop'
     ],
     badge: 'Chính hãng',
     color: 'blue',
@@ -195,11 +195,11 @@ export const products = [
     title: 'Sắt Thép Xây Dựng',
     category: 'Xi Măng & Thép',
     desc: 'Phân phối sắt thép cuộn, thép cây từ các nhà máy lớn như Hòa Phát, Pomina... đáp ứng mọi tiêu chuẩn kỹ thuật.',
-    image: 'https://images.unsplash.com/photo-1535063406549-defd219d1613?q=80&w=1000&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=1000&auto=format&fit=crop',
     gallery: [
-      'https://images.unsplash.com/photo-1535063406549-defd219d1613?q=80&w=1000&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=1000&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?q=80&w=1000&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1567606404068-079724a331d6?q=80&w=1000&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=1000&auto=format&fit=crop'
     ],
     badge: 'Đa dạng',
     color: 'orange',
@@ -224,11 +224,11 @@ export const products = [
     title: 'Ngói Lợp & Vật Liệu Hoàn Thiện',
     category: 'Gạch & Ngói',
     desc: 'Các loại ngói màu, ngói đất nung và vật liệu ốp lát cao cấp, mang lại vẻ đẹp thẩm mỹ cho ngôi nhà.',
-    image: 'https://images.unsplash.com/photo-1628624747186-a941c476b7ef?q=80&w=1000&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1000&auto=format&fit=crop',
     gallery: [
-      'https://images.unsplash.com/photo-1628624747186-a941c476b7ef?q=80&w=1000&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1620626012053-1c167f7ebc8d?q=80&w=1000&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1596253689456-1598645935d1?q=80&w=1000&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1000&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1581094794329-c8112a89af12?q=80&w=1000&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1545139224-79b176937ee9?q=80&w=1000&auto=format&fit=crop'
     ],
     badge: 'Thẩm mỹ',
     color: 'green',
@@ -253,10 +253,10 @@ export const products = [
     title: 'Bê Tông Nhựa Chặt',
     category: 'Bê Tông & Bê Tông Nhựa',
     desc: 'Bê tông nhựa nóng (Asphalt Concrete) chất lượng cao, sản xuất theo công nghệ hiện đại, đảm bảo độ bền và êm thuận cho đường giao thông.',
-    image: 'https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=80&w=1000&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?q=80&w=1000&auto=format&fit=crop',
     gallery: [
-      'https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=80&w=1000&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1574359256741-d943036e6a7c?q=80&w=1000&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?q=80&w=1000&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=1000&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=1000&auto=format&fit=crop'
     ],
     badge: 'Công nghệ cao',
@@ -285,11 +285,11 @@ export const products = [
     title: 'Gạch Terrazzo Cao Cấp',
     category: 'Gạch & Ngói',
     desc: 'Gạch lát vỉa hè, sân vườn với hoa văn đa dạng, bề mặt mài bóng hoặc nhám, chịu lực tốt và tính thẩm mỹ cao.',
-    image: 'https://images.unsplash.com/photo-1620626012053-1c167f7ebc8d?q=80&w=1000&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=1000&auto=format&fit=crop',
     gallery: [
-      'https://images.unsplash.com/photo-1620626012053-1c167f7ebc8d?q=80&w=1000&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=1000&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1000&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1596253689456-1598645935d1?q=80&w=1000&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=1000&auto=format&fit=crop'
     ],
     badge: 'Mới',
     color: 'green',
@@ -315,11 +315,11 @@ export const products = [
     title: 'Cống Bê Tông Ly Tâm',
     category: 'Bê Tông & Bê Tông Nhựa',
     desc: 'Cống tròn bê tông cốt thép sản xuất theo công nghệ quay ly tâm, đảm bảo độ đặc chắc và khả năng chịu lực vượt trội.',
-    image: 'https://images.unsplash.com/photo-1584463651450-93663678036d?q=80&w=1000&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1000&auto=format&fit=crop',
     gallery: [
-      'https://images.unsplash.com/photo-1584463651450-93663678036d?q=80&w=1000&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1599707367072-cd6ad66aa18d?q=80&w=1000&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1621905251189-08b45d6a269e?q=80&w=1000&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1000&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1581094794329-c8112a89af12?q=80&w=1000&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1545139224-79b176937ee9?q=80&w=1000&auto=format&fit=crop'
     ],
     badge: 'Tiêu chuẩn TCVN',
     color: 'blue',

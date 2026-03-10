@@ -41,7 +41,7 @@ export const news = [
       'Trong thời gian tới, Rạng Đông sẽ tiếp tục duy trì và cải tiến hệ thống quản lý chất lượng, đồng thời hướng tới việc áp dụng các tiêu chuẩn quản lý môi trường ISO 14001 và an toàn sức khỏe nghề nghiệp ISO 45001, khẳng định vị thế là đơn vị cung cấp vật liệu xây dựng hàng đầu tại khu vực.'
     ],
     detailImages: [
-      'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=1000&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?q=80&w=1000&auto=format&fit=crop'
     ]
   },
   {
@@ -50,7 +50,7 @@ export const news = [
     category: 'Trách Nhiệm Xã Hội',
     date: '2023-06-05',
     displayDate: '05 TH06',
-    image: 'https://images.unsplash.com/photo-1593113598332-cd288d649433?q=80&w=1000&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1545139224-79b176937ee9?q=80&w=1000&auto=format&fit=crop',
     excerpt: 'Công ty đã tài trợ 100% kinh phí xây dựng cầu dân sinh tại xã vùng cao, giúp bà con đi lại thuận tiện và các em nhỏ đến trường an toàn hơn.',
     content: [
       'Hưởng ứng phong trào "Chung tay vì cộng đồng", ngày 05/06/2023, Công ty Khoáng sản Rạng Đông đã phối hợp với chính quyền địa phương tổ chức lễ khánh thành và bàn giao cầu dân sinh tại xã La Dạ, huyện Hàm Thuận Bắc. Cây cầu được xây dựng kiên cố bằng bê tông cốt thép, thay thế cho cây cầu gỗ tạm bợ, xuống cấp nghiêm trọng trước đây.',
@@ -59,8 +59,8 @@ export const news = [
       'Đây là một trong chuỗi các hoạt động an sinh xã hội thường niên của Rạng Đông. Bên cạnh hoạt động sản xuất kinh doanh, công ty luôn chú trọng đến trách nhiệm xã hội, tích cực tham gia các hoạt động từ thiện, đền ơn đáp nghĩa, khuyến học khuyến tài, góp phần xây dựng cộng đồng ngày càng tốt đẹp hơn.'
     ],
     detailImages: [
-      'https://images.unsplash.com/photo-1541252260730-0412e8e2108e?q=80&w=1000&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=1000&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1000&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=1000&auto=format&fit=crop'
     ]
   },
   {
@@ -69,7 +69,7 @@ export const news = [
     category: 'Sự Kiện & Giải Thưởng',
     date: '2023-11-10',
     displayDate: '10 TH11',
-    image: 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?q=80&w=1000&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=1000&auto=format&fit=crop',
     excerpt: 'Tham gia hội thảo chuyên đề về vật liệu xây dựng bền vững, Rạng Đông chia sẻ tầm nhìn về phát triển các sản phẩm thân thiện với môi trường.'
   },
   {
@@ -78,7 +78,7 @@ export const news = [
     category: 'Tin Công Ty',
     date: '2023-10-25',
     displayDate: '25 TH10',
-    image: 'https://images.unsplash.com/photo-1560179707-f14e90ef3dab?q=80&w=1000&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=1000&auto=format&fit=crop',
     excerpt: 'Sự kiện đánh dấu bước ngoặt quan trọng trong việc mở rộng thị trường và nâng cao năng lực cung ứng cho các dự án quy mô lớn.'
   },
   {
@@ -96,7 +96,7 @@ export const news = [
     category: 'Tin Công Ty',
     date: '2023-09-05',
     displayDate: '05 TH09',
-    image: 'https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?q=80&w=1000&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?q=80&w=1000&auto=format&fit=crop',
     excerpt: 'Nâng cao ý thức và kỹ năng an toàn cho toàn thể cán bộ công nhân viên là ưu tiên hàng đầu tại các nhà máy sản xuất của Rạng Đông.'
   },
   {
@@ -105,7 +105,7 @@ export const news = [
     category: 'Sự Kiện & Giải Thưởng',
     date: '2023-08-28',
     displayDate: '28 TH08',
-    image: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=1000&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1000&auto=format&fit=crop',
     excerpt: 'Tại triển lãm quốc tế Vietbuild, gian hàng của chúng tôi đã đón tiếp hàng ngàn lượt khách tham quan và nhận được nhiều phản hồi tích cực.'
   },
   {
@@ -114,7 +114,7 @@ export const news = [
     category: 'Trách Nhiệm Xã Hội',
     date: '2023-07-15',
     displayDate: '15 TH07',
-    image: 'https://images.unsplash.com/photo-1593113630400-ea4288922497?q=80&w=1000&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=1000&auto=format&fit=crop',
     excerpt: 'Công đoàn công ty đã trao tặng 2 căn nhà tình thương cho công nhân có hoàn cảnh khó khăn, thể hiện tinh thần tương thân tương ái.'
   },
   {
@@ -132,7 +132,7 @@ export const news = [
     category: 'Sự Kiện & Giải Thưởng',
     date: '2024-01-15',
     displayDate: '15 TH01',
-    image: 'https://images.unsplash.com/photo-1579389083078-4e7018379f7e?q=80&w=1000&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=1000&auto=format&fit=crop',
     excerpt: 'Ghi nhận những đóng góp tích cực vào sự phát triển kinh tế địa phương và các hoạt động xã hội, Rạng Đông vinh dự nhận giải thưởng danh giá.',
     content: [
       'Ngày 15/01/2024, tại Trung tâm Hội nghị tỉnh Bình Thuận, Công ty Khoáng sản Rạng Đông đã vinh dự được trao tặng danh hiệu "Doanh nghiệp tiêu biểu tỉnh Bình Thuận năm 2024". Giải thưởng nhằm tôn vinh các doanh nghiệp có thành tích xuất sắc trong hoạt động sản xuất kinh doanh, chấp hành tốt pháp luật và đóng góp tích cực cho cộng đồng.',
@@ -146,7 +146,7 @@ export const news = [
     category: 'Sản Phẩm & Công Nghệ',
     date: '2024-02-20',
     displayDate: '20 TH02',
-    image: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?q=80&w=1000&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1000&auto=format&fit=crop',
     excerpt: 'Rạng Đông tiên phong áp dụng công nghệ thu hồi nhiệt và lọc bụi tĩnh điện trong dây chuyền sản xuất, hướng tới mục tiêu Net Zero.',
     content: [
       'Nhằm thực hiện cam kết bảo vệ môi trường và phát triển bền vững, đầu năm 2024, Công ty Khoáng sản Rạng Đông đã chính thức đưa vào vận hành hệ thống xử lý khí thải và thu hồi nhiệt dư tại nhà máy sản xuất vật liệu xây dựng.',

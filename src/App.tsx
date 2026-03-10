@@ -38,6 +38,7 @@ const AdminProjects = lazy(() => import('./pages/admin/ProjectsManager'));
 const AdminNews = lazy(() => import('./pages/admin/NewsManager'));
 const AdminMessages = lazy(() => import('./pages/admin/Messages'));
 const AdminRecruitment = lazy(() => import('./pages/admin/RecruitmentManager'));
+const AdminContact = lazy(() => import('./pages/admin/ContactManager'));
 const AdminSettings = lazy(() => import('./pages/admin/Settings'));
 
 const MainLayout = () => (
@@ -95,6 +96,11 @@ export default function App() {
             <Route path="recruitment" element={
               <Suspense fallback={<PageLoader />}>
                 <AdminRecruitment />
+              </Suspense>
+            } />
+            <Route path="contact" element={
+              <Suspense fallback={<PageLoader />}>
+                <AdminContact />
               </Suspense>
             } />
             <Route path="settings" element={

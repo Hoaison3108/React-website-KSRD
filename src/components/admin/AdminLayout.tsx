@@ -7,6 +7,7 @@ import {
   Briefcase, 
   Newspaper, 
   MessageSquare,
+  Phone,
   Settings as SettingsIcon,
   LogOut, 
   Menu, 
@@ -41,6 +42,7 @@ const AdminLayout = () => {
     { path: '/admin/news', label: 'Tin tức', icon: <Newspaper size={20} /> },
     { path: '/admin/recruitment', label: 'Tuyển dụng', icon: <Briefcase size={20} /> },
     { path: '/admin/messages', label: 'Tin nhắn', icon: <MessageSquare size={20} /> },
+    { path: '/admin/contact', label: 'Liên hệ', icon: <Phone size={20} /> },
     { path: '/admin/settings', label: 'Cài đặt', icon: <SettingsIcon size={20} /> },
   ];
 

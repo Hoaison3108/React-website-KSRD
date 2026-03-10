@@ -20,6 +20,7 @@ export default function About() {
                 src="https://github.com/Hoaison3108/khoangsanrangdongdemov3/blob/main/assets/images/DJI_0057.JPG?raw=true" 
                 alt="Về chúng tôi" 
                 className="w-full h-full object-cover"
+                referrerPolicy="no-referrer"
               />
             </div>
             

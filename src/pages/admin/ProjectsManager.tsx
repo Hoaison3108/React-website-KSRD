@@ -263,7 +263,7 @@ export default function ProjectsManager() {
                   </div>
                 </div>
                 <div className="p-4">
-                  <h4 className="font-bold text-lg text-gray-900 mb-1">{project.title}</h4>
+                  <h4 className="font-bold text-lg text-gray-900 mb-1 truncate" title={project.title}>{project.title}</h4>
                   <div className="flex justify-between text-sm text-gray-500 mb-2">
                     <span>{project.location}</span>
                     <span>{project.year}</span>
@@ -283,7 +283,7 @@ export default function ProjectsManager() {
       {isModalOpen && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-xl shadow-xl w-full max-w-2xl overflow-hidden max-h-[90vh] flex flex-col">
-            <div className="flex justify-between items-center p-6 border-b">
+            <div className="flex justify-between items-center p-6 border-b shrink-0">
               <h3 className="text-xl font-bold text-gray-800">
                 {editingId ? 'Chỉnh sửa dự án' : 'Thêm dự án mới'}
               </h3>
@@ -292,8 +292,9 @@ export default function ProjectsManager() {
               </button>
             </div>
             
-            <form onSubmit={handleSubmit} className="p-6 space-y-4 overflow-y-auto flex-1">
-              <div className="grid grid-cols-2 gap-4">
+            <form onSubmit={handleSubmit} className="flex flex-col flex-1 overflow-hidden">
+              <div className="p-6 space-y-4 overflow-y-auto flex-1">
+                <div className="grid grid-cols-2 gap-4">
                 <div className="col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-1">Tên dự án</label>
                   <input
@@ -439,18 +440,19 @@ export default function ProjectsManager() {
                   required
                 ></textarea>
               </div>
+              </div>
               
-              <div className="flex justify-end gap-3 pt-4">
+              <div className="flex justify-end gap-3 p-6 border-t bg-gray-50 shrink-0">
                 <button
                   type="button"
                   onClick={handleCloseModal}
-                  className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                  className="px-4 py-2 text-gray-700 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors font-medium"
                 >
                   Hủy bỏ
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-900 transition-colors flex items-center gap-2"
+                  className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-900 transition-colors flex items-center gap-2 font-medium shadow-sm"
                 >
                   <Save size={18} />
                   <span>Lưu lại</span>

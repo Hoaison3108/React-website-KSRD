@@ -5,7 +5,7 @@ export const DEFAULT_SETTINGS = {
   hero: {
     title: 'Giải Pháp Vật Liệu Xây Dựng Bền Vững',
     subtitle: 'Khoáng Sản Rạng Đông - Đồng hành cùng mọi công trình trọng điểm với chất lượng vượt trội và dịch vụ chuyên nghiệp.',
-    backgroundImage: 'https://images.unsplash.com/photo-1541888946425-d81bb19480c5?q=80&w=2070&auto=format&fit=crop'
+    backgroundImage: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=2070&auto=format&fit=crop'
   },
   services: [
     {
@@ -67,7 +67,7 @@ export const DEFAULT_PRODUCTS = [
     category: 'Cát đá xây dựng',
     description: 'Đá 1x2 sạch, không lẫn tạp chất, cường độ nén cao, phù hợp cho đổ bê tông sàn, dầm, cột.',
     price: 450000,
-    images: ['https://images.unsplash.com/photo-1578319439584-104c94d37305?q=80&w=2070&auto=format&fit=crop'],
+    images: ['https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=2070&auto=format&fit=crop'],
     specifications: {
       'Kích thước hạt': '10-25 mm',
       'Độ nén hao hụt': '< 15%',
@@ -85,7 +85,7 @@ export const DEFAULT_PROJECTS = [
     year: '2023',
     scale: '100.000 m3 bê tông',
     description: 'Cung cấp toàn bộ bê tông tươi và vật liệu đắp nền cho gói thầu XL-01 dự án cao tốc Bắc Nam.',
-    image: 'https://images.unsplash.com/photo-1545139224-79b1773592c2?q=80&w=2070&auto=format&fit=crop',
+    image: 'https://images.unsplash.com/photo-1545139224-79b176937ee9?q=80&w=2070&auto=format&fit=crop',
     featured: true,
     client: 'Bộ Giao Thông Vận Tải',
     scope: 'Cung ứng vật liệu xây dựng',

@@ -23,7 +23,7 @@ const galleryItems = [
     id: 3,
     type: 'video',
     category: 'Hoạt động',
-    src: 'https://images.unsplash.com/photo-1535732759880-bbd5c7265e3f?q=80&w=1000&auto=format&fit=crop', // Placeholder for video thumbnail
+    src: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=1000&auto=format&fit=crop', // Placeholder for video thumbnail
     title: 'Quy trình đổ bê tông tại công trình',
     videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' // Example video
   },
@@ -38,49 +38,49 @@ const galleryItems = [
     id: 5,
     type: 'image',
     category: 'Đội ngũ',
-    src: 'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1000&auto=format&fit=crop',
+    src: 'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?q=80&w=1000&auto=format&fit=crop',
     title: 'Đội ngũ kỹ sư Rạng Đông'
   },
   {
     id: 6,
     type: 'image',
     category: 'Sản xuất',
-    src: 'https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=80&w=1000&auto=format&fit=crop',
+    src: 'https://images.unsplash.com/photo-1545139224-79b176937ee9?q=80&w=1000&auto=format&fit=crop',
     title: 'Trạm trộn bê tông nhựa nóng'
   },
   {
     id: 7,
     type: 'image',
     category: 'Dự án',
-    src: 'https://images.unsplash.com/photo-1582719508461-905c673771fd?q=80&w=1000&auto=format&fit=crop',
+    src: 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=1000&auto=format&fit=crop',
     title: 'Cung cấp vật liệu cho Centara Mirage Resort'
   },
   {
     id: 8,
     type: 'image',
     category: 'Đội ngũ',
-    src: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=1000&auto=format&fit=crop',
+    src: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1000&auto=format&fit=crop',
     title: 'Họp giao ban công trường'
   },
   {
     id: 9,
     type: 'image',
     category: 'Dự án',
-    src: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1000&auto=format&fit=crop',
+    src: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?q=80&w=1000&auto=format&fit=crop',
     title: 'Hạ tầng khu công nghiệp VSIP III'
   },
   {
     id: 10,
     type: 'image',
     category: 'Sản xuất',
-    src: 'https://images.unsplash.com/photo-1513828583688-c52646db42da?q=80&w=1000&auto=format&fit=crop',
+    src: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1000&auto=format&fit=crop',
     title: 'Khai thác đá tại mỏ'
   },
   {
     id: 11,
     type: 'video',
     category: 'Hoạt động',
-    src: 'https://images.unsplash.com/photo-1541888946425-d81bb19480c5?q=80&w=1000&auto=format&fit=crop',
+    src: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=1000&auto=format&fit=crop',
     title: 'Giới thiệu năng lực sản xuất Rạng Đông',
     videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
   },
@@ -88,7 +88,7 @@ const galleryItems = [
     id: 12,
     type: 'image',
     category: 'Dự án',
-    src: 'https://images.unsplash.com/photo-1466611653911-95081537e5b7?q=80&w=1000&auto=format&fit=crop',
+    src: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=1000&auto=format&fit=crop',
     title: 'Móng trụ điện gió Hồng Phong'
   }
 ];
@@ -130,7 +130,7 @@ export default function GalleryPage() {
       <section className="relative h-[300px] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
           <img 
-            src="https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=2070&auto=format&fit=crop" 
+            src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=2070&auto=format&fit=crop" 
             alt="Gallery Hero" 
             className="w-full h-full object-cover"
             loading="lazy"

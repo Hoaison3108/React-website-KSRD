@@ -22,7 +22,7 @@ export default function AboutPage() {
        <section className="relative h-[400px] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0">
           <img 
-            src="https://images.unsplash.com/photo-1599708153386-52e69d9c2746?q=80&w=2070&auto=format&fit=crop" 
+            src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=2070&auto=format&fit=crop" 
             alt="About Hero" 
             className="w-full h-full object-cover"
             loading="lazy"

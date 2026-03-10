@@ -68,7 +68,7 @@ export default function AboutIntro() {
                 referrerPolicy="no-referrer"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                <span className="text-white font-bold text-lg">Khai thác mỏ</span>
+                <span className="text-white font-bold text-lg">Công trình xây dựng</span>
               </div>
             </div>
             <div className="rounded-2xl overflow-hidden shadow-lg relative group">
@@ -80,7 +80,7 @@ export default function AboutIntro() {
                 referrerPolicy="no-referrer"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                <span className="text-white font-bold text-lg">Khai thác mỏ</span>
+                <span className="text-white font-bold text-lg">Vật liệu xây dựng</span>
               </div>
             </div>
           </motion.div>

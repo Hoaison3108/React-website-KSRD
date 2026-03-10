@@ -9,7 +9,7 @@ const DEFAULT_SETTINGS: SiteSettings = {
   hero: {
     title: 'VẬT LIỆU XÂY DỰNG HOÀI SƠN',
     subtitle: 'Đồng hành cùng mọi công trình bền vững với thời gian. Cung cấp giải pháp vật liệu xây dựng toàn diện và chất lượng cao.',
-    backgroundImage: 'https://images.unsplash.com/photo-1541888946425-d81bb19480c5?q=80&w=2070&auto=format&fit=crop'
+    backgroundImage: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=2070&auto=format&fit=crop'
   },
   services: [
     { title: 'Cung cấp Bê tông', description: 'Bê tông thương phẩm chất lượng cao cho mọi công trình.', icon: 'Package' },
@@ -197,10 +197,8 @@ const Settings = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Left Column: Hero & Contact */}
-        <div className="lg:col-span-2 space-y-8">
-          {/* Hero Section */}
+      <div className="max-w-4xl space-y-8">
+        {/* Hero Section */}
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
             <div className="p-6 border-b dark:border-gray-700 flex items-center gap-2">
               <Layout className="text-emerald-600" size={20} />
@@ -303,56 +301,7 @@ const Settings = () => {
             </div>
           </div>
         </div>
-
-        {/* Right Column: Contact Info */}
-        <div className="space-y-8">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
-            <div className="p-6 border-b dark:border-gray-700 flex items-center gap-2">
-              <Phone className="text-emerald-600" size={20} />
-              <h2 className="text-xl font-bold text-gray-800 dark:text-white">Thông tin liên hệ</h2>
-            </div>
-            <div className="p-6 space-y-4">
-              <div>
-                <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 uppercase mb-2">Địa chỉ trụ sở</label>
-                <input
-                  type="text"
-                  value={settings.contactInfo.address}
-                  onChange={(e) => setSettings({ ...settings, contactInfo: { ...settings.contactInfo, address: e.target.value } })}
-                  className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500/20 outline-none dark:text-white"
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 uppercase mb-2">Số điện thoại</label>
-                <input
-                  type="text"
-                  value={settings.contactInfo.phone}
-                  onChange={(e) => setSettings({ ...settings, contactInfo: { ...settings.contactInfo, phone: e.target.value } })}
-                  className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500/20 outline-none dark:text-white"
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 uppercase mb-2">Email</label>
-                <input
-                  type="email"
-                  value={settings.contactInfo.email}
-                  onChange={(e) => setSettings({ ...settings, contactInfo: { ...settings.contactInfo, email: e.target.value } })}
-                  className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500/20 outline-none dark:text-white"
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 uppercase mb-2">Giờ làm việc</label>
-                <input
-                  type="text"
-                  value={settings.contactInfo.workingHours}
-                  onChange={(e) => setSettings({ ...settings, contactInfo: { ...settings.contactInfo, workingHours: e.target.value } })}
-                  className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500/20 outline-none dark:text-white"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
-    </div>
   );
 };
 

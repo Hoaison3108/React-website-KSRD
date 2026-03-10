@@ -247,10 +247,10 @@ const RecruitmentManager = () => {
               <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
                 {paginatedJobs.map((job) => (
                   <tr key={job.id} className="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm font-bold text-gray-900 dark:text-white">{job.title}</div>
-                      <div className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1 mt-1">
-                        <MapPin size={12} /> {job.location}
+                    <td className="px-6 py-4">
+                      <div className="text-sm font-bold text-gray-900 dark:text-white max-w-[250px] truncate" title={job.title}>{job.title}</div>
+                      <div className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1 mt-1 max-w-[250px] truncate" title={job.location}>
+                        <MapPin size={12} className="flex-shrink-0" /> <span className="truncate">{job.location}</span>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -313,7 +313,7 @@ const RecruitmentManager = () => {
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
           <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
-            <div className="flex justify-between items-center p-6 border-b dark:border-gray-700">
+            <div className="flex justify-between items-center p-6 border-b dark:border-gray-700 shrink-0">
               <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
                 {editingJob ? 'Chỉnh sửa tin tuyển dụng' : 'Thêm tin tuyển dụng mới'}
               </h2>
@@ -325,8 +325,9 @@ const RecruitmentManager = () => {
               </button>
             </div>
             
-            <form onSubmit={handleSubmit} className="p-8 overflow-y-auto space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
+            <form onSubmit={handleSubmit} className="flex flex-col flex-1 overflow-hidden">
+              <div className="p-8 overflow-y-auto space-y-6 flex-1">
+                <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Tiêu đề vị trí *</label>
                   <input 
@@ -483,12 +484,13 @@ const RecruitmentManager = () => {
                   </div>
                 </div>
               </div>
+              </div>
 
-              <div className="flex justify-end gap-4 pt-4">
+              <div className="flex justify-end gap-4 p-6 border-t dark:border-gray-700 bg-gray-50 dark:bg-gray-800 shrink-0">
                 <button 
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-6 py-2 border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300 rounded-lg font-bold hover:bg-gray-50 dark:hover:bg-gray-700 transition-all"
+                  className="px-6 py-2 border border-gray-200 dark:border-gray-600 text-gray-600 dark:text-gray-300 rounded-lg font-bold hover:bg-gray-100 dark:hover:bg-gray-700 transition-all"
                 >
                   Hủy
                 </button>
