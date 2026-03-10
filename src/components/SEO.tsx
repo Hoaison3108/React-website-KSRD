@@ -18,7 +18,7 @@ const SEO: React.FC<SEOProps> = ({
   url = window.location.href,
   type = 'website',
 }) => {
-  const siteTitle = `KSRD | ${title}`;
+  const siteTitle = `${title} | KSRD`;
 
   return (
     <Helmet>
