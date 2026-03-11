@@ -25,10 +25,10 @@ export default function Footer() {
     { label: 'Liên hệ', path: '/contact' },
   ];
 
-  const contactInfo = settings?.footerInfo || settings?.contactInfo || {
+  const contactInfo = settings?.footerInfo || {
     address: 'Km09 QL28B - xã Lương Sơn - tỉnh Lâm Đồng',
     phone: '0252 652 6666',
-    email: 'khoangsanrangdong@rangdonggroup.vn'
+    email: 'khoangsanrangdong@rangdonggroup.vn',
   };
 
   const handleSubscribe = async (e: React.FormEvent) => {

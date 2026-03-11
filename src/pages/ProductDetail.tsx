@@ -88,17 +88,17 @@ export default function ProductDetail() {
           const data = docSnap.data();
           fetchedProduct = {
             id: docSnap.id,
-            title: data.name,
-            desc: data.description,
-            image: data.images && data.images.length > 0 ? data.images[0] : '',
-            gallery: data.images || [],
-            badge: 'Mới',
-            color: 'blue',
+            title: data.title || data.name,
+            desc: data.desc || data.description,
+            image: data.image || (data.images && data.images.length > 0 ? data.images[0] : ''),
+            gallery: data.gallery || data.images || [],
+            badge: data.badge || 'Mới',
+            color: data.color || 'blue',
             category: data.category,
-            details: {
-              features: [],
-              specifications: Object.entries(data.specifications || {}).map(([key, value]) => ({ label: key, value: String(value) })),
-              applications: ''
+            details: data.details || {
+              features: data.features || [],
+              specifications: data.specifications ? Object.entries(data.specifications).map(([key, value]) => ({ label: key, value: String(value) })) : [],
+              applications: data.applications || ''
             }
           };
         } else {
@@ -124,11 +124,11 @@ export default function ProductDetail() {
               const dData = d.data();
               return {
                 id: d.id,
-                title: dData.name,
-                desc: dData.description,
-                image: dData.images && dData.images.length > 0 ? dData.images[0] : '',
-                badge: 'Mới',
-                color: 'blue',
+                title: dData.title || dData.name,
+                desc: dData.desc || dData.description,
+                image: dData.image || (dData.images && dData.images.length > 0 ? dData.images[0] : ''),
+                badge: dData.badge || 'Mới',
+                color: dData.color || 'blue',
                 category: dData.category
               } as Product;
             })

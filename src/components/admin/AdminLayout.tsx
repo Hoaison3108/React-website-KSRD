@@ -11,40 +11,49 @@ import {
   Settings as SettingsIcon,
   LogOut, 
   Menu, 
-  X 
+  X,
+  Users
 } from 'lucide-react';
 
 const AdminLayout = () => {
-  const { currentUser, logout } = useAuth();
+  const { currentUser, logout, isAdmin } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     if (!currentUser) {
-      navigate('/admin/login');
+      navigate('/management/login', { replace: true });
     }
   }, [currentUser, navigate]);
+
+  if (!currentUser) {
+    return null;
+  }
 
   const handleLogout = async () => {
     try {
       await logout();
-      navigate('/admin/login');
+      navigate('/management/login');
     } catch (error) {
       console.error("Failed to log out", error);
     }
   };
 
   const navItems = [
-    { path: '/admin/dashboard', label: 'Dashboard', icon: <LayoutDashboard size={20} /> },
-    { path: '/admin/products', label: 'Sản phẩm', icon: <Package size={20} /> },
-    { path: '/admin/projects', label: 'Dự án', icon: <Briefcase size={20} /> },
-    { path: '/admin/news', label: 'Tin tức', icon: <Newspaper size={20} /> },
-    { path: '/admin/recruitment', label: 'Tuyển dụng', icon: <Briefcase size={20} /> },
-    { path: '/admin/messages', label: 'Tin nhắn', icon: <MessageSquare size={20} /> },
-    { path: '/admin/contact', label: 'Liên hệ', icon: <Phone size={20} /> },
-    { path: '/admin/settings', label: 'Cài đặt', icon: <SettingsIcon size={20} /> },
+    { path: '/management/dashboard', label: 'Dashboard', icon: <LayoutDashboard size={20} /> },
+    { path: '/management/products', label: 'Sản phẩm', icon: <Package size={20} /> },
+    { path: '/management/projects', label: 'Dự án', icon: <Briefcase size={20} /> },
+    { path: '/management/news', label: 'Tin tức', icon: <Newspaper size={20} /> },
+    { path: '/management/recruitment', label: 'Tuyển dụng', icon: <Briefcase size={20} /> },
+    { path: '/management/messages', label: 'Tin nhắn', icon: <MessageSquare size={20} /> },
+    { path: '/management/contact', label: 'Liên hệ', icon: <Phone size={20} /> },
+    { path: '/management/settings', label: 'Cài đặt', icon: <SettingsIcon size={20} /> },
   ];
+
+  if (isAdmin) {
+    navItems.push({ path: '/management/users', label: 'Quản lý Nhân sự', icon: <Users size={20} /> });
+  }
 
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-gray-900">
@@ -52,7 +61,7 @@ const AdminLayout = () => {
       <aside className={`fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-gray-800 shadow-lg transform transition-transform duration-300 ease-in-out ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:relative md:translate-x-0`}>
         <div className="flex items-center justify-between p-4 border-b dark:border-gray-700">
           <Link to="/" className="text-xl font-bold text-blue-800 dark:text-blue-400">
-            Hoài Sơn Admin
+            Rạng Đông Management
           </Link>
           <button onClick={() => setIsSidebarOpen(false)} className="md:hidden text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
             <X size={24} />
@@ -77,14 +86,17 @@ const AdminLayout = () => {
           ))}
         </nav>
 
-        <div className="absolute bottom-0 w-full p-4 border-t dark:border-gray-700">
+        <div className="absolute bottom-0 w-full p-4 border-t dark:border-gray-700 bg-white dark:bg-gray-800">
           <button
             onClick={handleLogout}
-            className="flex items-center w-full px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg transition-colors dark:text-red-400 dark:hover:bg-red-900/20"
+            className="flex items-center w-full px-4 py-3 text-red-600 hover:bg-red-50 rounded-lg transition-colors dark:text-red-400 dark:hover:bg-red-900/20 mb-2"
           >
             <LogOut size={20} className="mr-3" />
             <span className="font-medium">Đăng xuất</span>
           </button>
+          <div className="text-center text-[10px] text-gray-400 dark:text-gray-500 pb-1">
+            Version 2.0.3 (Settings & Contact Refactored)
+          </div>
         </div>
       </aside>
 

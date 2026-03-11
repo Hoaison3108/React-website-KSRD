@@ -4,8 +4,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Autoplay } from 'swiper/modules';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
-import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../firebase';
+import { useFirestoreCollection } from '../hooks/useFirestoreCollection';
 import SkeletonGrid from './SkeletonGrid';
 import { products as localProducts, productCategories as localCategories } from '../data/products';
 
@@ -104,56 +103,46 @@ interface ProductsProps {
 }
 
 export default function Products({ viewMode = 'slider', hideHeader = false }: ProductsProps) {
+  const { data: rawProducts, loading } = useFirestoreCollection('products');
   const [products, setProducts] = useState<Product[]>([]);
   const [activeCategory, setActiveCategory] = useState('Tất cả');
   const [showFilters, setShowFilters] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [loading, setLoading] = useState(true);
   const filterRef = useRef<HTMLDivElement>(null);
   const itemsPerPage = 6;
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const querySnapshot = await getDocs(collection(db, 'products'));
-        const fetchedProducts = querySnapshot.docs.map(doc => {
-          const data = doc.data();
-          return {
-            id: doc.id,
-            title: data.name || data.title,
-            category: data.category,
-            desc: data.description || data.desc,
-            image: data.images && data.images.length > 0 ? data.images[0] : (data.image || ''),
-            badge: data.badge || 'Mới',
-            color: data.color || 'blue',
-            price: data.price,
-            details: data.details || {
-              features: data.features || [],
-              specifications: data.specifications ? Object.entries(data.specifications).map(([key, value]) => ({ label: key, value: String(value) })) : [],
-              applications: data.applications || ''
-            }
-          } as Product;
-        });
-        
-        // Combine local products with fetched products, avoiding duplicates by title
-        const combined = [...localProducts];
-        fetchedProducts.forEach(fp => {
-          if (!combined.find(lp => lp.title === fp.title)) {
-            combined.push(fp as any);
-          }
-        });
-        
-        setProducts(combined as any);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-        setProducts(localProducts as any);
-      } finally {
-        setLoading(false);
-      }
-    };
+    if (rawProducts && rawProducts.length > 0) {
+      const formattedProducts = rawProducts.map((p: any) => ({
+        id: p.id,
+        title: p.title || p.name,
+        category: p.category,
+        desc: p.desc || p.description,
+        image: p.image || (p.images && p.images.length > 0 ? p.images[0] : ''),
+        badge: p.badge || 'Mới',
+        color: p.color || 'blue',
+        price: p.price,
+        details: p.details || {
+          features: p.features || [],
+          specifications: p.specifications ? Object.entries(p.specifications).map(([key, value]) => ({ label: key, value: String(value) })) : [],
+          applications: p.applications || ''
+        }
+      })) as Product[];
+      
+      // Merge unique based on Title
+      const combined = [...localProducts];
+      formattedProducts.forEach(fp => {
+        if (!combined.find(lp => lp.title === fp.title)) {
+          combined.push(fp as any);
+        }
+      });
+      setProducts(combined as any);
+    } else if (!loading) {
+      setProducts(localProducts as any);
+    }
+  }, [rawProducts, loading]);
 
-    fetchProducts();
-  }, []);
+
 
   // Generate categories dynamically
   const productCategories = ['Tất cả', ...Array.from(new Set(products.map(p => p.category).filter(Boolean))) as string[]];

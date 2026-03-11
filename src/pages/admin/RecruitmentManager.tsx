@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, orderBy, Timestamp } from 'firebase/firestore';
 import { db } from '../../firebase';
-import { Briefcase, Plus, Search, Edit2, Trash2, X, Save, RefreshCw, MapPin, Clock, DollarSign, Calendar } from 'lucide-react';
+import { Briefcase, Plus, Search, Edit2, Trash2, X, Save, RefreshCw, RotateCcw, MapPin, Clock, DollarSign, Calendar } from 'lucide-react';
 import Pagination from '../../components/Pagination';
 import { jobs as defaultJobs } from '../../data/recruitment';
+import { useAuth } from '../../contexts/AuthContext';
 
 interface Job {
   id: string;
@@ -28,6 +29,7 @@ interface Job {
 const ITEMS_PER_PAGE = 8;
 
 const RecruitmentManager = () => {
+  const { isAdmin } = useAuth();
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -35,6 +37,7 @@ const RecruitmentManager = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingJob, setEditingJob] = useState<Job | null>(null);
   const [formStatus, setFormStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  const [isImporting, setIsImporting] = useState(false);
 
   const [formData, setFormData] = useState({
     title: '',
@@ -159,24 +162,31 @@ const RecruitmentManager = () => {
     }
   };
 
-  const restoreDefaults = async () => {
-    if (window.confirm('Bạn có muốn khôi phục dữ liệu tuyển dụng mặc định? Thao tác này sẽ thêm các tin tuyển dụng mẫu vào database.')) {
-      try {
-        setLoading(true);
-        for (const job of defaultJobs) {
+  const handleRestoreDefaults = async () => {
+    if (!window.confirm('Khôi phục dữ liệu mẫu (Tuyển Kỹ sư xây dựng, Lái xe tải...)?')) {
+      return;
+    }
+    
+    setIsImporting(true);
+    try {
+      for (const job of defaultJobs) {
+        const exists = jobs.find(j => j.title === job.title);
+        if (!exists) {
           const { id, ...jobWithoutId } = job;
+          const cleanData = JSON.parse(JSON.stringify(jobWithoutId));
           await addDoc(collection(db, 'recruitment'), {
-            ...jobWithoutId,
+            ...cleanData,
             createdAt: Timestamp.now()
           });
         }
-        alert('Đã khôi phục dữ liệu mặc định thành công!');
-        fetchJobs();
-      } catch (error) {
-        console.error("Error restoring defaults:", error);
-      } finally {
-        setLoading(false);
       }
+      alert('Đã khôi phục dữ liệu mẫu thành công!');
+      fetchJobs();
+    } catch (error) {
+      console.error("Error restoring defaults:", error);
+      alert('Có lỗi xảy ra khi khôi phục dữ liệu');
+    } finally {
+      setIsImporting(false);
     }
   };
 
@@ -198,20 +208,24 @@ const RecruitmentManager = () => {
           <h1 className="text-3xl font-bold text-gray-800 dark:text-white">Quản lý Tuyển dụng</h1>
           <p className="text-gray-500 dark:text-gray-400 mt-1">Quản lý các vị trí công việc đang tuyển dụng</p>
         </div>
-        <div className="flex gap-3">
-          <button 
-            onClick={restoreDefaults}
-            className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-bold transition-all dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
-          >
-            <RefreshCw size={20} /> Khôi phục mặc định
-          </button>
-          <button 
-            onClick={() => handleOpenModal()}
-            className="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold shadow-lg shadow-emerald-900/20 transition-all"
-          >
-            <Plus size={20} /> Thêm vị trí mới
-          </button>
-        </div>
+        {isAdmin && (
+          <div className="flex gap-3">
+            <button 
+              onClick={handleRestoreDefaults}
+              disabled={isImporting}
+              className="bg-white dark:bg-slate-800 text-gray-700 dark:text-gray-200 px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors border border-gray-200 dark:border-slate-700 shadow-sm disabled:opacity-50"
+            >
+              <RotateCcw size={18} className={isImporting ? 'animate-spin' : ''} />
+              <span>Sinh dữ liệu mẫu</span>
+            </button>
+            <button 
+              onClick={() => handleOpenModal()}
+              className="flex items-center gap-2 px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg font-bold shadow-lg shadow-emerald-900/20 transition-all"
+            >
+              <Plus size={20} /> Thêm vị trí mới
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
@@ -241,7 +255,7 @@ const RecruitmentManager = () => {
                   <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Vị trí</th>
                   <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Thông tin</th>
                   <th className="px-6 py-4 text-left text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Hạn nộp</th>
-                  <th className="px-6 py-4 text-right text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Thao tác</th>
+                  {isAdmin && <th className="px-6 py-4 text-right text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Thao tác</th>}
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
@@ -268,24 +282,26 @@ const RecruitmentManager = () => {
                         <Calendar size={14} /> {job.deadline}
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                      <div className="flex justify-end gap-2">
-                        <button 
-                          onClick={() => handleOpenModal(job)} 
-                          className="p-2 text-blue-600 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
-                          title="Chỉnh sửa"
-                        >
-                          <Edit2 size={18} />
-                        </button>
-                        <button 
-                          onClick={() => handleDelete(job.id)} 
-                          className="p-2 text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20 rounded-lg transition-colors"
-                          title="Xóa"
-                        >
-                          <Trash2 size={18} />
-                        </button>
-                      </div>
-                    </td>
+                    {isAdmin && (
+                      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                        <div className="flex justify-end gap-2">
+                          <button 
+                            onClick={() => handleOpenModal(job)} 
+                            className="p-2 text-blue-600 hover:bg-blue-50 dark:text-blue-400 dark:hover:bg-blue-900/20 rounded-lg transition-colors"
+                            title="Chỉnh sửa"
+                          >
+                            <Edit2 size={18} />
+                          </button>
+                          <button 
+                            onClick={() => handleDelete(job.id)} 
+                            className="p-2 text-red-600 hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+                            title="Xóa"
+                          >
+                            <Trash2 size={18} />
+                          </button>
+                        </div>
+                      </td>
+                    )}
                   </tr>
                 ))}
                 {paginatedJobs.length === 0 && (

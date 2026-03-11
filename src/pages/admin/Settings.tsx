@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
-import { db } from '../../firebase';
 import { uploadImage } from '../../utils/uploadImage';
 import { resetAllData } from '../../utils/seedData';
-import { Save, Image as ImageIcon, Plus, Trash2, Layout, Info, Phone, RotateCcw, Database } from 'lucide-react';
+import { Save, Image as ImageIcon, Plus, Trash2, Layout, Info, Phone, RotateCcw, Database, Shield } from 'lucide-react';
+import { useSiteSettings, SiteSettings } from '../../hooks/useSiteSettings';
+import { useAuth } from '../../contexts/AuthContext';
 
 const DEFAULT_SETTINGS: SiteSettings = {
   hero: {
-    title: 'VẬT LIỆU XÂY DỰNG HOÀI SƠN',
+    title: 'VẬT LIỆU XÂY DỰNG RẠNG ĐÔNG',
     subtitle: 'Đồng hành cùng mọi công trình bền vững với thời gian. Cung cấp giải pháp vật liệu xây dựng toàn diện và chất lượng cao.',
     backgroundImage: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=2070&auto=format&fit=crop'
   },
@@ -19,71 +19,30 @@ const DEFAULT_SETTINGS: SiteSettings = {
   footerInfo: {
     address: 'Km09 QL28B - xã Lương Sơn - tỉnh Lâm Đồng',
     phone: '0252 652 6666',
-    email: 'khoangsanrangdong@rangdonggroup.vn',
-    workingHours: '7:00 - 17:00'
+    email: 'khoangsanrangdong@rangdonggroup.vn'
   },
   contactPageInfo: {
     address: 'Km09 QL28B - xã Lương Sơn - tỉnh Lâm Đồng',
     phone: '0252 652 6666',
-    email: 'khoangsanrangdong@rangdonggroup.vn',
-    workingHours: '7:00 - 17:00'
+    email: 'khoangsanrangdong@rangdonggroup.vn'
   }
 };
 
-interface SiteSettings {
-  hero: {
-    title: string;
-    subtitle: string;
-    backgroundImage: string;
-  };
-  services: {
-    title: string;
-    description: string;
-    icon: string;
-  }[];
-  footerInfo: {
-    address: string;
-    phone: string;
-    email: string;
-    workingHours?: string;
-  };
-  contactPageInfo?: {
-    address: string;
-    phone: string;
-    email: string;
-    workingHours: string;
-  };
-}
-
 const Settings = () => {
-  const [settings, setSettings] = useState<SiteSettings>({
-    hero: { title: '', subtitle: '', backgroundImage: '' },
-    services: [],
-    footerInfo: { address: '', phone: '', email: '', workingHours: '' }
-  });
-  const [loading, setLoading] = useState(true);
+  const { isAdmin } = useAuth();
+  const { settings: remoteSettings, loading, updateSettings } = useSiteSettings();
+  const [settings, setSettings] = useState<SiteSettings | null>(null);
   const [saving, setSaving] = useState(false);
   const [heroImage, setHeroImage] = useState<File | null>(null);
 
   useEffect(() => {
-    fetchSettings();
-  }, []);
-
-  const fetchSettings = async () => {
-    try {
-      const docRef = doc(db, 'site_settings', 'main');
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        setSettings(docSnap.data() as SiteSettings);
-      }
-    } catch (error) {
-      console.error("Error fetching settings:", error);
-    } finally {
-      setLoading(false);
+    if (remoteSettings && !settings) {
+      setSettings(remoteSettings);
     }
-  };
+  }, [remoteSettings]);
 
   const handleSave = async () => {
+    if (!settings) return;
     setSaving(true);
     try {
       let heroUrl = settings.hero.backgroundImage;
@@ -96,12 +55,11 @@ const Settings = () => {
         hero: { ...settings.hero, backgroundImage: heroUrl }
       };
 
-      await setDoc(doc(db, 'site_settings', 'main'), updatedSettings);
-      setSettings(updatedSettings);
+      await updateSettings(updatedSettings);
       setHeroImage(null);
       alert('Đã lưu cài đặt thành công!');
     } catch (error) {
-      console.error("Error saving settings:", error);
+       // Lỗi đã được log ở hook, UI chỉ cần alert
       alert('Có lỗi xảy ra khi lưu cài đặt.');
     } finally {
       setSaving(false);
@@ -114,11 +72,10 @@ const Settings = () => {
     }
     setSaving(true);
     try {
-      await setDoc(doc(db, 'site_settings', 'main'), DEFAULT_SETTINGS);
+      await updateSettings(DEFAULT_SETTINGS);
       setSettings(DEFAULT_SETTINGS);
       alert('Đã khôi phục cài đặt mặc định thành công!');
     } catch (error) {
-      console.error("Error restoring settings:", error);
       alert('Có lỗi xảy ra khi khôi phục cài đặt.');
     } finally {
       setSaving(false);
@@ -132,7 +89,7 @@ const Settings = () => {
     setSaving(true);
     try {
       await resetAllData();
-      await fetchSettings();
+      // remoteSettings sẽ tự đồng bộ snapshot qua useSiteSettings => setSettings sẽ tự chạy
       alert('Đã khôi phục toàn bộ dữ liệu mẫu thành công!');
     } catch (error) {
       console.error("Error resetting data:", error);
@@ -160,11 +117,26 @@ const Settings = () => {
     setSettings({ ...settings, services: updatedServices });
   };
 
-  if (loading) {
+  if (loading || !settings) {
     return (
       <div className="flex flex-col items-center justify-center py-20">
         <div className="w-10 h-10 border-4 border-emerald-100 border-t-emerald-600 rounded-full animate-spin mb-4"></div>
         <p className="text-gray-500 dark:text-gray-400">Đang tải cài đặt...</p>
+      </div>
+    );
+  }
+
+  if (!isAdmin) {
+    return (
+      <div className="flex flex-col items-center justify-center py-32 text-center px-4">
+        <div className="bg-red-50 text-red-600 p-6 rounded-full mb-6">
+          <Shield size={64} />
+        </div>
+        <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-4">Quyền truy cập bị từ chối</h2>
+        <p className="text-gray-500 dark:text-gray-400 max-w-lg">
+          Khu vực này chứa các tham số cấu hình hệ thống, chỉ dành riêng cho Quản trị viên cấp cao (Admin). 
+          Tài khoản của bạn hiện là Nhân viên (Staff). Tham khảo Admin để biết thêm chi tiết.
+        </p>
       </div>
     );
   }

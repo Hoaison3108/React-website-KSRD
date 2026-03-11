@@ -4,7 +4,7 @@
  */
 
 import React, { lazy, Suspense } from 'react';
-import { BrowserRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Outlet, Navigate } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -40,6 +40,7 @@ const AdminMessages = lazy(() => import('./pages/admin/Messages'));
 const AdminRecruitment = lazy(() => import('./pages/admin/RecruitmentManager'));
 const AdminContact = lazy(() => import('./pages/admin/ContactManager'));
 const AdminSettings = lazy(() => import('./pages/admin/Settings'));
+const AdminUsers = lazy(() => import('./pages/admin/UserManager'));
 
 const MainLayout = () => (
   <div className="min-h-screen bg-white dark:bg-slate-900 text-gray-900 font-sans transition-colors duration-300 flex flex-col">
@@ -61,13 +62,14 @@ export default function App() {
         <Router>
           <ScrollToTop />
           <Routes>
-          {/* Admin Routes */}
-          <Route path="/admin/login" element={<Login />} />
-          <Route path="/admin" element={
+          {/* Management Routes */}
+          <Route path="/management/login" element={<Login />} />
+          <Route path="/management" element={
             <AuthProvider>
               <AdminLayout />
             </AuthProvider>
           }>
+            <Route index element={<Navigate to="dashboard" replace />} />
             <Route path="dashboard" element={
               <Suspense fallback={<PageLoader />}>
                 <Dashboard />
@@ -106,6 +108,11 @@ export default function App() {
             <Route path="settings" element={
               <Suspense fallback={<PageLoader />}>
                 <AdminSettings />
+              </Suspense>
+            } />
+            <Route path="users" element={
+              <Suspense fallback={<PageLoader />}>
+                <AdminUsers />
               </Suspense>
             } />
           </Route>
