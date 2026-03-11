@@ -30,7 +30,10 @@ export default function ContactManager() {
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         const data = docSnap.data();
-        if (data.contactInfo) {
+        if (data.contactPageInfo) {
+          setContactInfo(data.contactPageInfo);
+        } else if (data.contactInfo) {
+          // Fallback cho dữ liệu cũ
           setContactInfo(data.contactInfo);
         }
       }
@@ -54,7 +57,7 @@ export default function ContactManager() {
 
       await setDoc(docRef, {
         ...currentSettings,
-        contactInfo
+        contactPageInfo: contactInfo
       });
       
       alert('Đã lưu thông tin liên hệ thành công!');

@@ -25,7 +25,7 @@ export default function Footer() {
     { label: 'Liên hệ', path: '/contact' },
   ];
 
-  const contactInfo = settings?.contactInfo || {
+  const contactInfo = settings?.footerInfo || settings?.contactInfo || {
     address: 'Km09 QL28B - xã Lương Sơn - tỉnh Lâm Đồng',
     phone: '0252 652 6666',
     email: 'khoangsanrangdong@rangdonggroup.vn'

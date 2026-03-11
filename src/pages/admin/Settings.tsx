@@ -16,7 +16,13 @@ const DEFAULT_SETTINGS: SiteSettings = {
     { title: 'Đá & Cát xây dựng', description: 'Nguồn vật liệu tự nhiên, sàng lọc kỹ lưỡng.', icon: 'Info' },
     { title: 'Gạch & Ngói', description: 'Đa dạng mẫu mã, độ bền vượt trội.', icon: 'Layout' }
   ],
-  contactInfo: {
+  footerInfo: {
+    address: 'Km09 QL28B - xã Lương Sơn - tỉnh Lâm Đồng',
+    phone: '0252 652 6666',
+    email: 'khoangsanrangdong@rangdonggroup.vn',
+    workingHours: '7:00 - 17:00'
+  },
+  contactPageInfo: {
     address: 'Km09 QL28B - xã Lương Sơn - tỉnh Lâm Đồng',
     phone: '0252 652 6666',
     email: 'khoangsanrangdong@rangdonggroup.vn',
@@ -35,7 +41,13 @@ interface SiteSettings {
     description: string;
     icon: string;
   }[];
-  contactInfo: {
+  footerInfo: {
+    address: string;
+    phone: string;
+    email: string;
+    workingHours?: string;
+  };
+  contactPageInfo?: {
     address: string;
     phone: string;
     email: string;
@@ -47,7 +59,7 @@ const Settings = () => {
   const [settings, setSettings] = useState<SiteSettings>({
     hero: { title: '', subtitle: '', backgroundImage: '' },
     services: [],
-    contactInfo: { address: '', phone: '', email: '', workingHours: '' }
+    footerInfo: { address: '', phone: '', email: '', workingHours: '' }
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -297,6 +309,59 @@ const Settings = () => {
                     </div>
                   </div>
                 ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Footer Section */}
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+            <div className="p-6 border-b dark:border-gray-700 flex items-center gap-2">
+              <Phone className="text-emerald-600" size={20} />
+              <h2 className="text-xl font-bold text-gray-800 dark:text-white">Thông tin chân trang (Footer)</h2>
+            </div>
+            
+            <div className="p-6 space-y-6">
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 uppercase mb-2">
+                    Địa chỉ
+                  </label>
+                  <textarea
+                    value={settings.footerInfo?.address || ''}
+                    onChange={(e) => setSettings({ ...settings, footerInfo: { ...settings.footerInfo, address: e.target.value } })}
+                    rows={2}
+                    className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500/20 outline-none dark:text-white resize-none"
+                    placeholder="Nhập địa chỉ công ty..."
+                  />
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 uppercase mb-2">
+                      Số điện thoại
+                    </label>
+                    <input
+                      type="text"
+                      value={settings.footerInfo?.phone || ''}
+                      onChange={(e) => setSettings({ ...settings, footerInfo: { ...settings.footerInfo, phone: e.target.value } })}
+                      className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500/20 outline-none dark:text-white"
+                      placeholder="Ví dụ: 091.7630.863"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 dark:text-gray-300 uppercase mb-2">
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      value={settings.footerInfo?.email || ''}
+                      onChange={(e) => setSettings({ ...settings, footerInfo: { ...settings.footerInfo, email: e.target.value } })}
+                      className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500/20 outline-none dark:text-white"
+                      placeholder="Ví dụ: chautm@rangdonggroup.vn"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </div>

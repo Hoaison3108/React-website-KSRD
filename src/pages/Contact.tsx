@@ -20,7 +20,7 @@ export default function ContactPage() {
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const contactInfo = settings?.contactInfo || {
+  const contactInfo = settings?.contactPageInfo || settings?.contactInfo || {
     address: 'Km09 QL28B - xã Lương Sơn - tỉnh Lâm Đồng',
     phone: '0252 652 6666',
     email: 'khoangsanrangdong@rangdonggroup.vn',

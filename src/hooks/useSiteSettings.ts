@@ -13,7 +13,13 @@ export interface SiteSettings {
     description: string;
     icon: string;
   }[];
-  contactInfo: {
+  footerInfo: {
+    address: string;
+    phone: string;
+    email: string;
+    workingHours?: string;
+  };
+  contactPageInfo: {
     address: string;
     phone: string;
     email: string;
