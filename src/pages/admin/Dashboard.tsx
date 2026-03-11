@@ -1,7 +1,30 @@
 import React, { useEffect, useState } from 'react';
-import { collection, getCountFromServer } from 'firebase/firestore';
+import { collection, getCountFromServer, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../../firebase';
-import { Package, Briefcase, Newspaper, Users, Info } from 'lucide-react';
+import { Package, Briefcase, Newspaper, Users, Info, TrendingUp, MessageSquare as MessageIcon } from 'lucide-react';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { Line, Bar } from 'react-chartjs-2';
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 const Dashboard = () => {
   const [stats, setStats] = useState({
@@ -9,6 +32,11 @@ const Dashboard = () => {
     projects: 0,
     news: 0,
     users: 0
+  });
+  const [chartData, setChartData] = useState({
+    visits: [] as number[],
+    messages: [] as number[],
+    labels: [] as string[]
   });
   const [loading, setLoading] = useState(true);
 
@@ -20,11 +48,54 @@ const Dashboard = () => {
         const newsColl = collection(db, 'news');
         // const usersColl = collection(db, 'users'); // Users might be restricted
 
-        const [productsSnap, projectsSnap, newsSnap] = await Promise.all([
+        // Get dates for the last 7 days
+        const last7Days = Array.from({length: 7}, (_, i) => {
+          const d = new Date();
+          d.setDate(d.getDate() - (6 - i));
+          return d;
+        });
+        
+        const labels = last7Days.map(d => d.toLocaleDateString('vi-VN', { weekday: 'short' }));
+        
+        // Mock visits data 
+        const mockVisits = [120, 150, 180, 145, 190, 210, 175];
+
+        // Fetch messages for the last 7 days
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+        sevenDaysAgo.setHours(0, 0, 0, 0);
+
+        const messagesQuery = query(
+          collection(db, 'messages'),
+          where('createdAt', '>=', sevenDaysAgo)
+        );
+
+        const [productsSnap, projectsSnap, newsSnap, messagesSnap] = await Promise.all([
           getCountFromServer(productsColl),
           getCountFromServer(projectsColl),
-          getCountFromServer(newsColl)
+          getCountFromServer(newsColl),
+          getDocs(messagesQuery)
         ]);
+        
+        const messagesCountArray = new Array(7).fill(0);
+        
+        messagesSnap.docs.forEach(doc => {
+          const data = doc.data();
+          if (data.createdAt) {
+            const date = data.createdAt.toDate();
+            const dateString = date.toLocaleDateString('vi-VN', { weekday: 'short' });
+            const index = labels.indexOf(dateString);
+            if (index !== -1) {
+              messagesCountArray[index]++;
+            }
+          }
+        });
+
+        setChartData({
+          visits: mockVisits,
+          messages: messagesCountArray,
+          labels
+        });
 
         setStats({
           products: productsSnap.data().count,
@@ -69,6 +140,77 @@ const Dashboard = () => {
             </div>
           </div>
         ))}
+      </div>
+
+      {/* Charts Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
+          <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-6 flex items-center gap-2">
+            <TrendingUp className="text-blue-500" size={20} />
+            Lưu lượng truy cập (7 ngày qua)
+          </h2>
+          <div className="h-64">
+            <Line 
+              data={{
+                labels: chartData.labels,
+                datasets: [
+                  {
+                    label: 'Lượt truy cập',
+                    data: chartData.visits,
+                    borderColor: 'rgb(59, 130, 246)', // Tailwind blue-500
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    tension: 0.4,
+                    fill: true,
+                  }
+                ]
+              }}
+              options={{
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: { display: false }
+                },
+                scales: {
+                  y: { beginAtZero: true, grid: { color: 'rgba(156, 163, 175, 0.1)' } },
+                  x: { grid: { display: false } }
+                }
+              }}
+            />
+          </div>
+        </div>
+
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm p-6">
+          <h2 className="text-lg font-semibold text-gray-800 dark:text-white mb-6 flex items-center gap-2">
+            <MessageIcon className="text-emerald-500" size={20} />
+            Yêu cầu liên hệ mới (7 ngày qua)
+          </h2>
+          <div className="h-64">
+            <Bar 
+              data={{
+                labels: chartData.labels,
+                datasets: [
+                  {
+                    label: 'Form liên hệ',
+                    data: chartData.messages,
+                    backgroundColor: 'rgb(16, 185, 129)', // Tailwind emerald-500
+                    borderRadius: 4,
+                  }
+                ]
+              }}
+              options={{
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                  legend: { display: false }
+                },
+                scales: {
+                  y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: 'rgba(156, 163, 175, 0.1)' } },
+                  x: { grid: { display: false } }
+                }
+              }}
+            />
+          </div>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
