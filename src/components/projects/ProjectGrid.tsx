@@ -40,6 +40,7 @@ export default function ProjectGrid({ hideHeader = false }: ProjectGridProps) {
         const fetchedProjects = querySnapshot.docs.map(doc => {
           const data = doc.data();
           return {
+            ...data,
             id: doc.id,
             title: data.title,
             category: data.category,
@@ -51,11 +52,11 @@ export default function ProjectGrid({ hideHeader = false }: ProjectGridProps) {
           } as Project;
         });
         
-        // Combine local projects with fetched projects
-        const combined = [...localProjects];
-        fetchedProjects.forEach(fp => {
-          if (!combined.find(lp => lp.title === fp.title)) {
-            combined.push(fp as any);
+        // Combine fetched projects with local projects (Firebase takes priority)
+        const combined = [...fetchedProjects];
+        localProjects.forEach(lp => {
+          if (!combined.find(fp => fp.title === lp.title)) {
+            combined.push(lp as any);
           }
         });
 

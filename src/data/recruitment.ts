@@ -1,5 +1,5 @@
 export interface Job {
-  id: number;
+  id: string;
   title: string;
   location: string;
   type: string;
@@ -19,7 +19,7 @@ export interface Job {
 
 export const jobs: Job[] = [
   {
-    id: 1,
+    id: 'local_ksrd_job_001',
     title: 'Kỹ Sư Xây Dựng',
     location: 'Lâm Đồng',
     type: 'Toàn thời gian',
@@ -48,7 +48,7 @@ export const jobs: Job[] = [
     contactPhone: '035.3694.515'
   },
   {
-    id: 2,
+    id: 'local_ksrd_job_002',
     title: 'Nhân Viên Kinh Doanh',
     location: 'Bình Thuận',
     type: 'Toàn thời gian',
@@ -77,7 +77,7 @@ export const jobs: Job[] = [
     contactPhone: '035.3694.515'
   },
   {
-    id: 3,
+    id: 'local_ksrd_job_003',
     title: 'Lái Xe Tải Ben',
     location: 'Lâm Đồng',
     type: 'Toàn thời gian',

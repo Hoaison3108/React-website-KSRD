@@ -36,15 +36,15 @@ export default function RecruitmentPage() {
         const q = query(collection(db, 'recruitment'), orderBy('createdAt', 'desc'));
         const querySnapshot = await getDocs(q);
         const fetchedJobs = querySnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
+          ...doc.data(),
+          id: doc.id
         })) as Job[];
         
-        // Combine local jobs with fetched jobs
-        const combined = [...localJobs];
-        fetchedJobs.forEach(fj => {
-          if (!combined.find(lj => lj.title === fj.title)) {
-            combined.push(fj as any);
+        // Combine fetched jobs with local jobs (Firebase takes priority)
+        const combined = [...fetchedJobs];
+        localJobs.forEach(lj => {
+          if (!combined.find(fj => fj.title === lj.title)) {
+            combined.push(lj as any);
           }
         });
 
@@ -78,7 +78,7 @@ export default function RecruitmentPage() {
             loading="lazy"
             referrerPolicy="no-referrer"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-900/90 to-black/70" />
+          <div className="absolute inset-0 bg-linear-to-r from-blue-900/90 to-black/70" />
         </div>
         <div className="relative z-10 text-center text-white px-4 max-w-3xl mx-auto">
           <span className="inline-block py-1 px-3 rounded-full bg-secondary/20 border border-secondary/50 text-secondary text-xs font-bold uppercase tracking-wider mb-4 backdrop-blur-sm">
@@ -88,7 +88,7 @@ export default function RecruitmentPage() {
             Tuyển Dụng <span className="text-secondary">Nhân Tài</span>
           </h1>
           <p className="text-lg text-gray-200 leading-relaxed">
-            Cùng Rạng Đông kiến tạo những giá trị bền vững. Môi trường làm việc chuyên nghiệp, chế độ đãi ngộ hấp dẫn.
+            Cùng với chúng tôi kiến tạo những giá trị bền vững. Môi trường làm việc chuyên nghiệp, chế độ đãi ngộ hấp dẫn.
           </p>
         </div>
       </section>

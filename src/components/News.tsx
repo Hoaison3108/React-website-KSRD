@@ -58,11 +58,11 @@ export default function News({ isPaginationEnabled = false, hideHeader = false }
           } as NewsItem;
         });
         
-        // Combine local news with fetched news
-        const combined = [...localNews];
-        fetchedNews.forEach(fn => {
-          if (!combined.find(ln => ln.title === fn.title)) {
-            combined.push(fn as any);
+        // Combine fetched news with local news (Firebase takes priority)
+        const combined = [...fetchedNews];
+        localNews.forEach(ln => {
+          if (!combined.find(fn => fn.title === ln.title)) {
+            combined.push(ln as any);
           }
         });
         

@@ -129,11 +129,11 @@ export default function Products({ viewMode = 'slider', hideHeader = false }: Pr
         }
       })) as Product[];
       
-      // Merge unique based on Title
-      const combined = [...localProducts];
-      formattedProducts.forEach(fp => {
-        if (!combined.find(lp => lp.title === fp.title)) {
-          combined.push(fp as any);
+      // Merge unique based on Title (Firebase takes priority)
+      const combined = [...formattedProducts];
+      localProducts.forEach(lp => {
+        if (!combined.find(fp => fp.title === lp.title)) {
+          combined.push(lp as any);
         }
       });
       setProducts(combined as any);

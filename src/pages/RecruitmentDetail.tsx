@@ -47,7 +47,7 @@ export default function RecruitmentDetail() {
         let fetchedJob: Job | null = null;
 
         if (docSnap.exists()) {
-          fetchedJob = { id: docSnap.id, ...docSnap.data() } as Job;
+          fetchedJob = { ...docSnap.data(), id: docSnap.id } as Job;
         } else {
           // Fallback to local data
           const local = localJobs.find(j => j.id.toString() === id);
@@ -66,7 +66,7 @@ export default function RecruitmentDetail() {
           const q = query(collection(db, 'recruitment'), limit(5));
           const querySnapshot = await getDocs(q);
           const listFromFirestore = querySnapshot.docs
-            .map(doc => ({ id: doc.id, ...doc.data() } as Job))
+            .map(doc => ({ ...doc.data(), id: doc.id } as Job))
             .filter(j => j.id !== id);
           
           // Combine with local jobs for "Other Jobs"
@@ -130,7 +130,7 @@ export default function RecruitmentDetail() {
           <div className="lg:col-span-7 xl:col-span-8">
             <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl overflow-hidden border border-gray-100 dark:border-slate-700">
               {/* Header */}
-              <div className="p-8 border-b border-gray-100 dark:border-slate-700 bg-gradient-to-r from-blue-50 to-white dark:from-slate-800 dark:to-slate-800">
+              <div className="p-8 border-b border-gray-100 dark:border-slate-700 bg-linear-to-r from-blue-50 to-white dark:from-slate-800 dark:to-slate-800">
                 <h1 className="text-3xl font-bold text-primary dark:text-blue-400 mb-4">{job.title}</h1>
                 <div className="flex flex-wrap gap-4 text-sm text-gray-600 dark:text-gray-300">
                   <div className="flex items-center gap-2 bg-white dark:bg-slate-700 px-3 py-1.5 rounded-lg shadow-sm">

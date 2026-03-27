@@ -18,8 +18,8 @@ export function useFirestoreCollection<T = DocumentData>(
 
   const processSnapshot = (docs: QueryDocumentSnapshot<DocumentData>[]) => {
     return docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
+      ...doc.data(),
+      id: doc.id
     })) as (T & { id: string })[];
   };
 
