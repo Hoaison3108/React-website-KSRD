@@ -67,7 +67,7 @@ export default function ProductsPage() {
             Bạn cần tư vấn về sản phẩm?
           </h2>
           <p className="text-blue-100 max-w-2xl mx-auto mb-10 text-lg">
-            Đội ngũ kỹ thuật của Rạng Đông luôn sẵn sàng hỗ trợ bạn lựa chọn giải pháp vật liệu tối ưu nhất cho công trình.
+            Đội ngũ nhân sự của Khoáng sản Rạng Đông luôn sẵn sàng hỗ trợ bạn lựa chọn giải pháp vật liệu tối ưu nhất cho công trình.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <a 
@@ -77,10 +77,10 @@ export default function ProductsPage() {
               Liên hệ báo giá ngay
             </a>
             <a 
-              href="tel:0909123456" 
+              href="tel:0917630863" 
               className="btn bg-white/10 backdrop-blur-sm text-white border border-white/20 hover:bg-white hover:text-primary px-8 py-3 rounded-xl font-bold transition-all"
             >
-              Hotline: 0909 123 456
+              Hotline: 0917 630 863
             </a>
           </div>
         </div>

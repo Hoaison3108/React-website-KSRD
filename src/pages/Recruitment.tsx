@@ -186,7 +186,7 @@ export default function RecruitmentPage() {
                   </div>
                   <div>
                     <p className="text-xs text-gray-500 uppercase font-bold">Hotline Tuyển dụng</p>
-                    <a href="tel:0917630863" className="font-semibold text-gray-800 dark:text-white hover:text-primary">035.3694.515</a>
+                    <a href="tel:0353694515" className="font-semibold text-gray-800 dark:text-white hover:text-primary">035.3694.515</a>
                   </div>
                 </div>
               </div>

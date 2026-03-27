@@ -294,7 +294,7 @@ export default function Products({ viewMode = 'slider', hideHeader = false }: Pr
                   slidesPerView: 3,
                 },
               }}
-              className="!pb-12 !px-4 -mx-4"
+              className="pb-12! px-4! -mx-4"
             >
               {products.map((product, index) => (
                 <SwiperSlide key={product.id} className="h-auto">

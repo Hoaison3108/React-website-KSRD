@@ -238,11 +238,11 @@ export default function ProjectGrid({ hideHeader = false }: ProjectGridProps) {
                       <span>{project.year}</span>
                     </div>
 
-                    <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-4 group-hover:text-primary transition-colors line-clamp-2 min-h-[3.5rem]">
+                    <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-2 group-hover:text-primary transition-colors line-clamp-2 min-h-14">
                       {project.title}
                     </h3>
                     
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-6 line-clamp-3 leading-relaxed min-h-[4.5rem]">
+                    <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-3 leading-relaxed min-h-18">
                       {project.desc}
                     </p>
 

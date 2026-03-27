@@ -243,11 +243,11 @@ export default function News({ isPaginationEnabled = false, hideHeader = false }
                       </span>
                     )} */}
                   </div>
-                  <div className="p-6 flex flex-col flex-grow">
+                  <div className="p-6 flex flex-col grow">
                     <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3 leading-snug line-clamp-2 hover:text-primary dark:hover:text-blue-400 transition-colors">
                       {item.title}
                     </h3>
-                    <p className="text-sm text-gray-500 dark:text-slate-400 mb-6 line-clamp-3 leading-relaxed flex-grow">
+                    <p className="text-sm text-gray-500 dark:text-slate-400 mb-6 line-clamp-3 leading-relaxed grow">
                       {item.excerpt}
                     </p>
                     <span className="mt-auto inline-flex items-center text-xs font-bold text-secondary uppercase hover:translate-x-1 transition-transform self-start">
