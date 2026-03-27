@@ -28,6 +28,7 @@ interface Job {
 
 export default function RecruitmentDetail() {
   const { id } = useParams<{ id: string }>();
+  const [firestoreId, setFirestoreId] = useState<string | null>(null);
   const [job, setJob] = useState<Job | null>(null);
   const [otherJobs, setOtherJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
@@ -35,11 +36,12 @@ export default function RecruitmentDetail() {
   useEffect(() => {
     window.scrollTo(0, 0);
     const fetchJob = async () => {
-      if (!id) return;
+      if (!id) return; // Nếu không có ID, không làm gì cả
       setLoading(true);
       try {
         // Try fetching from Firestore first
-        const docRef = doc(db, 'recruitment', id);
+        console.log("Fetching job with firestoreId:", id);
+        const docRef = doc(db, 'recruitment', id); // Sử dụng firestoreId lấy từ URL
         const docSnap = await getDoc(docRef);
         
         let fetchedJob: Job | null = null;
@@ -93,7 +95,7 @@ export default function RecruitmentDetail() {
     };
 
     fetchJob();
-  }, [id]);
+  }, [id]); // Theo dõi sự thay đổi của ID trên URL
 
   if (loading) {
     return (
