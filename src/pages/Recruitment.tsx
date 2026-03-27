@@ -186,7 +186,7 @@ export default function RecruitmentPage() {
                   </div>
                   <div>
                     <p className="text-xs text-gray-500 uppercase font-bold">Hotline Tuyển dụng</p>
-                    <a href="tel:0917630863" className="font-semibold text-gray-800 dark:text-white hover:text-primary">091.7630.863</a>
+                    <a href="tel:0917630863" className="font-semibold text-gray-800 dark:text-white hover:text-primary">035.3694.515</a>
                   </div>
                 </div>
               </div>
@@ -196,7 +196,7 @@ export default function RecruitmentPage() {
                 <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
                   <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-secondary rounded-full"></div> BHXH, BHYT theo quy định</li>
                   <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-secondary rounded-full"></div> Thưởng lễ, tết, lương tháng 13</li>
-                  <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-secondary rounded-full"></div> Du lịch hàng năm</li>
+                  <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-secondary rounded-full"></div> Du lịch theo chính sách, chế độ</li>
                   <li className="flex items-center gap-2"><div className="w-1.5 h-1.5 bg-secondary rounded-full"></div> Môi trường làm việc năng động</li>
                 </ul>
               </div>

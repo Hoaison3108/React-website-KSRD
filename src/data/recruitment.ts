@@ -43,9 +43,9 @@ export const jobs: Job[] = [
     education: 'Đại học',
     quantity: 2,
     gender: 'Nam',
-    contactName: 'Phòng Nhân Sự',
-    contactEmail: 'tuyendung@rangdonggroup.vn',
-    contactPhone: '091.7630.863'
+    contactName: 'Phòng Tổng hợp',
+    contactEmail: 'khoangsanrangdong@rangdonggroup.vn',
+    contactPhone: '035.3694.515'
   },
   {
     id: 2,
@@ -72,9 +72,9 @@ export const jobs: Job[] = [
     education: 'Cao đẳng',
     quantity: 5,
     gender: 'Nam/Nữ',
-    contactName: 'Phòng Nhân Sự',
-    contactEmail: 'tuyendung@rangdonggroup.vn',
-    contactPhone: '091.7630.863'
+    contactName: 'Phòng Tổng hợp',
+    contactEmail: 'khoangsanrangdong@rangdonggroup.vn',
+    contactPhone: '035.3694.515'
   },
   {
     id: 3,
@@ -100,8 +100,8 @@ export const jobs: Job[] = [
     education: 'Phổ thông',
     quantity: 3,
     gender: 'Nam',
-    contactName: 'Phòng Nhân Sự',
-    contactEmail: 'tuyendung@rangdonggroup.vn',
-    contactPhone: '091.7630.863'
+    contactName: 'Phòng Tổng hợp',
+    contactEmail: 'khoangsanrangdong@rangdonggroup.vn',
+    contactPhone: '035.3694.515'
   }
 ];
