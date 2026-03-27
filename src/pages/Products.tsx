@@ -41,7 +41,7 @@ export default function ProductsPage() {
             Giải Pháp <span className="text-secondary">Vật Liệu Toàn Diện</span>
           </h1>
           <p className="text-lg text-gray-200 leading-relaxed">
-            Hệ sinh thái sản phẩm đa dạng từ bê tông, gạch không nung đến cát đá, đáp ứng mọi yêu cầu khắt khe nhất của công trình hiện đại.
+            Hệ sinh thái sản phẩm đa dạng từ Bê tông thương phẩm, Bê tông nhựa nóng, Gạch không nung, Cống bế tông ly tâm - Cấu kiện đúc sẵn, Đá xây dựng...Đáp ứng mọi tiêu chuẩn kỹ thuật của công trình hiện đại.
           </p>
         </div>
       </section>

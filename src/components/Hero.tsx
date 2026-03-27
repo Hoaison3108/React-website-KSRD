@@ -52,20 +52,20 @@ export default function Hero() {
           transition={{ duration: 0.8 }}
           className="max-w-4xl mx-auto"
         >
-          <h4 className="text-secondary text-base md:text-lg font-bold tracking-[2px] uppercase mb-4">
+          <h4 className="text-secondary text-base md:text-2xl font-bold tracking-[2px] uppercase mb-4">
             TRAO CHẤT LƯỢNG - NHẬN NIỀM TIN
           </h4>
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-6 drop-shadow-lg uppercase">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold leading-normal mb-6 drop-shadow-lg uppercase text-center">
             {heroData.title}
           </h1>
           <p className="text-lg md:text-xl mb-10 max-w-2xl mx-auto text-gray-100">
             {heroData.subtitle}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="#products" className="btn btn-primary shadow-lg shadow-blue-900/50">
+            <a href="/products" className="btn btn-primary shadow-lg shadow-blue-900/50">
               KHÁM PHÁ SẢN PHẨM
             </a>
-            <a href="#about" className="btn btn-secondary">
+            <a href="/about" className="btn btn-secondary">
               VỀ CHÚNG TÔI
             </a>
           </div>
