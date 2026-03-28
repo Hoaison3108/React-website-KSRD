@@ -15,11 +15,13 @@ export interface SiteSettings {
     address: string;
     phone: string;
     email: string;
+    workingHours?: string;
   };
   contactPageInfo?: {
     address: string;
     phone: string;
     email: string;
+    workingHours?: string;
   };
 }
 

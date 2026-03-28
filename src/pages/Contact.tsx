@@ -5,69 +5,68 @@ import SEO from '../components/SEO';
 import { motion, AnimatePresence } from 'motion/react';
 import { saveContactMessage } from '../utils/firestoreUtils';
 import { useSiteSettings } from '../hooks/useSiteSettings';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+
+const contactSchema = z.object({
+  name: z.string().min(1, 'Vui lòng nhập họ tên'),
+  phone: z.string()
+    .min(1, 'Vui lòng nhập số điện thoại')
+    .regex(/^\d{10,11}$/, 'Số điện thoại không hợp lệ'),
+  email: z.string().email('Email không hợp lệ').optional().or(z.literal('')),
+  service: z.string().optional(),
+  message: z.string().min(1, 'Vui lòng nhập nội dung')
+});
+
+type ContactFormValues = z.infer<typeof contactSchema>;
 
 export default function ContactPage() {
   const { settings } = useSiteSettings();
   const [activeAccordion, setActiveAccordion] = useState<number | null>(0);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    phone: '',
-    email: '',
-    service: '',
-    message: ''
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting }
+  } = useForm<ContactFormValues>({
+    resolver: zodResolver(contactSchema),
+    defaultValues: {
+      name: '',
+      phone: '',
+      email: '',
+      service: '',
+      message: ''
+    }
   });
-  const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const contactInfo = settings?.contactPageInfo || settings?.contactInfo || {
-    address: 'Km09 QL28B - xã Lương Sơn - tỉnh Lâm Đồng',
-    phone: '0252 652 6666',
-    email: 'khoangsanrangdong@rangdonggroup.vn',
-    workingHours: '7:00 - 17:00'
+  const baseInfo = settings?.contactPageInfo || settings?.footerInfo;
+  const contactInfo = {
+    address: baseInfo?.address || 'Km09 QL28B - xã Lương Sơn - tỉnh Lâm Đồng',
+    phone: baseInfo?.phone || '0252 652 6666',
+    email: baseInfo?.email || 'khoangsanrangdong@rangdonggroup.vn',
+    workingHours: (settings?.contactPageInfo as any)?.workingHours || '7:00 - 17:00'
   };
 
-  const validate = () => {
-    const newErrors: Record<string, string> = {};
-    if (!formData.name.trim()) newErrors.name = 'Vui lòng nhập họ tên';
-    if (!formData.phone.trim()) newErrors.phone = 'Vui lòng nhập số điện thoại';
-    else if (!/^\d{10,11}$/.test(formData.phone.trim())) newErrors.phone = 'Số điện thoại không hợp lệ';
-    if (formData.email && !/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'Email không hợp lệ';
-    if (!formData.message.trim()) newErrors.message = 'Vui lòng nhập nội dung';
-    
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validate()) return;
-
-    setIsSubmitting(true);
-    
+  const onSubmit = async (data: ContactFormValues) => {
+    setSubmitError(null);
     try {
-      await saveContactMessage(formData);
+      await saveContactMessage({
+        ...data,
+        email: data.email || '',
+        service: data.service || ''
+      });
       setIsSuccess(true);
-      setFormData({ name: '', phone: '', email: '', service: '', message: '' });
-      // Reset success message after 5 seconds
+      reset(); // Reset form sau khi gửi thành công
+      
+      // Xoá thông báo thành công sau 5 giây
       setTimeout(() => setIsSuccess(false), 5000);
     } catch (error) {
       console.error('Submit error:', error);
-      setErrors({ submit: 'Có lỗi xảy ra khi gửi yêu cầu. Vui lòng thử lại sau.' });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-    if (errors[name]) {
-      setErrors(prev => {
-        const newErrors = { ...prev };
-        delete newErrors[name];
-        return newErrors;
-      });
+      setSubmitError('Có lỗi xảy ra khi gửi yêu cầu. Vui lòng thử lại sau.');
     }
   };
 
@@ -82,20 +81,20 @@ export default function ContactPage() {
     },
     {
       question: "Công ty có hỗ trợ vận chuyển không?",
-      answer: "Có, Rạng Đông sở hữu đội xe vận chuyển chuyên dụng (xe bồn bê tông, xe tải ben) đảm bảo giao hàng tận nơi đến chân công trình tại khu vực Bình Thuận và các tỉnh lân cận."
+      answer: "Có, Khoáng sản Rạng Đông sở hữu đội xe vận chuyển chuyên dụng (xe bồn bê tông, xe tải ben) đảm bảo giao hàng tận nơi đến chân công trình tại khu vực Bình Thuận - Lâm Đồng và các tỉnh lân cận."
     },
     {
       question: "Chính sách bảo hành sản phẩm như thế nào?",
-      answer: "Tất cả sản phẩm của Rạng Đông đều được cam kết chất lượng theo tiêu chuẩn TCVN. Chúng tôi bảo hành chất lượng bê tông và độ bền vật liệu theo hợp đồng ký kết cụ thể cho từng dự án."
+      answer: "Tất cả sản phẩm của chúng tôi đều được cam kết chất lượng theo tiêu chuẩn TCVN. Chúng tôi bảo hành chất lượng bê tông và độ bền vật liệu theo hợp đồng ký kết cụ thể cho từng dự án."
     },
     {
       question: "Tôi có thể tham quan cơ sở trước khi đặt hàng không?",
-      answer: "Hoàn toàn được. Chúng tôi luôn hoan nghênh Quý khách hàng đến tham quan quy trình sản xuất và kiểm soát chất lượng tại cơ sở để thêm tin tưởng vào năng lực của Rạng Đông."
+      answer: "Hoàn toàn được. Chúng tôi luôn hoan nghênh Quý khách hàng đến tham quan quy trình sản xuất và kiểm soát chất lượng tại cơ sở để thêm tin tưởng vào năng lực của chúng tôi."
     }
   ];
 
   return (
-    <div className="pt-[72px] min-h-screen bg-gray-50 dark:bg-slate-900 font-sans">
+    <div className="pt-[78px] min-h-screen bg-gray-50 dark:bg-slate-900 font-sans">
       <SEO 
         title="Liên hệ" 
         description="Kết nối với Khoáng Sản Rạng Đông để nhận tư vấn báo giá và giải pháp vật liệu xây dựng tối ưu nhất cho công trình của bạn. Hỗ trợ 24/7."
@@ -214,11 +213,11 @@ export default function ContactPage() {
                       Vui lòng điền thông tin vào biểu mẫu bên dưới. Chuyên viên tư vấn của chúng tôi sẽ liên hệ lại với bạn sớm nhất.
                     </p>
 
-                    <form className="space-y-5" onSubmit={handleSubmit}>
-                      {errors.submit && (
+                    <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
+                      {submitError && (
                         <div className="p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg flex items-center gap-2 text-red-600 dark:text-red-400 text-sm font-medium">
                           <AlertCircle size={16} />
-                          {errors.submit}
+                          {submitError}
                         </div>
                       )}
                       <div className="grid grid-cols-2 gap-5">
@@ -226,25 +225,21 @@ export default function ContactPage() {
                           <label className="text-xs font-bold text-gray-700 dark:text-gray-300 uppercase">Họ tên <span className="text-red-500">*</span></label>
                           <input 
                             type="text" 
-                            name="name"
-                            value={formData.name}
-                            onChange={handleChange}
+                            {...register('name')}
                             className={`w-full px-4 py-3 bg-gray-50 dark:bg-slate-700 border ${errors.name ? 'border-red-500' : 'border-gray-200 dark:border-slate-600'} rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all dark:text-white`} 
                             placeholder="Nhập họ tên" 
                           />
-                          {errors.name && <p className="text-[10px] text-red-500 font-bold flex items-center gap-1"><AlertCircle size={10} /> {errors.name}</p>}
+                          {errors.name && <p className="text-[10px] text-red-500 font-bold flex items-center gap-1"><AlertCircle size={10} /> {errors.name.message as string}</p>}
                         </div>
                         <div className="space-y-2">
                           <label className="text-xs font-bold text-gray-700 dark:text-gray-300 uppercase">Số điện thoại <span className="text-red-500">*</span></label>
                           <input 
                             type="text" 
-                            name="phone"
-                            value={formData.phone}
-                            onChange={handleChange}
+                            {...register('phone')}
                             className={`w-full px-4 py-3 bg-gray-50 dark:bg-slate-700 border ${errors.phone ? 'border-red-500' : 'border-gray-200 dark:border-slate-600'} rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all dark:text-white`} 
                             placeholder="Nhập SĐT" 
                           />
-                          {errors.phone && <p className="text-[10px] text-red-500 font-bold flex items-center gap-1"><AlertCircle size={10} /> {errors.phone}</p>}
+                          {errors.phone && <p className="text-[10px] text-red-500 font-bold flex items-center gap-1"><AlertCircle size={10} /> {errors.phone.message as string}</p>}
                         </div>
                       </div>
 
@@ -252,21 +247,17 @@ export default function ContactPage() {
                         <label className="text-xs font-bold text-gray-700 dark:text-gray-300 uppercase">Email</label>
                         <input 
                           type="email" 
-                          name="email"
-                          value={formData.email}
-                          onChange={handleChange}
+                          {...register('email')}
                           className={`w-full px-4 py-3 bg-gray-50 dark:bg-slate-700 border ${errors.email ? 'border-red-500' : 'border-gray-200 dark:border-slate-600'} rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all dark:text-white`} 
                           placeholder="example@gmail.com" 
                         />
-                        {errors.email && <p className="text-[10px] text-red-500 font-bold flex items-center gap-1"><AlertCircle size={10} /> {errors.email}</p>}
+                        {errors.email && <p className="text-[10px] text-red-500 font-bold flex items-center gap-1"><AlertCircle size={10} /> {errors.email.message as string}</p>}
                       </div>
 
                       <div className="space-y-2">
                         <label className="text-xs font-bold text-gray-700 dark:text-gray-300 uppercase">Dịch vụ quan tâm</label>
                         <select 
-                          name="service"
-                          value={formData.service}
-                          onChange={handleChange}
+                          {...register('service')}
                           className="w-full px-4 py-3 bg-gray-50 dark:bg-slate-700 border border-gray-200 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all dark:text-white"
                         >
                           <option value="">Chọn dịch vụ...</option>
@@ -280,13 +271,11 @@ export default function ContactPage() {
                       <div className="space-y-2">
                         <label className="text-xs font-bold text-gray-700 dark:text-gray-300 uppercase">Nội dung <span className="text-red-500">*</span></label>
                         <textarea 
-                          name="message"
-                          value={formData.message}
-                          onChange={handleChange}
+                          {...register('message')}
                           className={`w-full px-4 py-3 bg-gray-50 dark:bg-slate-700 border ${errors.message ? 'border-red-500' : 'border-gray-200 dark:border-slate-600'} rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all h-32 resize-none dark:text-white`} 
                           placeholder="Nhập nội dung cần tư vấn..."
                         ></textarea>
-                        {errors.message && <p className="text-[10px] text-red-500 font-bold flex items-center gap-1"><AlertCircle size={10} /> {errors.message}</p>}
+                        {errors.message && <p className="text-[10px] text-red-500 font-bold flex items-center gap-1"><AlertCircle size={10} /> {errors.message.message as string}</p>}
                       </div>
 
                       <button 

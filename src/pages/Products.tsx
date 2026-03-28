@@ -14,7 +14,7 @@ export default function ProductsPage() {
   }, []);
 
   return (
-    <div className="pt-[72px]">
+    <div className="pt-[78px]">
       <SEO 
         title="Sản phẩm" 
         description="Khám phá hệ sinh thái sản phẩm vật liệu xây dựng đa dạng của Rạng Đông: bê tông tươi, gạch block, cát đá xây dựng đạt tiêu chuẩn quốc tế."

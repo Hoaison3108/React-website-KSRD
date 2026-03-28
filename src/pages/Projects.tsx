@@ -16,7 +16,7 @@ export default function ProjectsPage() {
   }, []);
 
   return (
-    <div className="pt-[72px]">
+    <div className="pt-[78px]">
       <SEO 
         title="Dự án" 
         description="Tổng hợp các dự án trọng điểm mà Khoáng Sản Rạng Đông đã và đang cung cấp vật liệu xây dựng: cao tốc, khu công nghiệp, resort cao cấp."

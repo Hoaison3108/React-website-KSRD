@@ -42,7 +42,7 @@ export default function Hero() {
           />
         </AnimatePresence>
         {/* Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#104c8a]/90 to-[#104c8a]/40 z-10"></div>
+        <div className="absolute inset-0 bg-linear-to-b from-black/30 via-black/50 to-slate-900/80 z-10"></div>
       </div>
 
       <div className="container-custom relative z-20 text-center text-white px-4">

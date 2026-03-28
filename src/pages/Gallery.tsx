@@ -119,7 +119,7 @@ export default function GalleryPage() {
   }, []);
 
   return (
-    <div className="pt-[72px] min-h-screen bg-gray-50 dark:bg-slate-900">
+    <div className="pt-[78px] min-h-screen bg-gray-50 dark:bg-slate-900">
       <SEO 
         title="Thư viện hình ảnh" 
         description="Hình ảnh và video thực tế về hoạt động sản xuất, dự án tiêu biểu và đội ngũ nhân sự của Khoáng Sản Rạng Đông."

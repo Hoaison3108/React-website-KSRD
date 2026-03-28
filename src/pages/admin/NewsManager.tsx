@@ -5,6 +5,7 @@ import { Plus, Edit, Trash2, X, Save, Image as ImageIcon, RotateCcw } from 'luci
 import { news as localNews } from '../../data/news';
 import { useFirestoreCollection } from '../../hooks/useFirestoreCollection';
 import { useAuth } from '../../contexts/AuthContext';
+import { useToast } from '../../contexts/ToastContext';
 
 interface News {
   id: string;
@@ -18,6 +19,7 @@ interface News {
 }
 
 export default function NewsManager() {
+  const { showToast } = useToast();
   const { isAdmin } = useAuth();
   const { data: rawNews, loading, refetch } = useFirestoreCollection('news');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -73,11 +75,11 @@ export default function NewsManager() {
           await addDoc(collection(db, 'news'), cleanData);
         }
       }
-      alert('Đã khôi phục dữ liệu mẫu thành công!');
+      showToast('Đã khôi phục dữ liệu mẫu thành công!', 'success');
       refetch();
     } catch (error) {
       console.error(error);
-      alert('Có lỗi xảy ra');
+      showToast('Có lỗi xảy ra', 'error');
     } finally {
       setIsImporting(false);
     }
@@ -109,6 +111,7 @@ export default function NewsManager() {
   };
 
   const handleCloseModal = () => {
+  const { showToast } = useToast();
     setIsModalOpen(false);
     setEditingId(null);
   };
@@ -133,10 +136,10 @@ export default function NewsManager() {
       }
       
       handleCloseModal();
-      alert('Đã lưu tin tức thành công!');
+      showToast('Đã lưu tin tức thành công!', 'success');
     } catch (error) {
       console.error(error);
-      alert("Lỗi khi lưu tin tức");
+      showToast("Lỗi khi lưu tin tức", 'error');
     }
   };
 
@@ -146,7 +149,7 @@ export default function NewsManager() {
         await deleteDoc(doc(db, 'news', id));
       } catch (error) {
         console.error(error);
-        alert("Lỗi khi xóa tin tức");
+        showToast("Lỗi khi xóa tin tức", 'error');
       }
     }
   };

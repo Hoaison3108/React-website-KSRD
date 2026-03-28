@@ -41,7 +41,7 @@ export default function Navbar() {
   });
 
   return (
-    <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isSticky ? 'bg-primary py-4 shadow-lg' : 'bg-transparent py-6'}`}>
+    <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${isSticky ? 'bg-slate-50/95 py-3 backdrop-blur-md border-b border-primary/10' : 'bg-slate-50 py-5 shadow-sm'}`}>
       {/* Scroll Progress Bar */}
       <motion.div
         className="absolute bottom-0 left-0 right-0 h-1 bg-secondary origin-left z-[60]"
@@ -49,14 +49,17 @@ export default function Navbar() {
       />
       <div className="container-custom flex justify-between items-center">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2 group">
-          <div className={`w-10 h-10 md:w-12 md:h-12 bg-white rounded-lg flex items-center justify-center text-primary font-bold text-xl shadow-lg transition-all ${isSticky ? 'scale-90' : ''}`}>
-            RĐ
-          </div>
-          <div className="flex flex-col font-heading">
-            <span className="text-lg md:text-xl font-extrabold text-white uppercase leading-none">KHOÁNG SẢN</span>
-            <span className="text-xs md:text-sm font-bold text-secondary uppercase leading-none mt-1">RẠNG ĐÔNG</span>
-          </div>
+        <Link to="/" className="flex items-center gap-1 md:gap-2 group">
+          <img 
+            src="/logo-rdg.png" 
+            alt="Logo Khoáng Sản Rạng Đông" 
+            className={`h-10 md:h-12 w-auto object-contain transition-all duration-300 ${isSticky ? 'scale-90' : ''}`}
+          />
+          <img 
+            src="/company-name.png" 
+            alt="Khoáng Sản Rạng Đông" 
+            className="h-10 md:h-12 w-auto object-contain mt-1"
+          />
         </Link>
 
         {/* Desktop Menu */}
@@ -70,8 +73,8 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 to={link.href}
-                className={`text-sm font-bold transition-colors uppercase ${
-                  isActive ? 'text-white' : 'text-white/80 hover:text-white'
+                className={`text-sm font-bold transition-all uppercase tracking-wide ${
+                  isActive ? 'text-primary' : 'text-slate-800 hover:text-primary'
                 }`}
               >
                 {link.name}
@@ -79,10 +82,10 @@ export default function Navbar() {
             );
           })}
           
-          <div className="flex items-center gap-2 border-l border-white/20 pl-4">
+          <div className="flex items-center gap-2 border-l border-slate-300 pl-4">
             <button
               onClick={toggle}
-              className="p-2 rounded-full hover:bg-white/10 text-white transition-colors"
+              className="p-2 rounded-full text-slate-700 hover:bg-primary/10 hover:text-primary transition-all"
               aria-label="Toggle Dark Mode"
             >
               {isDark ? <Sun size={20} /> : <Moon size={20} />}
@@ -94,13 +97,13 @@ export default function Navbar() {
         <div className="lg:hidden flex items-center gap-4">
           <button
             onClick={toggle}
-            className="p-2 rounded-full hover:bg-white/10 text-white transition-colors"
+            className="p-2 rounded-full text-slate-700 hover:bg-primary/10 hover:text-primary transition-all"
           >
             {isDark ? <Sun size={20} /> : <Moon size={20} />}
           </button>
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="text-white focus:outline-none"
+            className="text-slate-800 hover:text-primary transition-colors focus:outline-none"
           >
             {isOpen ? <X size={28} /> : <Menu size={28} />}
           </button>

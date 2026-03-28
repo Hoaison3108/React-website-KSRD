@@ -145,7 +145,7 @@ export default function NewsDetail() {
   }
 
   return (
-    <div className="pt-[72px] pb-20 bg-gray-50 dark:bg-slate-900 min-h-screen">
+    <div className="pt-[78px] pb-20 bg-gray-50 dark:bg-slate-900 min-h-screen">
       <SEO 
         title={newsItem.title} 
         description={newsItem.excerpt}

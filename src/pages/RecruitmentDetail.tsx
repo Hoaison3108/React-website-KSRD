@@ -117,7 +117,7 @@ export default function RecruitmentDetail() {
   }
 
   return (
-    <div className="pt-[72px] min-h-screen bg-gray-50 dark:bg-slate-900 font-sans">
+    <div className="pt-[78px] min-h-screen bg-gray-50 dark:bg-slate-900 font-sans">
       <SEO 
         title={`${job.title} - Tuyển dụng`} 
         description={`Tuyển dụng ${job.title} tại ${job.location}. Lương ${job.salary}. Ứng tuyển ngay!`}

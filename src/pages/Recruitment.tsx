@@ -61,7 +61,7 @@ export default function RecruitmentPage() {
   }, []);
 
   return (
-    <div className="pt-[72px] min-h-screen bg-gray-50 dark:bg-slate-900">
+    <div className="pt-[78px] min-h-screen bg-gray-50 dark:bg-slate-900">
       <SEO 
         title="Tuyển dụng" 
         description="Cơ hội nghề nghiệp tại Khoáng Sản Rạng Đông. Chúng tôi luôn chào đón những ứng viên tài năng gia nhập đội ngũ."
@@ -88,7 +88,7 @@ export default function RecruitmentPage() {
             Tuyển Dụng <span className="text-secondary">Nhân Tài</span>
           </h1>
           <p className="text-lg text-gray-200 leading-relaxed">
-            Cùng với chúng tôi kiến tạo những giá trị bền vững. Môi trường làm việc chuyên nghiệp, chế độ đãi ngộ hấp dẫn.
+            Cùng Khoáng sản Rạng Đông kiến tạo những giá trị bền vững. Môi trường làm việc chuyên nghiệp, chế độ đãi ngộ hấp dẫn.
           </p>
         </div>
       </section>

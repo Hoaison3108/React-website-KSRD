@@ -4,6 +4,7 @@ import { resetAllData } from '../../utils/seedData';
 import { Save, Image as ImageIcon, Plus, Trash2, Layout, Info, Phone, RotateCcw, Database, Shield } from 'lucide-react';
 import { useSiteSettings, SiteSettings } from '../../hooks/useSiteSettings';
 import { useAuth } from '../../contexts/AuthContext';
+import { useToast } from '../../contexts/ToastContext';
 
 const DEFAULT_SETTINGS: SiteSettings = {
   hero: {
@@ -29,6 +30,7 @@ const DEFAULT_SETTINGS: SiteSettings = {
 };
 
 const Settings = () => {
+  const { showToast } = useToast();
   const { isAdmin } = useAuth();
   const { settings: remoteSettings, loading, updateSettings } = useSiteSettings();
   const [settings, setSettings] = useState<SiteSettings | null>(null);
@@ -57,10 +59,10 @@ const Settings = () => {
 
       await updateSettings(updatedSettings);
       setHeroImage(null);
-      alert('Đã lưu cài đặt thành công!');
+      showToast('Đã lưu cài đặt thành công!', 'success');
     } catch (error) {
        // Lỗi đã được log ở hook, UI chỉ cần alert
-      alert('Có lỗi xảy ra khi lưu cài đặt.');
+      showToast('Có lỗi xảy ra khi lưu cài đặt.', 'error');
     } finally {
       setSaving(false);
     }
@@ -74,9 +76,9 @@ const Settings = () => {
     try {
       await updateSettings(DEFAULT_SETTINGS);
       setSettings(DEFAULT_SETTINGS);
-      alert('Đã khôi phục cài đặt mặc định thành công!');
+      showToast('Đã khôi phục cài đặt mặc định thành công!', 'success');
     } catch (error) {
-      alert('Có lỗi xảy ra khi khôi phục cài đặt.');
+      showToast('Có lỗi xảy ra khi khôi phục cài đặt.', 'error');
     } finally {
       setSaving(false);
     }
@@ -90,10 +92,10 @@ const Settings = () => {
     try {
       await resetAllData();
       // remoteSettings sẽ tự đồng bộ snapshot qua useSiteSettings => setSettings sẽ tự chạy
-      alert('Đã khôi phục toàn bộ dữ liệu mẫu thành công!');
+      showToast('Đã khôi phục toàn bộ dữ liệu mẫu thành công!', 'success');
     } catch (error) {
       console.error("Error resetting data:", error);
-      alert('Có lỗi xảy ra khi khôi phục dữ liệu.');
+      showToast('Có lỗi xảy ra khi khôi phục dữ liệu.', 'error');
     } finally {
       setSaving(false);
     }

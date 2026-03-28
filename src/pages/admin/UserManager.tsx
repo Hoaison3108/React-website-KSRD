@@ -5,6 +5,7 @@ import { getAuth, createUserWithEmailAndPassword, deleteUser } from 'firebase/au
 import { db, firebaseConfig } from '../../firebase';
 import { Shield, Plus, X, Save, Trash2, Users, Loader2 } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
+import { useToast } from '../../contexts/ToastContext';
 
 // Create a secondary app to create new users without signing out the current admin
 const secondaryApp = initializeApp(firebaseConfig, 'SecondaryApp');
@@ -19,6 +20,7 @@ interface UserData {
 }
 
 const UserManager = () => {
+  const { showToast } = useToast();
   const { isAdmin } = useAuth();
   const [users, setUsers] = useState<UserData[]>([]);
   const [loading, setLoading] = useState(true);
@@ -83,18 +85,18 @@ const UserManager = () => {
       // 3. Sign out the secondary app immediately to prevent session conflicts
       await secondaryAuth.signOut();
 
-      alert('Tạo tài khoản thành công!');
+      showToast('Tạo tài khoản thành công!', 'success');
       setIsModalOpen(false);
       setFormData({ email: '', password: '', name: '', role: 'user' });
       fetchUsers();
     } catch (error: any) {
       console.error("Error creating user:", error);
       if (error.code === 'auth/email-already-in-use') {
-        alert('Email này đã được sử dụng!');
+        showToast('Email này đã được sử dụng!', 'error');
       } else if (error.code === 'auth/weak-password') {
-        alert('Mật khẩu quá yếu, vui lòng nhập ít nhất 6 ký tự.');
+        showToast('Mật khẩu quá yếu, vui lòng nhập ít nhất 6 ký tự.', 'error');
       } else {
-        alert('Có lỗi xảy ra khi tạo tài khoản: ' + error.message);
+        showToast('Có lỗi xảy ra khi tạo tài khoản: ' + error.message, 'error');
       }
     } finally {
       setFormStatus('idle');
@@ -106,11 +108,11 @@ const UserManager = () => {
     if (window.confirm(`Bạn có chắc chắn muốn XÓA quyền truy cập của tài khoản ${userEmail}?\n\nLưu ý: Hành động này chỉ xóa Document phân quyền trong Firestore, không xóa tài khoản Firebase Auth gốc. Tài khoản này khi đăng nhập lại sẽ bị hạ xuống quyền 'user' mặc định và không còn thông tin nội bộ.`)) {
       try {
         await deleteDoc(doc(db, 'users', userId));
-        alert('Đã thu hồi quyền truy cập thành công!');
+        showToast('Đã thu hồi quyền truy cập thành công!', 'success');
         fetchUsers();
       } catch (error) {
         console.error("Error deleting user doc:", error);
-        alert('Lỗi thu hồi quyền');
+        showToast('Lỗi thu hồi quyền', 'error');
       }
     }
   };

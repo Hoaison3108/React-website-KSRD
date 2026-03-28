@@ -5,6 +5,7 @@ import { Plus, Edit, Trash2, X, Save, Image as ImageIcon, RotateCcw } from 'luci
 import { projects as localProjects } from '../../data/projects';
 import { useFirestoreCollection } from '../../hooks/useFirestoreCollection';
 import { useAuth } from '../../contexts/AuthContext';
+import { useToast } from '../../contexts/ToastContext';
 
 interface Project {
   id: string;
@@ -27,6 +28,7 @@ interface Project {
 }
 
 export default function ProjectsManager() {
+  const { showToast } = useToast();
   const { isAdmin } = useAuth();
   const { data: rawProjects, loading, refetch } = useFirestoreCollection('projects');
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -78,11 +80,11 @@ export default function ProjectsManager() {
           await addDoc(collection(db, 'projects'), { ...cleanData, createdAt: Timestamp.now() });
         }
       }
-      alert('Đã khôi phục dữ liệu mẫu thành công!');
+      showToast('Đã khôi phục dữ liệu mẫu thành công!', 'success');
       refetch();
     } catch (error) {
       console.error(error);
-      alert('Có lỗi xảy ra');
+      showToast('Có lỗi xảy ra', 'error');
     } finally {
       setIsImporting(false);
     }
@@ -128,6 +130,7 @@ export default function ProjectsManager() {
   };
 
   const handleCloseModal = () => {
+  const { showToast } = useToast();
     setIsModalOpen(false);
     setEditingId(null);
   };
@@ -161,10 +164,10 @@ export default function ProjectsManager() {
       }
       
       handleCloseModal();
-      alert('Đã lưu dự án thành công!');
+      showToast('Đã lưu dự án thành công!', 'success');
     } catch (error) {
       console.error(error);
-      alert("Lỗi khi lưu dự án");
+      showToast("Lỗi khi lưu dự án", 'error');
     }
   };
 
@@ -174,7 +177,7 @@ export default function ProjectsManager() {
         await deleteDoc(doc(db, 'projects', id));
       } catch (error) {
         console.error(error);
-        alert("Lỗi khi xóa");
+        showToast("Lỗi khi xóa", 'error');
       }
     }
   };

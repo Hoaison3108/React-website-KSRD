@@ -11,7 +11,7 @@ import SEO from '../components/SEO';
 
 export default function AboutPage() {
   return (
-    <div className="pt-[72px]">
+    <div className="pt-[78px]">
       <SEO 
         title="Giới thiệu" 
         description="Tìm hiểu về hành trình hơn 10 năm phát triển của Khoáng Sản Rạng Đông, sứ mệnh, tầm nhìn và những giá trị cốt lõi mà chúng tôi theo đuổi."

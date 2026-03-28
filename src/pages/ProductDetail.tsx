@@ -199,7 +199,7 @@ export default function ProductDetail() {
   }
 
   return (
-    <div className="pt-[80px] bg-gray-50 dark:bg-slate-900 min-h-screen">
+    <div className="pt-[78px] bg-gray-50 dark:bg-slate-900 min-h-screen">
       <SEO 
         title={product.title} 
         description={product.desc}

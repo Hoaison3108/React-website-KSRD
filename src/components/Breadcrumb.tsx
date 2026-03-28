@@ -24,7 +24,7 @@ export default function Breadcrumb({ customLastSegment }: BreadcrumbProps) {
   if (pathnames.length === 0) return null;
 
   return (
-    <div className="bg-gray-100 dark:bg-slate-800 py-3 border-b border-gray-200 dark:border-slate-700">
+    <div className="bg-slate-50 dark:bg-slate-800 py-3 border-b border-gray-200 dark:border-slate-700">
       <div className="container-custom">
         <nav className="flex items-center text-sm text-gray-500 dark:text-slate-400">
           <Link to="/" className="hover:text-primary transition-colors">

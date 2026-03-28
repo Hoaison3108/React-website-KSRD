@@ -5,6 +5,7 @@ import { Plus, Edit, Trash2, X, Save, Image as ImageIcon, RotateCcw } from 'luci
 import { products as localProducts } from '../../data/products';
 import { useFirestoreCollection } from '../../hooks/useFirestoreCollection';
 import { useAuth } from '../../contexts/AuthContext';
+import { useToast } from '../../contexts/ToastContext';
 
 interface Product {
   id: string;
@@ -24,6 +25,7 @@ interface Product {
 }
 
 export default function ProductsManager() {
+  const { showToast } = useToast();
   const { isAdmin } = useAuth();
   const { data: rawProducts, loading, refetch: fetchProducts } = useFirestoreCollection('products');
   const [products, setProducts] = useState<Product[]>([]);
@@ -86,11 +88,11 @@ export default function ProductsManager() {
           });
         }
       }
-      alert('Đã khôi phục dữ liệu mẫu thành công!');
+      showToast('Đã khôi phục dữ liệu mẫu thành công!', 'success');
       fetchProducts();
     } catch (error) {
       console.error("Error restoring defaults: ", error);
-      alert('Có lỗi xảy ra khi khôi phục dữ liệu');
+      showToast('Có lỗi xảy ra khi khôi phục dữ liệu', 'error');
     } finally {
       setIsImporting(false);
     }
@@ -136,6 +138,7 @@ export default function ProductsManager() {
   };
 
   const handleCloseModal = () => {
+  const { showToast } = useToast();
     setIsModalOpen(false);
     setEditingId(null);
   };
@@ -188,7 +191,7 @@ export default function ProductsManager() {
       fetchProducts();
     } catch (error) {
       console.error("Error saving product: ", error);
-      alert("Có lỗi xảy ra khi lưu sản phẩm");
+      showToast("Có lỗi xảy ra khi lưu sản phẩm", 'error');
     }
   };
 
@@ -199,7 +202,7 @@ export default function ProductsManager() {
         fetchProducts();
       } catch (error) {
         console.error("Error deleting product: ", error);
-        alert("Có lỗi xảy ra khi xóa sản phẩm");
+        showToast("Có lỗi xảy ra khi xóa sản phẩm", 'error');
       }
     }
   };

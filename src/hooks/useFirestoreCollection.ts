@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { collection, query, onSnapshot, getDocs, QueryConstraint, QueryDocumentSnapshot, DocumentData } from 'firebase/firestore';
 import { db } from '../firebase';
 import { handleFirestoreError, OperationType } from '../utils/firestoreUtils';
@@ -43,6 +43,14 @@ export function useFirestoreCollection<T = DocumentData>(
     }
   };
 
+  // Sử dụng useRef để lưu trữ mảng queries và chỉ update khi có sự thay đổi thực sự
+  const queriesRef = useRef(options.queries);
+  useEffect(() => {
+    if (JSON.stringify(options.queries) !== JSON.stringify(queriesRef.current)) {
+      queriesRef.current = options.queries;
+    }
+  }, [options.queries]);
+  
   useEffect(() => {
     if (!options.realtime) {
       fetchCollection();
@@ -50,7 +58,7 @@ export function useFirestoreCollection<T = DocumentData>(
     }
 
     setLoading(true);
-    const q = query(collection(db, collectionName), ...(options.queries || []));
+    const q = query(collection(db, collectionName), ...(queriesRef.current || []));
     
     // Set up realtime listener
     const unsubscribe = onSnapshot(q, 
@@ -67,7 +75,7 @@ export function useFirestoreCollection<T = DocumentData>(
     );
 
     return () => unsubscribe();
-  }, [collectionName, JSON.stringify(options.queries), options.realtime]); // stringify queries an toàn cho useEffect dependency nếu mảng nông
+  }, [collectionName, queriesRef.current, options.realtime]); // Dependency dựa vào ref.current (đã memoized)
 
   return { data, loading, error, refetch: fetchCollection };
 }

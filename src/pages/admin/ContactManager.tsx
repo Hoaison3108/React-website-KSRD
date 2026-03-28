@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Save, Phone, Mail, MapPin, Clock, Shield } from 'lucide-react';
 import { useSiteSettings } from '../../hooks/useSiteSettings';
 import { useAuth } from '../../contexts/AuthContext';
+import { useToast } from '../../contexts/ToastContext';
 
 interface ContactInfo {
   address: string;
@@ -19,15 +20,24 @@ export default function ContactManager() {
     email: '',
     workingHours: ''
   });
+  const { showToast } = useToast();
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     if (remoteSettings) {
       if (remoteSettings.contactPageInfo) {
-        setContactInfo(remoteSettings.contactPageInfo);
+        setContactInfo({
+          ...remoteSettings.contactPageInfo,
+          workingHours: remoteSettings.contactPageInfo.workingHours || ''
+        });
       } else if (remoteSettings.footerInfo) {
         // Fallback tạm thời nếu chưa có cấu hình riêng
-        setContactInfo({ ...remoteSettings.footerInfo, workingHours: remoteSettings.footerInfo.workingHours || '' });
+        setContactInfo({ 
+          address: remoteSettings.footerInfo.address,
+          phone: remoteSettings.footerInfo.phone,
+          email: remoteSettings.footerInfo.email,
+          workingHours: remoteSettings.footerInfo.workingHours || '' 
+        });
       }
     }
   }, [remoteSettings]);
@@ -40,10 +50,10 @@ export default function ContactManager() {
         ...remoteSettings,
         contactPageInfo: contactInfo
       });
-      alert('Đã lưu thông tin liên hệ thành công!');
+      showToast('Đã lưu thông liên hệ thành công!', 'success');
     } catch (error) {
       // Lỗi đã handle trong Hook
-      alert('Có lỗi xảy ra khi lưu thông tin liên hệ.');
+      showToast('Có lỗi xảy ra khi lưu thông tin.', 'error');
     } finally {
       setSaving(false);
     }

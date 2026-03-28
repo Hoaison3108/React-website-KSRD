@@ -13,7 +13,7 @@ export default function NewsPage() {
   }, []);
 
   return (
-    <div className="pt-[72px]">
+    <div className="pt-[78px]">
       <SEO 
         title="Tin tức" 
         description="Cập nhật những tin tức mới nhất về hoạt động kinh doanh, sự kiện và xu hướng ngành vật liệu xây dựng từ Khoáng Sản Rạng Đông."

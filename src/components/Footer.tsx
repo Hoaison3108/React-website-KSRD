@@ -76,28 +76,20 @@ export default function Footer() {
       />
       <div className="container-custom">
         <div className="grid md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8 mb-12">
-          {/* Col 1: Logo & Desc */}
+          {/* Col 1: About */}
           <div className="lg:col-span-3 lg:pr-8">
-            <div className="flex items-center gap-2 mb-8">
-              <div className="w-10 h-10 bg-white rounded-lg flex items-center justify-center text-primary font-bold text-xl">
-                RĐ
-              </div>
-              <div className="flex flex-col">
-                <span className="text-lg font-extrabold text-white uppercase leading-none">KHOÁNG SẢN</span>
-                <span className="text-xs font-bold text-secondary uppercase leading-none mt-1">RẠNG ĐÔNG</span>
-              </div>
-            </div>
+            <h4 className="text-lg font-extrabold text-secondary uppercase tracking-wider mb-8">SỰ CAM KẾT</h4>
             <p className="text-gray-400 text-sm leading-relaxed mb-8">
-              Khoáng Sản Rạng Đông đồng hành cùng mọi công trình trọng điểm với các sản phẩm từ khai thác khoáng sản tự nhiên và bê tông chất lượng cao.
+              Chúng tôi cam kết cung ứng nguồn vật liệu chất lượng ổn định, đáp ứng yêu cầu về kỹ thuật và tiến độ cho các công trình bằng sự phục vụ tận tâm, chuyên nghiệp.
             </p>
             <div className="flex gap-4">
-              <a href="#" className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors">
+              <a href="#" className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors hover:text-white">
                 <Facebook size={18} />
               </a>
-              <a href="#" className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors">
+              <a href="#" className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors hover:text-white">
                 <MessageCircle size={18} />
               </a>
-              <a href="#" className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors">
+              <a href="#" className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors hover:text-white">
                 <Youtube size={18} />
               </a>
             </div>

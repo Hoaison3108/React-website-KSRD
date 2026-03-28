@@ -5,6 +5,7 @@ import { Briefcase, Plus, Search, Edit2, Trash2, X, Save, RefreshCw, RotateCcw, 
 import Pagination from '../../components/Pagination';
 import { jobs as defaultJobs } from '../../data/recruitment';
 import { useAuth } from '../../contexts/AuthContext';
+import { useToast } from '../../contexts/ToastContext';
 
 interface Job {
   id: string;
@@ -29,6 +30,7 @@ interface Job {
 const ITEMS_PER_PAGE = 8;
 
 const RecruitmentManager = () => {
+  const { showToast } = useToast();
   const { isAdmin } = useAuth();
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(true);
@@ -135,13 +137,13 @@ const RecruitmentManager = () => {
     try {
       if (editingJob) {
         await updateDoc(doc(db, 'recruitment', editingJob.id), jobData);
-        alert('Cập nhật tin tuyển dụng thành công!');
+        showToast('Cập nhật tin tuyển dụng thành công!', 'success');
       } else {
         await addDoc(collection(db, 'recruitment'), {
           ...jobData,
           createdAt: Timestamp.now()
         });
-        alert('Thêm tin tuyển dụng thành công!');
+        showToast('Thêm tin tuyển dụng thành công!', 'success');
       }
       setIsModalOpen(false);
       fetchJobs();
@@ -180,11 +182,11 @@ const RecruitmentManager = () => {
           });
         }
       }
-      alert('Đã khôi phục dữ liệu mẫu thành công!');
+      showToast('Đã khôi phục dữ liệu mẫu thành công!', 'success');
       fetchJobs();
     } catch (error) {
       console.error("Error restoring defaults:", error);
-      alert('Có lỗi xảy ra khi khôi phục dữ liệu');
+      showToast('Có lỗi xảy ra khi khôi phục dữ liệu', 'error');
     } finally {
       setIsImporting(false);
     }
