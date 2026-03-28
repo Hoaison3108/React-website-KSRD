@@ -94,9 +94,6 @@ const AdminLayout = () => {
             <LogOut size={20} className="mr-3" />
             <span className="font-medium">Đăng xuất</span>
           </button>
-          <div className="text-center text-[10px] text-gray-400 dark:text-gray-500 pb-1">
-            Version 2.0.3 (Settings & Contact Refactored)
-          </div>
         </div>
       </aside>
 

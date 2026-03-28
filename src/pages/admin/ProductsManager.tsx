@@ -7,6 +7,7 @@ import { generateSlug } from '../../utils/stringUtils';
 import { useFirestoreCollection } from '../../hooks/useFirestoreCollection';
 import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../../contexts/ToastContext';
+import ImageUpload from '../../components/admin/ImageUpload';
 
 interface Product {
   id: string;
@@ -368,26 +369,13 @@ export default function ProductsManager() {
               </div>
               
               <div>
-                <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">URL Hình ảnh</label>
-                <div className="flex items-start gap-4">
-                  {formData.image ? (
-                    <div className="w-20 h-20 shrink-0 rounded-lg overflow-hidden border border-gray-200 dark:border-slate-600 bg-gray-100 flex items-center justify-center">
-                      <img src={formData.image} alt="Preview" className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjY2JkNWUxIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHJlY3QgeD0iMyIgeT0iMyIgd2lkdGg9IjE4IiBoZWlnaHQ9IjE4IiByeD0iMiIgcnk9IjIiPjwvcmVjdD48Y2lyY2xlIGN4PSI4LjUiIGN5PSI4LjUiIHI9IjEuNSI+PC9jaXJjbGU+PHBhdGggZD0iTTIxIDE1bC01LTVMNSAxNSI+PC9wYXRoPjwvc3ZnPg==' }} />
-                    </div>
-                  ) : (
-                    <div className="w-20 h-20 shrink-0 rounded-lg border border-dashed border-gray-300 dark:border-slate-600 bg-gray-50 flex items-center justify-center text-gray-400">
-                      <ImageIcon size={24} />
-                    </div>
-                  )}
-                  <input
-                    type="url"
-                    value={formData.image}
-                    onChange={(e) => setFormData({...formData, image: e.target.value})}
-                    className="flex-1 w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all dark:text-white"
-                    placeholder="https://example.com/image.jpg"
-                    required
-                  />
-                </div>
+                <ImageUpload
+                  label="URL Hình ảnh Cover"
+                  value={formData.image}
+                  onChange={(val) => setFormData({...formData, image: val})}
+                  folder="products/covers"
+                  required={true}
+                />
               </div>
               
               <div>
@@ -401,20 +389,14 @@ export default function ProductsManager() {
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">Thư viện ảnh (Mỗi dòng 1 URL)</label>
-                <textarea
+                <ImageUpload
+                  label="Thư viện ảnh"
                   value={formData.gallery}
-                  onChange={(e) => setFormData({...formData, gallery: e.target.value})}
-                  className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all dark:text-white h-24 resize-none"
-                  placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg"
-                ></textarea>
-                {formData.gallery && (
-                  <div className="flex gap-2 mt-2 overflow-x-auto pb-2 custom-scrollbar">
-                    {formData.gallery.split('\n').map((url, idx) => url.trim() && (
-                      <img key={idx} src={url.trim()} alt="" className="w-16 h-16 object-cover rounded border border-gray-200" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
-                    ))}
-                  </div>
-                )}
+                  onChange={(val) => setFormData({...formData, gallery: val})}
+                  folder="products/gallery"
+                  multiple={true}
+                  helpText={<p className="text-[11px] text-gray-500 mb-2">Mỗi URL một dòng hoặc chọn tải nhiều file ảnh cùng lúc.</p>}
+                />
               </div>
 
               <div className="grid grid-cols-2 gap-4">

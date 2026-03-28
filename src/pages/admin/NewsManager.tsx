@@ -7,6 +7,7 @@ import { generateSlug } from '../../utils/stringUtils';
 import { useFirestoreCollection } from '../../hooks/useFirestoreCollection';
 import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../../contexts/ToastContext';
+import ImageUpload from '../../components/admin/ImageUpload';
 
 interface News {
   id: string;
@@ -294,13 +295,13 @@ export default function NewsManager() {
                 </div>
                 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Hình ảnh phụ kẹp giữa các đoạn (Mỗi dòng 1 Link)</label>
-                  <textarea
+                  <ImageUpload
+                    label="Hình ảnh phụ kẹp giữa các đoạn"
                     value={formData.detailImages}
-                    onChange={(e) => setFormData({...formData, detailImages: e.target.value})}
-                    className="w-full px-4 py-2.5 bg-white dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-800 outline-none text-gray-900 dark:text-white shadow-sm h-24 resize-none"
-                    placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg"
-                  ></textarea>
+                    onChange={(val) => setFormData({...formData, detailImages: val})}
+                    folder="news/gallery"
+                    multiple={true}
+                  />
                 </div>
               
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -341,26 +342,13 @@ export default function NewsManager() {
               </div>
               
               <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">URL Cover Image (Ảnh Thumbnail) *</label>
-                <div className="flex items-start gap-4 mt-1">
-                  {formData.image ? (
-                    <div className="w-20 h-20 shrink-0 rounded-lg overflow-hidden border border-gray-200 dark:border-slate-600 bg-gray-100 flex items-center justify-center">
-                      <img src={formData.image} alt="Preview" className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjY2JkNWUxIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHJlY3QgeD0iMyIgeT0iMyIgd2lkdGg9IjE4IiBoZWlnaHQ9IjE4IiByeD0iMiIgcnk9IjIiPjwvcmVjdD48Y2lyY2xlIGN4PSI4LjUiIGN5PSI4LjUiIHI9IjEuNSI+PC9jaXJjbGU+PHBhdGggZD0iTTIxIDE1bC01LTVMNSAxNSI+PC9wYXRoPjwvc3ZnPg==' }} />
-                    </div>
-                  ) : (
-                    <div className="w-20 h-20 shrink-0 rounded-lg border border-dashed border-gray-300 dark:border-slate-600 bg-gray-50 flex items-center justify-center text-gray-400">
-                      <ImageIcon size={24} />
-                    </div>
-                  )}
-                  <input
-                    type="url"
-                    value={formData.image}
-                    onChange={(e) => setFormData({...formData, image: e.target.value})}
-                    className="flex-1 w-full px-4 py-2.5 bg-white dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-800 outline-none text-gray-900 dark:text-white shadow-sm"
-                    placeholder="https://..."
-                    required
-                  />
-                </div>
+                <ImageUpload
+                  label="Cover Image (Ảnh Thumbnail)"
+                  value={formData.image}
+                  onChange={(val) => setFormData({...formData, image: val})}
+                  folder="news/covers"
+                  required={true}
+                />
               </div>
               
               <div className="pt-2">

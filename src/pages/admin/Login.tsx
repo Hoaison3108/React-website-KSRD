@@ -55,7 +55,7 @@ const Login = () => {
                 type="email"
                 required
                 className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white"
-                placeholder="admin@hoaison.com"
+                placeholder="username@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
