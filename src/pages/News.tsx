@@ -40,7 +40,7 @@ export default function NewsPage() {
             Tiêu Điểm & <span className="text-secondary">Xu Hướng</span>
           </h1>
           <p className="text-lg text-gray-200 leading-relaxed">
-            Cập nhật liên tục các hoạt động nổi bật của Rạng Đông về hoạt động kinh doanh và sự kiện nổi bật.
+            Cập nhật liên tục các hoạt động nổi bật của Khoáng Sản Rạng Đông về hoạt động kinh doanh và sự kiện nổi bật.
           </p>
         </div>
       </section>
