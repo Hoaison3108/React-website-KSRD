@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Briefcase, MapPin, Clock, DollarSign, Send, ArrowLeft, Calendar, User, CheckCircle2, Phone, Mail } from 'lucide-react';
-import { doc, getDoc, collection, getDocs, query, limit } from 'firebase/firestore';
+import { doc, getDoc, collection, getDocs, query, limit, where } from 'firebase/firestore';
 import { db } from '../firebase';
 import Breadcrumb from '../components/Breadcrumb';
 import SEO from '../components/SEO';
@@ -9,6 +9,7 @@ import { jobs as localJobs } from '../data/recruitment';
 
 interface Job {
   id: string | number;
+  slug?: string;
   title: string;
   location: string;
   type: string;
@@ -27,7 +28,7 @@ interface Job {
 }
 
 export default function RecruitmentDetail() {
-  const { id } = useParams<{ id: string }>();
+  const { slug } = useParams<{ slug: string }>();
   const [firestoreId, setFirestoreId] = useState<string | null>(null);
   const [job, setJob] = useState<Job | null>(null);
   const [otherJobs, setOtherJobs] = useState<Job[]>([]);
@@ -36,25 +37,27 @@ export default function RecruitmentDetail() {
   useEffect(() => {
     window.scrollTo(0, 0);
     const fetchJob = async () => {
-      if (!id) return; // Nếu không có ID, không làm gì cả
+      if (!slug) return;
       setLoading(true);
       try {
         // Try fetching from Firestore first
-        console.log("Fetching job with firestoreId:", id);
-        const docRef = doc(db, 'recruitment', id); // Sử dụng firestoreId lấy từ URL
-        const docSnap = await getDoc(docRef);
+        const collRef = collection(db, 'recruitment');
+        const qJob = query(collRef, where("slug", "==", slug), limit(1));
+        const qs = await getDocs(qJob);
         
         let fetchedJob: Job | null = null;
 
-        if (docSnap.exists()) {
-          fetchedJob = { ...docSnap.data(), id: docSnap.id } as Job;
+        if (!qs.empty) {
+          const docSnap = qs.docs[0];
+          fetchedJob = { ...docSnap.data(), id: docSnap.id, slug: docSnap.data().slug || slug } as Job;
         } else {
           // Fallback to local data
-          const local = localJobs.find(j => j.id.toString() === id);
+          const local = localJobs.find(j => j.slug === slug);
           if (local) {
             fetchedJob = {
               ...local,
-              id: local.id.toString()
+              id: local.id.toString(),
+              slug: local.slug
             } as any;
           }
         }
@@ -66,14 +69,14 @@ export default function RecruitmentDetail() {
           const q = query(collection(db, 'recruitment'), limit(5));
           const querySnapshot = await getDocs(q);
           const listFromFirestore = querySnapshot.docs
-            .map(doc => ({ ...doc.data(), id: doc.id } as Job))
-            .filter(j => j.id !== id);
+            .map(doc => ({ ...doc.data(), id: doc.id, slug: doc.data().slug || '' } as Job))
+            .filter(j => j.slug !== slug);
           
           // Combine with local jobs for "Other Jobs"
           const combinedOthers = [...listFromFirestore];
           localJobs.forEach(lj => {
-            if (lj.id.toString() !== id && !combinedOthers.find(cr => cr.title === lj.title)) {
-              combinedOthers.push({ ...lj, id: lj.id.toString() } as any);
+            if (lj.slug !== slug && !combinedOthers.find(cr => cr.title === lj.title)) {
+              combinedOthers.push({ ...lj, id: lj.id.toString(), slug: lj.slug } as any);
             }
           });
 
@@ -84,10 +87,10 @@ export default function RecruitmentDetail() {
       } catch (error) {
         console.error("Error fetching job detail:", error);
         // Fallback to local data on error
-        const local = localJobs.find(j => j.id.toString() === id);
+        const local = localJobs.find(j => j.slug === slug);
         if (local) {
-          setJob({ ...local, id: local.id.toString() } as any);
-          setOtherJobs(localJobs.filter(j => j.id.toString() !== id).slice(0, 5) as any);
+          setJob({ ...local, id: local.id.toString(), slug: local.slug } as any);
+          setOtherJobs(localJobs.filter(j => j.slug !== slug).slice(0, 5) as any);
         }
       } finally {
         setLoading(false);
@@ -95,7 +98,7 @@ export default function RecruitmentDetail() {
     };
 
     fetchJob();
-  }, [id]); // Theo dõi sự thay đổi của ID trên URL
+  }, [slug]); // Theo dõi sự thay đổi của ID trên URL
 
   if (loading) {
     return (
@@ -283,7 +286,7 @@ export default function RecruitmentDetail() {
                 <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-4">Vị trí khác</h3>
                 <div className="space-y-4">
                   {otherJobs.map(otherJob => (
-                    <Link key={otherJob.id} to={`/recruitment/${otherJob.id}`} className="block group">
+                    <Link key={otherJob.id} to={`/recruitment/${otherJob.slug}`} className="block group">
                       <div className="p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors">
                         <h4 className="font-bold text-gray-800 dark:text-white group-hover:text-primary transition-colors line-clamp-1">{otherJob.title}</h4>
                         <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mt-1">

@@ -172,8 +172,10 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-gray-800 pt-8 text-center text-gray-500 text-sm">
-          <p>© 2026 Công Ty TNHH Khoáng Sản Rạng Đông. All rights reserved.</p>
+        <div className="border-t border-gray-800 pt-8 pb-4 flex flex-col md:flex-row justify-center items-center text-gray-500 text-sm">
+          <Link to="/management" className="cursor-default focus:outline-none" tabIndex={-1}>
+            <p className="cursor-default">© 2026 Công Ty TNHH Khoáng Sản Rạng Đông. All rights reserved.</p>
+          </Link>
         </div>
       </div>
     </footer>

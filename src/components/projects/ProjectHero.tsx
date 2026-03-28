@@ -57,7 +57,7 @@ export default function ProjectHero() {
             </div>
           </div>
 
-          <Link to={`/projects/${featured.id}`} className="btn btn-primary flex items-center gap-2 group">
+          <Link to={`/projects/${featured.slug}`} className="btn btn-primary flex items-center gap-2 group">
             Chi tiết dự án
             <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
           </Link>

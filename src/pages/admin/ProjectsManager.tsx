@@ -3,12 +3,14 @@ import { addDoc, updateDoc, deleteDoc, doc, Timestamp, collection } from 'fireba
 import { db } from '../../firebase';
 import { Plus, Edit, Trash2, X, Save, Image as ImageIcon, RotateCcw } from 'lucide-react';
 import { projects as localProjects } from '../../data/projects';
+import { generateSlug } from '../../utils/stringUtils';
 import { useFirestoreCollection } from '../../hooks/useFirestoreCollection';
 import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../../contexts/ToastContext';
 
 interface Project {
   id: string;
+  slug?: string;
   title: string;
   desc: string;
   image: string;
@@ -39,6 +41,7 @@ export default function ProjectsManager() {
     if (!rawProjects) return [];
     return rawProjects.map((data: any) => ({
       id: data.id,
+      slug: data.slug || generateSlug(data.title || ''),
       title: data.title || '',
       desc: data.desc || data.description || '',
       image: data.image || data.imageUrl || '',
@@ -54,6 +57,7 @@ export default function ProjectsManager() {
 
   const [formData, setFormData] = useState({
     title: '',
+    slug: '',
     desc: '',
     image: '',
     location: '',
@@ -77,6 +81,7 @@ export default function ProjectsManager() {
         if (!exists) {
           const { id, ...projectData } = project;
           const cleanData = JSON.parse(JSON.stringify(projectData)); // Remove all undefined fields safely
+          cleanData.slug = cleanData.slug || generateSlug(cleanData.title || '');
           await addDoc(collection(db, 'projects'), { ...cleanData, createdAt: Timestamp.now() });
         }
       }
@@ -95,6 +100,7 @@ export default function ProjectsManager() {
       setEditingId(project.id);
       setFormData({
         title: project.title,
+        slug: project.slug || '',
         desc: project.desc,
         image: project.image,
         location: project.location,
@@ -112,6 +118,7 @@ export default function ProjectsManager() {
       setEditingId(null);
       setFormData({
         title: '',
+        slug: '',
         desc: '',
         image: '',
         location: '',
@@ -130,7 +137,6 @@ export default function ProjectsManager() {
   };
 
   const handleCloseModal = () => {
-  const { showToast } = useToast();
     setIsModalOpen(false);
     setEditingId(null);
   };
@@ -138,7 +144,7 @@ export default function ProjectsManager() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const projectData = {
+      const projectData: any = {
         title: formData.title,
         desc: formData.desc,
         image: formData.image,
@@ -153,13 +159,15 @@ export default function ProjectsManager() {
           challenge: formData.challenge,
           solution: formData.solution,
           gallery: formData.gallery.split('\n').map(url => url.trim()).filter(url => url !== '')
-        },
-        createdAt: editingId ? undefined : Timestamp.now()
+        }
       };
       
       if (editingId) {
+        projectData.slug = formData.slug || generateSlug(formData.title);
         await updateDoc(doc(db, 'projects', editingId), projectData);
       } else {
+        projectData.slug = generateSlug(formData.title);
+        projectData.createdAt = Timestamp.now();
         await addDoc(collection(db, 'projects'), projectData);
       }
       
@@ -363,14 +371,25 @@ export default function ProjectsManager() {
                   <h4 className="text-sm font-bold text-gray-800 dark:text-white uppercase tracking-wider mb-2 border-b dark:border-slate-700 pb-2">2. Truyền thông & Hình ảnh</h4>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">URL Hình ảnh Cover *</label>
-                    <input
-                      type="url"
-                      value={formData.image}
-                      onChange={(e) => setFormData({...formData, image: e.target.value})}
-                      className="w-full px-4 py-2.5 bg-white dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-800 outline-none text-gray-900 dark:text-white shadow-sm"
-                      placeholder="https://.../cover.jpg"
-                      required
-                    />
+                    <div className="flex items-start gap-4 mt-1">
+                      {formData.image ? (
+                        <div className="w-20 h-20 shrink-0 rounded-lg overflow-hidden border border-gray-200 dark:border-slate-600 bg-gray-100 flex items-center justify-center">
+                          <img src={formData.image} alt="Preview" className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjY2JkNWUxIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHJlY3QgeD0iMyIgeT0iMyIgd2lkdGg9IjE4IiBoZWlnaHQ9IjE4IiByeD0iMiIgcnk9IjIiPjwvcmVjdD48Y2lyY2xlIGN4PSI4LjUiIGN5PSI4LjUiIHI9IjEuNSI+PC9jaXJjbGU+PHBhdGggZD0iTTIxIDE1bC01LTVMNSAxNSI+PC9wYXRoPjwvc3ZnPg==' }} />
+                        </div>
+                      ) : (
+                        <div className="w-20 h-20 shrink-0 rounded-lg border border-dashed border-gray-300 dark:border-slate-600 bg-gray-50 flex items-center justify-center text-gray-400">
+                          <ImageIcon size={24} />
+                        </div>
+                      )}
+                      <input
+                        type="url"
+                        value={formData.image}
+                        onChange={(e) => setFormData({...formData, image: e.target.value})}
+                        className="flex-1 w-full px-4 py-2.5 bg-white dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-800 outline-none text-gray-900 dark:text-white shadow-sm"
+                        placeholder="https://.../cover.jpg"
+                        required
+                      />
+                    </div>
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Thư viện ảnh Gallery (Mỗi URL một dòng)</label>
@@ -380,6 +399,13 @@ export default function ProjectsManager() {
                       className="w-full px-4 py-2.5 bg-white dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-800 outline-none text-gray-900 dark:text-white shadow-sm h-24 resize-none"
                       placeholder="https://.../img1.jpg&#10;https://.../img2.jpg"
                     ></textarea>
+                    {formData.gallery && (
+                      <div className="flex gap-2 mt-2 overflow-x-auto pb-2 custom-scrollbar">
+                        {formData.gallery.split('\n').map((url, idx) => url.trim() && (
+                          <img key={idx} src={url.trim()} alt="" className="w-12 h-12 object-cover rounded border border-gray-200" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
 

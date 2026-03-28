@@ -3,12 +3,13 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, MapPin, Calendar, Building2, Ruler, Target, Lightbulb, ChevronRight, ChevronLeft, X, Maximize2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import Breadcrumb from '../components/Breadcrumb';
-import { doc, getDoc, collection, getDocs, query, limit } from 'firebase/firestore';
+import { doc, getDoc, collection, getDocs, query, limit, where } from 'firebase/firestore';
 import { db } from '../firebase';
 import { projects as localProjects } from '../data/projects';
 
 interface Project {
   id: string | number;
+  slug?: string;
   title: string;
   category: string;
   location: string;
@@ -29,7 +30,7 @@ interface Project {
 import SEO from '../components/SEO';
 
 export default function ProjectDetailPage() {
-  const { id } = useParams<{ id: string }>();
+  const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const [project, setProject] = useState<Project | null>(null);
   const [otherProjects, setOtherProjects] = useState<Project[]>([]);
@@ -41,19 +42,22 @@ export default function ProjectDetailPage() {
     window.scrollTo(0, 0);
 
     const fetchProject = async () => {
-      if (!id) return;
+      if (!slug) return;
       setLoading(true);
       try {
         // Try fetching from Firestore first
-        const docRef = doc(db, 'projects', id);
-        const docSnap = await getDoc(docRef);
+        const projectsRefCol = collection(db, 'projects');
+        const qProject = query(projectsRefCol, where("slug", "==", slug), limit(1));
+        const querySnapshotCol = await getDocs(qProject);
 
         let fetchedProject: Project | null = null;
 
-        if (docSnap.exists()) {
+        if (!querySnapshotCol.empty) {
+          const docSnap = querySnapshotCol.docs[0];
           const data = docSnap.data();
           fetchedProject = {
             id: docSnap.id,
+            slug: data.slug || slug,
             title: data.title,
             category: data.category,
             location: data.location,
@@ -62,7 +66,7 @@ export default function ProjectDetailPage() {
             desc: data.description || data.desc,
             image: data.image,
             featured: data.featured || false,
-            details: {
+            details: data.details || {
               client: data.client || '',
               scope: data.scope || '',
               challenge: data.challenge || '',
@@ -72,11 +76,12 @@ export default function ProjectDetailPage() {
           };
         } else {
           // Fallback to local data
-          const local = localProjects.find(p => p.id.toString() === id);
+          const local = localProjects.find(p => p.slug === slug);
           if (local) {
             fetchedProject = {
               ...local,
-              id: local.id.toString()
+              id: local.id.toString(),
+              slug: local.slug
             } as any;
           }
         }
@@ -93,6 +98,7 @@ export default function ProjectDetailPage() {
               const dData = d.data();
               return {
                 id: d.id,
+                slug: dData.slug || '',
                 title: dData.title,
                 category: dData.category,
                 location: dData.location,
@@ -103,13 +109,13 @@ export default function ProjectDetailPage() {
                 featured: dData.featured || false
               } as Project;
             })
-            .filter(p => p.id !== id);
+            .filter(p => p.slug !== slug);
           
           // Combine with local projects for "Other Projects"
           const combinedOthers = [...othersFromFirestore];
           localProjects.forEach(lp => {
-            if (lp.id.toString() !== id && !combinedOthers.find(co => co.title === lp.title)) {
-              combinedOthers.push({ ...lp, id: lp.id.toString() } as any);
+            if (lp.slug !== slug && !combinedOthers.find(co => co.title === lp.title)) {
+              combinedOthers.push({ ...lp, id: lp.id.toString(), slug: lp.slug } as any);
             }
           });
 
@@ -120,10 +126,10 @@ export default function ProjectDetailPage() {
       } catch (error) {
         console.error("Error fetching project:", error);
         // Fallback to local data on error
-        const local = localProjects.find(p => p.id.toString() === id);
+        const local = localProjects.find(p => p.slug === slug);
         if (local) {
-          setProject({ ...local, id: local.id.toString() } as any);
-          setOtherProjects(localProjects.filter(p => p.id.toString() !== id).slice(0, 5) as any);
+          setProject({ ...local, id: local.id.toString(), slug: local.slug } as any);
+          setOtherProjects(localProjects.filter(p => p.slug !== slug).slice(0, 5) as any);
         }
       } finally {
         setLoading(false);
@@ -132,7 +138,7 @@ export default function ProjectDetailPage() {
     };
 
     fetchProject();
-  }, [id]);
+  }, [slug]);
 
   const getImageUrl = (image: any) => {
     if (typeof image === 'string' && image.trim() !== '') return image;
@@ -400,7 +406,7 @@ export default function ProjectDetailPage() {
               <div className="space-y-6">
                 {otherProjects
                   .map((other) => (
-                    <Link key={other.id} to={`/projects/${other.id}`} className="flex gap-4 group">
+                    <Link key={other.id} to={`/projects/${other.slug}`} className="flex gap-4 group">
                       <div className="w-20 h-20 rounded-xl overflow-hidden shrink-0">
                         <img src={getImageUrl(other.image)} alt={other.title} className="w-full h-full object-cover transition-transform group-hover:scale-110" />
                       </div>

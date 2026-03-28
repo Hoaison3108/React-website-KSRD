@@ -16,6 +16,7 @@ import 'swiper/css/navigation';
 
 interface Product {
   id: string | number;
+  slug?: string;
   title: string;
   desc: string;
   image: string;
@@ -31,7 +32,7 @@ interface Product {
 }
 
 export default function ProductDetail() {
-  const { id } = useParams<{ id: string }>();
+  const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const [product, setProduct] = useState<Product | null>(null);
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
@@ -75,19 +76,22 @@ export default function ProductDetail() {
     setCurrentImageIndex(0); // Reset image index when product changes
 
     const fetchProduct = async () => {
-      if (!id) return;
+      if (!slug) return;
       setLoading(true);
       try {
         // Try fetching from Firestore first
-        const docRef = doc(db, 'products', id);
-        const docSnap = await getDoc(docRef);
+        const productsCollectionRef = collection(db, 'products');
+        const qProduct = query(productsCollectionRef, where("slug", "==", slug), limit(1));
+        const querySnapshotProduct = await getDocs(qProduct);
 
         let fetchedProduct: Product | null = null;
 
-        if (docSnap.exists()) {
+        if (!querySnapshotProduct.empty) {
+          const docSnap = querySnapshotProduct.docs[0];
           const data = docSnap.data();
           fetchedProduct = {
             id: docSnap.id,
+            slug: data.slug || slug,
             title: data.title || data.name,
             desc: data.desc || data.description,
             image: data.image || (data.images && data.images.length > 0 ? data.images[0] : ''),
@@ -103,11 +107,12 @@ export default function ProductDetail() {
           };
         } else {
           // Fallback to local data
-          const local = localProducts.find(p => p.id.toString() === id);
+          const local = localProducts.find(p => p.slug === slug);
           if (local) {
             fetchedProduct = {
               ...local,
-              id: local.id.toString()
+              id: local.id.toString(),
+              slug: local.slug
             } as any;
           }
         }
@@ -124,6 +129,7 @@ export default function ProductDetail() {
               const dData = d.data();
               return {
                 id: d.id,
+                slug: dData.slug || '',
                 title: dData.title || dData.name,
                 desc: dData.desc || dData.description,
                 image: dData.image || (dData.images && dData.images.length > 0 ? dData.images[0] : ''),
@@ -132,13 +138,13 @@ export default function ProductDetail() {
                 category: dData.category
               } as Product;
             })
-            .filter(p => p.id !== id);
+            .filter(p => p.slug !== slug);
           
           // Combine with local products for "Related Products"
           const combinedRelated = [...relatedFromFirestore];
           localProducts.forEach(lp => {
-            if (lp.id.toString() !== id && !combinedRelated.find(cr => cr.title === lp.title)) {
-              combinedRelated.push({ ...lp, id: lp.id.toString() } as any);
+            if (lp.slug !== slug && !combinedRelated.find(cr => cr.title === lp.title)) {
+              combinedRelated.push({ ...lp, id: lp.id.toString(), slug: lp.slug } as any);
             }
           });
 
@@ -149,10 +155,10 @@ export default function ProductDetail() {
       } catch (error) {
         console.error("Error fetching product:", error);
         // Fallback to local data on error
-        const local = localProducts.find(p => p.id.toString() === id);
+        const local = localProducts.find(p => p.slug === slug);
         if (local) {
-          setProduct({ ...local, id: local.id.toString() } as any);
-          setRelatedProducts(localProducts.filter(p => p.id.toString() !== id).slice(0, 4) as any);
+          setProduct({ ...local, id: local.id.toString(), slug: local.slug } as any);
+          setRelatedProducts(localProducts.filter(p => p.slug !== slug).slice(0, 4) as any);
         }
       } finally {
         setLoading(false);
@@ -160,7 +166,7 @@ export default function ProductDetail() {
     };
 
     fetchProduct();
-  }, [id]);
+  }, [slug]);
 
   const getImageUrl = (image: any) => {
     if (typeof image === 'string' && image.trim() !== '') return image;
@@ -454,7 +460,7 @@ export default function ProductDetail() {
               .map((relatedProduct) => (
                 <SwiperSlide key={relatedProduct.id}>
                   <Link 
-                    to={`/products/${relatedProduct.id}`} 
+                    to={`/products/${relatedProduct.slug}`} 
                     className="group bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-slate-700 block h-full"
                   >
                     <div className="relative h-48 overflow-hidden">

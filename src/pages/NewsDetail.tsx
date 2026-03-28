@@ -5,7 +5,7 @@ import Breadcrumb from '../components/Breadcrumb';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Autoplay } from 'swiper/modules';
 import SEO from '../components/SEO';
-import { doc, getDoc, collection, getDocs, query, limit } from 'firebase/firestore';
+import { doc, getDoc, collection, getDocs, query, limit, where } from 'firebase/firestore';
 import { db } from '../firebase';
 import { news as localNews } from '../data/news';
 
@@ -14,6 +14,7 @@ import 'swiper/css/navigation';
 
 interface NewsItem {
   id: string | number;
+  slug?: string;
   title: string;
   date: string;
   displayDate: string;
@@ -24,7 +25,7 @@ interface NewsItem {
 }
 
 export default function NewsDetail() {
-  const { id } = useParams<{ id: string }>();
+  const { slug } = useParams<{ slug: string }>();
   const [newsItem, setNewsItem] = useState<NewsItem | null>(null);
   const [relatedNews, setRelatedNews] = useState<NewsItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -33,22 +34,25 @@ export default function NewsDetail() {
     window.scrollTo(0, 0);
 
     const fetchNews = async () => {
-      if (!id) return;
+      if (!slug) return;
       setLoading(true);
       try {
         // Try fetching from Firestore first
-        const docRef = doc(db, 'news', id);
-        const docSnap = await getDoc(docRef);
+        const refCol = collection(db, 'news');
+        const qNews = query(refCol, where("slug", "==", slug), limit(1));
+        const qs = await getDocs(qNews);
 
         let fetchedNews: NewsItem | null = null;
 
-        if (docSnap.exists()) {
+        if (!qs.empty) {
+          const docSnap = qs.docs[0];
           const data = docSnap.data();
           const dateObj = new Date(data.date);
           const displayDate = `${dateObj.getDate()} Th${dateObj.getMonth() + 1}`;
 
           fetchedNews = {
             id: docSnap.id,
+            slug: data.slug || slug,
             title: data.title,
             date: data.date,
             displayDate: displayDate,
@@ -59,11 +63,12 @@ export default function NewsDetail() {
           };
         } else {
           // Fallback to local data
-          const local = localNews.find(n => n.id.toString() === id);
+          const local = localNews.find(n => n.slug === slug);
           if (local) {
             fetchedNews = {
               ...local,
-              id: local.id.toString()
+              id: local.id.toString(),
+              slug: local.slug
             } as any;
           }
         }
@@ -79,24 +84,27 @@ export default function NewsDetail() {
             .map(d => {
               const dData = d.data();
               const dDateObj = new Date(dData.date);
-              const dDisplayDate = `${dDateObj.getDate()} Th${dDateObj.getMonth() + 1}`;
+              const dDisplayDate = `${dDateObj.getDate().toString().padStart(2, '0')} TH${(dDateObj.getMonth() + 1).toString().padStart(2, '0')}`;
+              const contentData = Array.isArray(dData.content) ? dData.content : (dData.content ? [dData.content] : []);
+              
               return {
                 id: d.id,
+                slug: dData.slug || '',
                 title: dData.title,
                 date: dData.date,
                 displayDate: dDisplayDate,
                 image: dData.image,
-                excerpt: dData.summary || dData.title,
-                content: Array.isArray(dData.content) ? dData.content : (dData.content ? [dData.content] : []),
+                excerpt: dData.summary || dData.excerpt || (contentData.length > 0 ? contentData[0] : dData.title),
+                content: contentData,
               } as NewsItem;
             })
-            .filter(n => n.id !== id);
+            .filter(n => n.slug !== slug);
           
           // Combine with local news for "Related News"
           const combinedRelated = [...relatedFromFirestore];
           localNews.forEach(ln => {
-            if (ln.id.toString() !== id && !combinedRelated.find(cr => cr.title === ln.title)) {
-              combinedRelated.push({ ...ln, id: ln.id.toString() } as any);
+            if (ln.slug !== slug && !combinedRelated.find(cr => cr.title === ln.title)) {
+              combinedRelated.push({ ...ln, id: ln.id.toString(), slug: ln.slug } as any);
             }
           });
 
@@ -107,10 +115,10 @@ export default function NewsDetail() {
       } catch (error) {
         console.error("Error fetching news:", error);
         // Fallback to local data on error
-        const local = localNews.find(n => n.id.toString() === id);
+        const local = localNews.find(n => n.slug === slug);
         if (local) {
-          setNewsItem({ ...local, id: local.id.toString() } as any);
-          setRelatedNews(localNews.filter(n => n.id.toString() !== id).slice(0, 4) as any);
+          setNewsItem({ ...local, id: local.id.toString(), slug: local.slug } as any);
+          setRelatedNews(localNews.filter(n => n.slug !== slug).slice(0, 4) as any);
         }
       } finally {
         setLoading(false);
@@ -118,7 +126,7 @@ export default function NewsDetail() {
     };
 
     fetchNews();
-  }, [id]);
+  }, [slug]);
 
   const getImageUrl = (image: any) => {
     if (typeof image === 'string' && image.trim() !== '') return image;
@@ -267,7 +275,7 @@ export default function NewsDetail() {
             {relatedNews.map((item) => (
               <SwiperSlide key={item.id}>
                 <Link 
-                  to={`/news/${item.id}`} 
+                  to={`/news/${item.slug}`} 
                   className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-2xl overflow-hidden group hover:shadow-xl transition-all duration-300 flex flex-col h-full block"
                 >
                   <div className="relative h-48 overflow-hidden shrink-0">

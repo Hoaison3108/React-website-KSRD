@@ -97,14 +97,17 @@ const Dashboard = () => {
           labels
         });
 
-        setStats({
+        const fetchedStats = {
           products: productsSnap.data().count,
           projects: projectsSnap.data().count,
           news: newsSnap.data().count,
           users: 1 // Hardcoded for now as we have 1 admin
-        });
+        };
+
+        console.log("✅ Dữ liệu Firebase lấy về thành công:", fetchedStats);
+        setStats(fetchedStats);
       } catch (error) {
-        console.error("Error fetching stats:", error);
+        console.error("❌ Lỗi khi lấy dữ liệu từ Firebase:", error);
       } finally {
         setLoading(false);
       }

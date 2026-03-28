@@ -38,14 +38,14 @@ export const publicRoutes = (
     <Route index element={<Home />} />
     <Route path="about" element={<AboutPage />} />
     <Route path="products" element={<ProductsPage />} />
-    <Route path="products/:id" element={<ProductDetail />} />
+    <Route path="products/:slug" element={<ProductDetail />} />
     <Route path="projects" element={<ProjectsPage />} />
-    <Route path="projects/:id" element={<ProjectDetailPage />} />
+    <Route path="projects/:slug" element={<ProjectDetailPage />} />
     <Route path="news" element={<NewsPage />} />
-    <Route path="news/:id" element={<NewsDetail />} />
+    <Route path="news/:slug" element={<NewsDetail />} />
     <Route path="contact" element={<ContactPage />} />
     <Route path="recruitment" element={<RecruitmentPage />} />
-    <Route path="recruitment/:id" element={<RecruitmentDetail />} />
+    <Route path="recruitment/:slug" element={<RecruitmentDetail />} />
     <Route path="gallery" element={<GalleryPage />} />
     <Route path="*" element={<NotFound />} />
   </Route>

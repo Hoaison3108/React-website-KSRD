@@ -4,11 +4,13 @@ import { db } from '../../firebase';
 import { Briefcase, Plus, Search, Edit2, Trash2, X, Save, RefreshCw, RotateCcw, MapPin, Clock, DollarSign, Calendar } from 'lucide-react';
 import Pagination from '../../components/Pagination';
 import { jobs as defaultJobs } from '../../data/recruitment';
+import { generateSlug } from '../../utils/stringUtils';
 import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../../contexts/ToastContext';
 
 interface Job {
   id: string;
+  slug?: string;
   title: string;
   location: string;
   type: string;
@@ -43,6 +45,7 @@ const RecruitmentManager = () => {
 
   const [formData, setFormData] = useState({
     title: '',
+    slug: '',
     location: '',
     type: 'Toàn thời gian',
     salary: '',
@@ -85,6 +88,7 @@ const RecruitmentManager = () => {
       setEditingJob(job);
       setFormData({
         title: job.title,
+        slug: job.slug || '',
         location: job.location,
         type: job.type,
         salary: job.salary,
@@ -104,6 +108,7 @@ const RecruitmentManager = () => {
       setEditingJob(null);
       setFormData({
         title: '',
+        slug: '',
         location: '',
         type: 'Toàn thời gian',
         salary: '',
@@ -127,7 +132,7 @@ const RecruitmentManager = () => {
     e.preventDefault();
     setFormStatus('submitting');
 
-    const jobData = {
+    const jobData: any = {
       ...formData,
       requirements: formData.requirements.split('\n').filter(r => r.trim() !== ''),
       benefits: formData.benefits.split('\n').filter(b => b.trim() !== ''),
@@ -136,13 +141,13 @@ const RecruitmentManager = () => {
 
     try {
       if (editingJob) {
+        jobData.slug = formData.slug || generateSlug(formData.title);
         await updateDoc(doc(db, 'recruitment', editingJob.id), jobData);
         showToast('Cập nhật tin tuyển dụng thành công!', 'success');
       } else {
-        await addDoc(collection(db, 'recruitment'), {
-          ...jobData,
-          createdAt: Timestamp.now()
-        });
+        jobData.slug = generateSlug(formData.title);
+        jobData.createdAt = Timestamp.now();
+        await addDoc(collection(db, 'recruitment'), jobData);
         showToast('Thêm tin tuyển dụng thành công!', 'success');
       }
       setIsModalOpen(false);
@@ -176,6 +181,7 @@ const RecruitmentManager = () => {
         if (!exists) {
           const { id, ...jobWithoutId } = job;
           const cleanData = JSON.parse(JSON.stringify(jobWithoutId));
+          cleanData.slug = cleanData.slug || generateSlug(cleanData.title || '');
           await addDoc(collection(db, 'recruitment'), {
             ...cleanData,
             createdAt: Timestamp.now()
@@ -436,7 +442,10 @@ const RecruitmentManager = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Mô tả công việc *</label>
+                <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">Mô tả công việc *</label>
+                <div className="bg-emerald-50 text-emerald-800 p-2 rounded-lg text-xs mb-3 border border-emerald-200">
+                  <span className="font-bold">Mẹo:</span> Sử dụng phím Enter để ngắt đoạn hợp lý giúp tin tuyển dụng dễ đọc hơn.
+                </div>
                 <textarea 
                   required
                   rows={4}
@@ -449,23 +458,25 @@ const RecruitmentManager = () => {
 
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Yêu cầu (Mỗi dòng một ý)</label>
+                  <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">Yêu cầu</label>
+                  <p className="text-[11px] text-gray-500 mb-2">Mỗi dòng 1 ý. Ví dụ:<br/>- Tốt nghiệp Đại học trở lên<br/>- Kinh nghiệm 3 năm</p>
                   <textarea 
                     rows={6}
                     value={formData.requirements}
                     onChange={(e) => setFormData({...formData, requirements: e.target.value})}
                     className="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
-                    placeholder="Nhập các yêu cầu công việc..."
+                    placeholder="- Yêu cầu 1&#10;- Yêu cầu 2"
                   ></textarea>
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-2">Quyền lợi (Mỗi dòng một ý)</label>
+                  <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">Quyền lợi</label>
+                  <p className="text-[11px] text-gray-500 mb-2">Mỗi dòng 1 ý. Ví dụ:<br/>- Thưởng tháng 13<br/>- Đóng BHXH đầy đủ</p>
                   <textarea 
                     rows={6}
                     value={formData.benefits}
                     onChange={(e) => setFormData({...formData, benefits: e.target.value})}
                     className="w-full px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-600 dark:bg-gray-700 dark:text-white outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
-                    placeholder="Nhập các quyền lợi được hưởng..."
+                    placeholder="- Quyền lợi 1&#10;- Quyền lợi 2"
                   ></textarea>
                 </div>
               </div>

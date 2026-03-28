@@ -9,6 +9,7 @@ import { news as localNews, newsCategories as localCategories } from '../data/ne
 
 interface NewsItem {
   id: string | number;
+  slug?: string;
   title: string;
   category?: string;
   date: string;
@@ -44,17 +45,19 @@ export default function News({ isPaginationEnabled = false, hideHeader = false }
           const data = doc.data();
           // Format date for display
           const dateObj = new Date(data.date);
-          const displayDate = `${dateObj.getDate()} Th${dateObj.getMonth() + 1}`;
+          const displayDate = `${dateObj.getDate().toString().padStart(2, '0')} TH${(dateObj.getMonth() + 1).toString().padStart(2, '0')}`;
+          const contentData = data.content ? (Array.isArray(data.content) ? data.content : [data.content]) : [];
 
           return {
             id: doc.id,
+            slug: data.slug || '',
             title: data.title,
             category: data.category,
             date: data.date,
             displayDate: displayDate,
             image: data.image,
-            excerpt: data.summary || data.excerpt,
-            content: data.content ? (Array.isArray(data.content) ? data.content : [data.content]) : [],
+            excerpt: data.summary || data.excerpt || (contentData.length > 0 ? contentData[0] : ''),
+            content: contentData,
           } as NewsItem;
         });
         
@@ -225,7 +228,7 @@ export default function News({ isPaginationEnabled = false, hideHeader = false }
                 transition={{ duration: 0.3, delay: index * 0.05 }}
                 className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700 rounded-2xl overflow-hidden group hover:shadow-xl transition-all duration-300 h-full"
               >
-                <Link to={`/news/${item.id}`} className="flex flex-col h-full">
+                <Link to={`/news/${item.slug}`} className="flex flex-col h-full">
                   <div className="relative h-52 overflow-hidden shrink-0">
                     <img 
                       src={getImageUrl(item.image)} 

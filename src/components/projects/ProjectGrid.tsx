@@ -9,6 +9,7 @@ import { projects as localProjects } from '../../data/projects';
 
 interface Project {
   id: string | number;
+  slug?: string;
   title: string;
   category: string;
   image: string;
@@ -42,6 +43,7 @@ export default function ProjectGrid({ hideHeader = false }: ProjectGridProps) {
           return {
             ...data,
             id: doc.id,
+            slug: data.slug || '',
             title: data.title,
             category: data.category,
             image: data.image,
@@ -202,7 +204,7 @@ export default function ProjectGrid({ hideHeader = false }: ProjectGridProps) {
                 transition={{ duration: 0.4 }}
                 className="group bg-white dark:bg-slate-800 rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 border border-gray-100 dark:border-slate-700 h-full"
               >
-                <Link to={`/projects/${project.id}`} className="flex flex-col h-full">
+                <Link to={`/projects/${project.slug}`} className="flex flex-col h-full">
                   {/* Image Container */}
                   <div className="relative h-64 overflow-hidden">
                     <img 

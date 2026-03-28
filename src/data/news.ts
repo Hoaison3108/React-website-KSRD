@@ -9,6 +9,7 @@ export const newsCategories = [
 export const news = [
   {
     id: 1,
+    slug: 'le-khoi-cong-nha-may-san-xuat-gach-khong-nung-cong-suat-lon',
     title: 'Lễ khởi công nhà máy sản xuất gạch không nung công suất lớn',
     category: 'Tin Công Ty',
     date: '2025-08-15',
@@ -28,6 +29,7 @@ export const news = [
   },
   {
     id: 2,
+    slug: 'be-tong-rang-dong-dat-chuan-iso-9001-2015',
     title: 'Bê tông Rạng Đông đạt chuẩn ISO 9001:2015',
     category: 'Sự Kiện & Giải Thưởng',
     date: '2023-07-20',
@@ -46,6 +48,7 @@ export const news = [
   },
   {
     id: 3,
+    slug: 'hoat-dong-tu-thien-xay-cau-cho-em-tai-vung-cao',
     title: 'Hoạt động từ thiện: Xây cầu cho em tại vùng cao',
     category: 'Trách Nhiệm Xã Hội',
     date: '2023-06-05',
@@ -65,6 +68,7 @@ export const news = [
   },
   {
     id: 4,
+    slug: 'hoi-thao-xu-huong-vat-lieu-xay-dung-xanh-2024',
     title: 'Hội thảo: Xu hướng vật liệu xây dựng xanh 2024',
     category: 'Sự Kiện & Giải Thưởng',
     date: '2023-11-10',
@@ -74,6 +78,7 @@ export const news = [
   },
   {
     id: 5,
+    slug: 'ky-ket-hop-tac-chien-luoc-voi-tap-doan-xay-dung-hoa-binh',
     title: 'Ký kết hợp tác chiến lược với Tập đoàn Xây dựng Hòa Bình',
     category: 'Tin Công Ty',
     date: '2023-10-25',
@@ -83,6 +88,7 @@ export const news = [
   },
   {
     id: 6,
+    slug: 'ra-mat-dong-san-pham-gach-terrazzo-cao-cap-moi',
     title: 'Ra mắt dòng sản phẩm gạch Terrazzo cao cấp mới',
     category: 'Sản Phẩm & Công Nghệ',
     date: '2023-09-12',
@@ -92,6 +98,7 @@ export const news = [
   },
   {
     id: 7,
+    slug: 'dao-tao-an-toan-lao-dong-dinh-ky-quy-3-2023',
     title: 'Đào tạo an toàn lao động định kỳ quý 3/2023',
     category: 'Tin Công Ty',
     date: '2023-09-05',
@@ -101,6 +108,7 @@ export const news = [
   },
   {
     id: 8,
+    slug: 'trien-lam-vietbuild-2023-gian-hang-rang-dong-thu-hut-khach-tham-quan',
     title: 'Triển lãm Vietbuild 2023: Gian hàng Rạng Đông thu hút khách tham quan',
     category: 'Sự Kiện & Giải Thưởng',
     date: '2023-08-28',
@@ -110,6 +118,7 @@ export const news = [
   },
   {
     id: 9,
+    slug: 'chuong-trinh-mai-am-cong-doan-trao-tang-nha-tinh-thuong',
     title: 'Chương trình "Mái ấm công đoàn" trao tặng nhà tình thương',
     category: 'Trách Nhiệm Xã Hội',
     date: '2023-07-15',
@@ -119,6 +128,7 @@ export const news = [
   },
   {
     id: 10,
+    slug: 'nang-cap-he-thong-tram-tron-be-tong-tai-binh-thuan',
     title: 'Nâng cấp hệ thống trạm trộn bê tông tại Bình Thuận',
     category: 'Sản Phẩm & Công Nghệ',
     date: '2023-12-01',
@@ -128,6 +138,7 @@ export const news = [
   },
   {
     id: 11,
+    slug: 'rang-dong-dat-giai-thuong-doanh-nghiep-tieu-bieu-2024',
     title: 'Rạng Đông đạt giải thưởng Doanh nghiệp tiêu biểu 2024',
     category: 'Sự Kiện & Giải Thưởng',
     date: '2024-01-15',
@@ -142,6 +153,7 @@ export const news = [
   },
   {
     id: 12,
+    slug: 'trien-khai-cong-nghe-san-xuat-xanh-giam-thieu-khi-thai',
     title: 'Triển khai công nghệ sản xuất xanh giảm thiểu khí thải',
     category: 'Sản Phẩm & Công Nghệ',
     date: '2024-02-20',

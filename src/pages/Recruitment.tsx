@@ -9,6 +9,7 @@ import { jobs as localJobs } from '../data/recruitment';
 
 interface Job {
   id: string | number;
+  slug?: string;
   title: string;
   location: string;
   type: string;
@@ -37,7 +38,8 @@ export default function RecruitmentPage() {
         const querySnapshot = await getDocs(q);
         const fetchedJobs = querySnapshot.docs.map(doc => ({
           ...doc.data(),
-          id: doc.id
+          id: doc.id,
+          slug: doc.data().slug || ''
         })) as Job[];
         
         // Combine fetched jobs with local jobs (Firebase takes priority)
@@ -110,7 +112,7 @@ export default function RecruitmentPage() {
               jobs.map((job) => (
                 <div key={job.id} className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-md border border-gray-100 dark:border-slate-700 hover:shadow-lg transition-shadow">
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
-                    <Link to={`/recruitment/${job.id}`} className="hover:text-primary transition-colors">
+                    <Link to={`/recruitment/${job.slug}`} className="hover:text-primary transition-colors">
                       <h3 className="text-xl font-bold text-primary dark:text-blue-400">{job.title}</h3>
                     </Link>
                     <span className="bg-green-100 text-green-700 text-xs font-bold px-3 py-1 rounded-full w-fit">
@@ -145,7 +147,7 @@ export default function RecruitmentPage() {
                   </div>
 
                   <Link 
-                    to={`/recruitment/${job.id}`}
+                    to={`/recruitment/${job.slug}`}
                     className="inline-flex items-center gap-2 bg-primary hover:bg-primary-dark text-white px-6 py-2.5 rounded-lg font-bold transition-colors text-sm"
                   >
                     Ứng tuyển ngay <ArrowRight size={16} />

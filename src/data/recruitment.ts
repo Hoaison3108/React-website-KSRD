@@ -1,5 +1,6 @@
 export interface Job {
   id: string;
+  slug: string;
   title: string;
   location: string;
   type: string;
@@ -20,6 +21,7 @@ export interface Job {
 export const jobs: Job[] = [
   {
     id: 'local_ksrd_job_001',
+    slug: 'ky-su-xay-dung',
     title: 'Kỹ Sư Xây Dựng',
     location: 'Lâm Đồng',
     type: 'Toàn thời gian',
@@ -49,6 +51,7 @@ export const jobs: Job[] = [
   },
   {
     id: 'local_ksrd_job_002',
+    slug: 'nhan-vien-kinh-doanh',
     title: 'Nhân Viên Kinh Doanh',
     location: 'Bình Thuận',
     type: 'Toàn thời gian',
@@ -78,6 +81,7 @@ export const jobs: Job[] = [
   },
   {
     id: 'local_ksrd_job_003',
+    slug: 'lai-xe-tai-ben',
     title: 'Lái Xe Tải Ben',
     location: 'Lâm Đồng',
     type: 'Toàn thời gian',

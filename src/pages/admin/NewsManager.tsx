@@ -3,15 +3,19 @@ import { addDoc, updateDoc, deleteDoc, doc, Timestamp, collection } from 'fireba
 import { db } from '../../firebase';
 import { Plus, Edit, Trash2, X, Save, Image as ImageIcon, RotateCcw } from 'lucide-react';
 import { news as localNews } from '../../data/news';
+import { generateSlug } from '../../utils/stringUtils';
 import { useFirestoreCollection } from '../../hooks/useFirestoreCollection';
 import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../../contexts/ToastContext';
 
 interface News {
   id: string;
+  slug: string;
   title: string;
+  summary?: string;
   content: string | string[];
   image: string;
+  detailImages?: string[];
   author: string;
   date: string;
   category: string;
@@ -30,9 +34,12 @@ export default function NewsManager() {
     if (!rawNews) return [];
     return rawNews.map((data: any) => ({
       id: data.id,
+      slug: data.slug || generateSlug(data.title || ''),
       title: data.title || '',
+      summary: data.summary || data.excerpt || '',
       content: data.content || '',
       image: data.image || data.imageUrl || '',
+      detailImages: data.detailImages || [],
       author: data.author || 'Ban Biên Tập',
       date: data.date || data.publishedAt || '',
       category: data.category || 'Tin tức công ty',
@@ -46,8 +53,11 @@ export default function NewsManager() {
 
   const [formData, setFormData] = useState({
     title: '',
+    slug: '',
+    summary: '',
     content: '',
     image: '',
+    detailImages: '',
     author: 'Ban Biên Tập',
     date: new Date().toISOString().split('T')[0],
     category: 'Tin tức công ty'
@@ -61,12 +71,15 @@ export default function NewsManager() {
     setIsImporting(true);
     try {
       for (const item of localNews) {
-        const exists = newsList.find(n => n.title === item.title);
+          const exists = newsList.find(n => n.title === item.title);
         if (!exists) {
           const cleanData = {
+            slug: item.slug || generateSlug(item.title || ''),
             title: item.title || '',
+            summary: item.excerpt || (item as any).summary || '',
             content: item.content || (item.excerpt ? [item.excerpt] : ['']),
             image: item.image || '',
+            detailImages: (item as any).detailImages || [],
             author: 'Ban Biên Tập',
             date: item.date || new Date().toISOString().split('T')[0],
             category: item.category || 'Tin tức công ty',
@@ -90,8 +103,11 @@ export default function NewsManager() {
       setEditingId(item.id);
       setFormData({
         title: item.title,
+        slug: item.slug,
+        summary: item.summary || '',
         content: Array.isArray(item.content) ? item.content.join('\n\n') : item.content,
         image: item.image,
+        detailImages: item.detailImages?.join('\n') || '',
         author: item.author,
         date: item.date,
         category: item.category
@@ -100,8 +116,11 @@ export default function NewsManager() {
       setEditingId(null);
       setFormData({
         title: '',
+        slug: '',
+        summary: '',
         content: '',
         image: '',
+        detailImages: '',
         author: 'Ban Biên Tập',
         date: new Date().toISOString().split('T')[0],
         category: 'Tin tức công ty'
@@ -111,7 +130,6 @@ export default function NewsManager() {
   };
 
   const handleCloseModal = () => {
-  const { showToast } = useToast();
     setIsModalOpen(false);
     setEditingId(null);
   };
@@ -119,19 +137,23 @@ export default function NewsManager() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const newsData = {
+      const newsData: any = {
         title: formData.title,
+        summary: formData.summary,
         content: formData.content.split('\n\n').map(p => p.trim()).filter(p => p !== ''),
         image: formData.image,
+        detailImages: formData.detailImages.split('\n').map(url => url.trim()).filter(url => url !== ''),
         author: formData.author,
         date: formData.date,
         category: formData.category,
-        createdAt: editingId ? undefined : Timestamp.now()
       };
       
       if (editingId) {
+        newsData.slug = formData.slug || generateSlug(formData.title); // Update if missing, otherwise keep
         await updateDoc(doc(db, 'news', editingId), newsData);
       } else {
+        newsData.slug = generateSlug(formData.title);
+        newsData.createdAt = Timestamp.now();
         await addDoc(collection(db, 'news'), newsData);
       }
       
@@ -261,6 +283,26 @@ export default function NewsManager() {
                   />
                 </div>
               
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Mô tả tóm tắt (Đoạn text xám)</label>
+                  <textarea
+                    value={formData.summary}
+                    onChange={(e) => setFormData({...formData, summary: e.target.value})}
+                    className="w-full px-4 py-2.5 bg-white dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-800 outline-none text-gray-900 dark:text-white shadow-sm h-20 resize-none"
+                    placeholder="Tuỳ chọn. Nếu để trống sẽ tự lấy đoạn nội dung đầu tiên làm tóm tắt."
+                  ></textarea>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Hình ảnh phụ kẹp giữa các đoạn (Mỗi dòng 1 Link)</label>
+                  <textarea
+                    value={formData.detailImages}
+                    onChange={(e) => setFormData({...formData, detailImages: e.target.value})}
+                    className="w-full px-4 py-2.5 bg-white dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-800 outline-none text-gray-900 dark:text-white shadow-sm h-24 resize-none"
+                    placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg"
+                  ></textarea>
+                </div>
+              
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tác giả</label>
@@ -300,14 +342,25 @@ export default function NewsManager() {
               
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">URL Cover Image (Ảnh Thumbnail) *</label>
-                <input
-                  type="url"
-                  value={formData.image}
-                  onChange={(e) => setFormData({...formData, image: e.target.value})}
-                  className="w-full px-4 py-2.5 bg-white dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-800 outline-none text-gray-900 dark:text-white shadow-sm"
-                  placeholder="https://..."
-                  required
-                />
+                <div className="flex items-start gap-4 mt-1">
+                  {formData.image ? (
+                    <div className="w-20 h-20 shrink-0 rounded-lg overflow-hidden border border-gray-200 dark:border-slate-600 bg-gray-100 flex items-center justify-center">
+                      <img src={formData.image} alt="Preview" className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjY2JkNWUxIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHJlY3QgeD0iMyIgeT0iMyIgd2lkdGg9IjE4IiBoZWlnaHQ9IjE4IiByeD0iMiIgcnk9IjIiPjwvcmVjdD48Y2lyY2xlIGN4PSI4LjUiIGN5PSI4LjUiIHI9IjEuNSI+PC9jaXJjbGU+PHBhdGggZD0iTTIxIDE1bC01LTVMNSAxNSI+PC9wYXRoPjwvc3ZnPg==' }} />
+                    </div>
+                  ) : (
+                    <div className="w-20 h-20 shrink-0 rounded-lg border border-dashed border-gray-300 dark:border-slate-600 bg-gray-50 flex items-center justify-center text-gray-400">
+                      <ImageIcon size={24} />
+                    </div>
+                  )}
+                  <input
+                    type="url"
+                    value={formData.image}
+                    onChange={(e) => setFormData({...formData, image: e.target.value})}
+                    className="flex-1 w-full px-4 py-2.5 bg-white dark:bg-slate-700 border border-gray-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-800 outline-none text-gray-900 dark:text-white shadow-sm"
+                    placeholder="https://..."
+                    required
+                  />
+                </div>
               </div>
               
               <div className="pt-2">

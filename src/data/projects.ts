@@ -3,6 +3,7 @@ export const projectCategories = ['Tất cả', 'Hạ tầng', 'Dân dụng', 'C
 export const projects = [
   {
     id: 1,
+    slug: 'cao-toc-bac-nam-doan-vinh-hao-phan-thiet',
     title: 'CAO TỐC BẮC NAM (ĐOẠN VĨNH HẢO - PHAN THIẾT)',
     category: 'Hạ tầng',
     location: 'Bình Thuận',
@@ -26,6 +27,7 @@ export const projects = [
   },
   {
     id: 2,
+    slug: 'khu-cong-nghiep-vsip-iii',
     title: 'KHU CÔNG NGHIỆP VSIP III',
     category: 'Công nghiệp',
     location: 'Bình Dương',
@@ -49,6 +51,7 @@ export const projects = [
   },
   {
     id: 3,
+    slug: 'centara-mirage-resort-mui-ne',
     title: 'CENTARA MIRAGE RESORT MŨI NÉ',
     category: 'Dân dụng',
     location: 'Phan Thiết',
@@ -72,6 +75,7 @@ export const projects = [
   },
   {
     id: 4,
+    slug: 'cau-phan-thiet',
     title: 'CẦU PHAN THIẾT',
     category: 'Hạ tầng',
     location: 'Bình Thuận',
@@ -94,6 +98,7 @@ export const projects = [
   },
   {
     id: 5,
+    slug: 'nha-may-nhiet-dien-vinh-tan-4',
     title: 'NHÀ MÁY NHIỆT ĐIỆN VĨNH TÂN 4',
     category: 'Công nghiệp',
     location: 'Tuy Phong, Bình Thuận',
@@ -116,6 +121,7 @@ export const projects = [
   },
   {
     id: 6,
+    slug: 'he-thong-kenh-tieu-khiet-tam',
     title: 'HỆ THỐNG KÊNH TIÊU KHIẾT TÂM',
     category: 'Thủy lợi',
     location: 'Bắc Bình, Bình Thuận',
@@ -138,6 +144,7 @@ export const projects = [
   },
   {
     id: 7,
+    slug: 'khu-do-thi-bien-thanh-long-bay',
     title: 'KHU ĐÔ THỊ BIỂN THANH LONG BAY',
     category: 'Dân dụng',
     location: 'Hàm Thuận Nam, Bình Thuận',
@@ -160,6 +167,7 @@ export const projects = [
   },
   {
     id: 8,
+    slug: 'duong-tinh-719b',
     title: 'ĐƯỜNG TỈNH 719B',
     category: 'Hạ tầng',
     location: 'Phan Thiết - Kê Gà',
@@ -182,6 +190,7 @@ export const projects = [
   },
   {
     id: 9,
+    slug: 'nha-may-dien-gio-hong-phong',
     title: 'NHÀ MÁY ĐIỆN GIÓ HỒNG PHONG',
     category: 'Công nghiệp',
     location: 'Bắc Bình, Bình Thuận',
@@ -204,6 +213,7 @@ export const projects = [
   },
   {
     id: 10,
+    slug: 'ho-chua-nuoc-ka-pet',
     title: 'HỒ CHỨA NƯỚC KA PÉT',
     category: 'Thủy lợi',
     location: 'Hàm Thuận Nam, Bình Thuận',
@@ -225,6 +235,7 @@ export const projects = [
   },
   {
     id: 11,
+    slug: 'truong-thpt-chuyen-tran-hung-dao-co-so-moi',
     title: 'TRƯỜNG THPT CHUYÊN TRẦN HƯNG ĐẠO (CƠ SỞ MỚI)',
     category: 'Dân dụng',
     location: 'Phan Thiết',
@@ -246,6 +257,7 @@ export const projects = [
   },
   {
     id: 12,
+    slug: 'cang-quoc-te-vinh-tan',
     title: 'CẢNG QUỐC TẾ VĨNH TÂN',
     category: 'Hạ tầng',
     location: 'Tuy Phong, Bình Thuận',
@@ -267,6 +279,7 @@ export const projects = [
   },
   {
     id: 13,
+    slug: 'khu-cong-nghiep-ham-kiem-i-ii',
     title: 'KHU CÔNG NGHIỆP HÀM KIỆM I & II',
     category: 'Công nghiệp',
     location: 'Hàm Thuận Nam, Bình Thuận',
@@ -288,6 +301,7 @@ export const projects = [
   },
   {
     id: 14,
+    slug: 'ke-song-ca-ty',
     title: 'KÈ SÔNG CÀ TY',
     category: 'Thủy lợi',
     location: 'Phan Thiết',
@@ -309,6 +323,7 @@ export const projects = [
   },
   {
     id: 15,
+    slug: 'benh-vien-da-khoa-tinh-binh-thuan-mo-rong',
     title: 'BỆNH VIỆN ĐA KHOA TỈNH BÌNH THUẬN (MỞ RỘNG)',
     category: 'Dân dụng',
     location: 'Phan Thiết',
@@ -330,6 +345,7 @@ export const projects = [
   },
   {
     id: 16,
+    slug: 'khu-do-thi-moi-phan-thiet',
     title: 'KHU ĐÔ THỊ MỚI PHAN THIẾT',
     category: 'Dân dụng',
     location: 'Phan Thiết',
@@ -352,6 +368,7 @@ export const projects = [
   },
   {
     id: 17,
+    slug: 'duong-ven-bien-dt-719',
     title: 'ĐƯỜNG VEN BIỂN DT.719',
     category: 'Hạ tầng',
     location: 'Kê Gà - Tân Thành',
@@ -372,3 +389,5 @@ export const projects = [
     }
   }
 ];
+
+

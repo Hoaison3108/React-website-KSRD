@@ -14,6 +14,7 @@ import 'swiper/css/navigation';
 
 interface Product {
   id: string | number;
+  slug?: string;
   title: string;
   category?: string;
   desc: string;
@@ -47,7 +48,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, index = 0 }) => {
       transition={{ duration: 0.4 }}
       className="bg-white dark:bg-slate-900 rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 h-full group border border-gray-100 dark:border-slate-700"
     >
-      <Link to={`/products/${product.id}`} className="flex flex-col h-full">
+      <Link to={`/products/${product.slug}`} className="flex flex-col h-full">
         <div className="relative h-64 shrink-0 overflow-hidden">
           <img 
             src={imageUrl} 
@@ -115,6 +116,7 @@ export default function Products({ viewMode = 'slider', hideHeader = false }: Pr
     if (rawProducts && rawProducts.length > 0) {
       const formattedProducts = rawProducts.map((p: any) => ({
         id: p.id,
+        slug: p.slug || '',
         title: p.title || p.name,
         category: p.category,
         desc: p.desc || p.description,

@@ -7,6 +7,7 @@ import { projects as localProjects } from '../data/projects';
 
 interface Project {
   id: string | number;
+  slug?: string;
   title: string;
   category: string;
   location: string;
@@ -46,6 +47,7 @@ export default function Projects() {
           const data = doc.data();
           return {
             id: doc.id,
+            slug: data.slug || '',
             title: data.title,
             category: data.category,
             location: data.location,
@@ -115,7 +117,7 @@ export default function Projects() {
 
           <div className="flex flex-col gap-6 mb-8">
             {projects.map((project, index) => (
-              <Link to={`/projects/${project.id}`} key={index} className="border border-gray-200 dark:border-slate-700 rounded-xl p-6 bg-white dark:bg-slate-800 hover:border-primary hover:shadow-md transition-all cursor-pointer group block">
+              <Link to={`/projects/${project.slug}`} key={index} className="border border-gray-200 dark:border-slate-700 rounded-xl p-6 bg-white dark:bg-slate-800 hover:border-primary hover:shadow-md transition-all cursor-pointer group block">
                 <h4 className="text-sm font-bold text-primary dark:text-blue-400 uppercase mb-2 group-hover:text-secondary transition-colors">
                   {project.title}
                 </h4>
@@ -139,7 +141,7 @@ export default function Projects() {
         {/* Gallery Side */}
         <div className="lg:w-[58%] flex gap-4 h-[500px] lg:h-[600px]">
           {projects[0] && (
-            <Link to={`/projects/${projects[0].id}`} className="flex-[1.5] h-full rounded-xl overflow-hidden shadow-xl relative group block">
+            <Link to={`/projects/${projects[0].slug}`} className="flex-[1.5] h-full rounded-xl overflow-hidden shadow-xl relative group block">
               <img 
                 src={getImageUrl(projects[0].image)} 
                 alt="Project Large" 
@@ -153,7 +155,7 @@ export default function Projects() {
           )}
           <div className="flex-1 flex flex-col gap-4 h-full">
             {projects[1] && (
-              <Link to={`/projects/${projects[1].id}`} className="flex-1 rounded-xl overflow-hidden shadow-xl relative group block">
+              <Link to={`/projects/${projects[1].slug}`} className="flex-1 rounded-xl overflow-hidden shadow-xl relative group block">
                 <img 
                   src={getImageUrl(projects[1].image)} 
                   alt="Project Small 1" 
@@ -166,7 +168,7 @@ export default function Projects() {
               </Link>
             )}
             {projects[2] && (
-              <Link to={`/projects/${projects[2].id}`} className="flex-1 rounded-xl overflow-hidden shadow-xl relative group block">
+              <Link to={`/projects/${projects[2].slug}`} className="flex-1 rounded-xl overflow-hidden shadow-xl relative group block">
                 <img 
                   src={getImageUrl(projects[2].image)} 
                   alt="Project Small 2" 

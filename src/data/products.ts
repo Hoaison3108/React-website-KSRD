@@ -9,6 +9,7 @@ export const productCategories = [
 export const products = [
   {
     id: 1,
+    slug: 'be-tong-thuong-pham',
     title: 'Bê Tông Thương Phẩm',
     category: 'Bê Tông & Bê Tông Nhựa',
     desc: 'Bê tông tươi chất lượng cao, đa dạng mác từ M150 đến M600, phù hợp cho mọi loại hình công trình từ dân dụng đến công nghiệp.',
@@ -38,6 +39,7 @@ export const products = [
   },
   {
     id: 2,
+    slug: 'da-xay-dung',
     title: 'Đá Xây Dựng',
     category: 'Đá & Cát',
     desc: 'Khai thác và chế biến đá xây dựng các loại: đá 1x2, 4x6, đá mi, đá hộc... đảm bảo tiêu chuẩn cơ lý.',
@@ -101,6 +103,7 @@ export const products = [
   },
   {
     id: 3,
+    slug: 'gach-khong-nung',
     title: 'Gạch Không Nung',
     category: 'Gạch & Ngói',
     desc: 'Sản phẩm gạch block, gạch terrazzo thân thiện môi trường, độ bền cao, cách âm cách nhiệt tốt.',
@@ -134,6 +137,7 @@ export const products = [
   },
   {
     id: 4,
+    slug: 'cat-xay-dung',
     title: 'Cát Xây Dựng',
     category: 'Đá & Cát',
     desc: 'Cát vàng, cát đen đã qua sàng lọc, loại bỏ tạp chất, đảm bảo chất lượng cho vữa xây trát và bê tông.',
@@ -163,6 +167,7 @@ export const products = [
   },
   {
     id: 5,
+    slug: 'xi-mang-cong-nghiep',
     title: 'Xi Măng Công Nghiệp',
     category: 'Xi Măng & Thép',
     desc: 'Cung cấp các loại xi măng PCB30, PCB40 từ các thương hiệu uy tín, đảm bảo độ kết dính và độ bền cao.',
@@ -192,6 +197,7 @@ export const products = [
   },
   {
     id: 6,
+    slug: 'sat-thep-xay-dung',
     title: 'Sắt Thép Xây Dựng',
     category: 'Xi Măng & Thép',
     desc: 'Phân phối sắt thép cuộn, thép cây từ các nhà máy lớn như Hòa Phát, Pomina... đáp ứng mọi tiêu chuẩn kỹ thuật.',
@@ -221,6 +227,7 @@ export const products = [
   },
   {
     id: 7,
+    slug: 'ngoi-lop-vat-lieu-hoan-thien',
     title: 'Ngói Lợp & Vật Liệu Hoàn Thiện',
     category: 'Gạch & Ngói',
     desc: 'Các loại ngói màu, ngói đất nung và vật liệu ốp lát cao cấp, mang lại vẻ đẹp thẩm mỹ cho ngôi nhà.',
@@ -250,6 +257,7 @@ export const products = [
   },
   {
     id: 8,
+    slug: 'be-tong-nhua-chat',
     title: 'Bê Tông Nhựa Chặt',
     category: 'Bê Tông & Bê Tông Nhựa',
     desc: 'Bê tông nhựa nóng (Asphalt Concrete) chất lượng cao, sản xuất theo công nghệ hiện đại, đảm bảo độ bền và êm thuận cho đường giao thông.',
@@ -282,6 +290,7 @@ export const products = [
   },
   {
     id: 9,
+    slug: 'gach-terrazzo-cao-cap',
     title: 'Gạch Terrazzo Cao Cấp',
     category: 'Gạch & Ngói',
     desc: 'Gạch lát vỉa hè, sân vườn với hoa văn đa dạng, bề mặt mài bóng hoặc nhám, chịu lực tốt và tính thẩm mỹ cao.',
@@ -312,6 +321,7 @@ export const products = [
   },
   {
     id: 10,
+    slug: 'cong-be-tong-ly-tam',
     title: 'Cống Bê Tông Ly Tâm',
     category: 'Bê Tông & Bê Tông Nhựa',
     desc: 'Cống tròn bê tông cốt thép sản xuất theo công nghệ quay ly tâm, đảm bảo độ đặc chắc và khả năng chịu lực vượt trội.',
@@ -341,3 +351,4 @@ export const products = [
     }
   }
 ];
+

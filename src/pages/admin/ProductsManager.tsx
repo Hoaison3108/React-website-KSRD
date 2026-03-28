@@ -3,12 +3,14 @@ import { collection, addDoc, updateDoc, deleteDoc, doc, Timestamp } from 'fireba
 import { db } from '../../firebase';
 import { Plus, Edit, Trash2, X, Save, Image as ImageIcon, RotateCcw } from 'lucide-react';
 import { products as localProducts } from '../../data/products';
+import { generateSlug } from '../../utils/stringUtils';
 import { useFirestoreCollection } from '../../hooks/useFirestoreCollection';
 import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../../contexts/ToastContext';
 
 interface Product {
   id: string;
+  slug?: string;
   title: string;
   desc: string;
   category: string;
@@ -38,6 +40,7 @@ export default function ProductsManager() {
       // Map data to handle missing fields and sort by createdAt
       const formatted = rawProducts.map((p: any) => ({
         id: p.id,
+        slug: p.slug || generateSlug(p.title || p.name || ''),
         title: p.title || p.name,
         desc: p.desc || p.description,
         category: p.category,
@@ -56,6 +59,7 @@ export default function ProductsManager() {
   // Form state
   const [formData, setFormData] = useState({
     title: '',
+    slug: '',
     desc: '',
     category: '',
     image: '',
@@ -82,6 +86,7 @@ export default function ProductsManager() {
         if (!exists) {
           const { id, ...productData } = product;
           const cleanData = JSON.parse(JSON.stringify(productData)); // Remove undefined
+          cleanData.slug = cleanData.slug || generateSlug(cleanData.title || cleanData.name || '');
           await addDoc(collection(db, 'products'), {
             ...cleanData,
             createdAt: Timestamp.now()
@@ -109,6 +114,7 @@ export default function ProductsManager() {
 
       setFormData({
         title: product.title,
+        slug: product.slug || '',
         desc: product.desc,
         category: product.category,
         image: product.image,
@@ -123,6 +129,7 @@ export default function ProductsManager() {
       setEditingId(null);
       setFormData({
         title: '',
+        slug: '',
         desc: '',
         category: '',
         image: '',
@@ -138,7 +145,6 @@ export default function ProductsManager() {
   };
 
   const handleCloseModal = () => {
-  const { showToast } = useToast();
     setIsModalOpen(false);
     setEditingId(null);
   };
@@ -163,7 +169,7 @@ export default function ProductsManager() {
         })
         .filter(item => item !== null) as { label: string; value: string }[];
 
-      const productData = {
+      const productData: any = {
         title: formData.title,
         desc: formData.desc,
         category: formData.category,
@@ -175,15 +181,17 @@ export default function ProductsManager() {
           features,
           specifications,
           applications: formData.applications
-        },
-        createdAt: editingId ? undefined : Timestamp.now()
+        }
       };
       
       Object.keys(productData).forEach(key => productData[key as keyof typeof productData] === undefined && delete productData[key as keyof typeof productData]);
 
       if (editingId) {
+        productData.slug = formData.slug || generateSlug(formData.title);
         await updateDoc(doc(db, 'products', editingId), productData);
       } else {
+        productData.slug = generateSlug(formData.title);
+        productData.createdAt = Timestamp.now();
         await addDoc(collection(db, 'products'), productData);
       }
       
@@ -361,14 +369,25 @@ export default function ProductsManager() {
               
               <div>
                 <label className="block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1">URL Hình ảnh</label>
-                <input
-                  type="url"
-                  value={formData.image}
-                  onChange={(e) => setFormData({...formData, image: e.target.value})}
-                  className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all dark:text-white"
-                  placeholder="https://example.com/image.jpg"
-                  required
-                />
+                <div className="flex items-start gap-4">
+                  {formData.image ? (
+                    <div className="w-20 h-20 shrink-0 rounded-lg overflow-hidden border border-gray-200 dark:border-slate-600 bg-gray-100 flex items-center justify-center">
+                      <img src={formData.image} alt="Preview" className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjY2JkNWUxIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCI+PHJlY3QgeD0iMyIgeT0iMyIgd2lkdGg9IjE4IiBoZWlnaHQ9IjE4IiByeD0iMiIgcnk9IjIiPjwvcmVjdD48Y2lyY2xlIGN4PSI4LjUiIGN5PSI4LjUiIHI9IjEuNSI+PC9jaXJjbGU+PHBhdGggZD0iTTIxIDE1bC01LTVMNSAxNSI+PC9wYXRoPjwvc3ZnPg==' }} />
+                    </div>
+                  ) : (
+                    <div className="w-20 h-20 shrink-0 rounded-lg border border-dashed border-gray-300 dark:border-slate-600 bg-gray-50 flex items-center justify-center text-gray-400">
+                      <ImageIcon size={24} />
+                    </div>
+                  )}
+                  <input
+                    type="url"
+                    value={formData.image}
+                    onChange={(e) => setFormData({...formData, image: e.target.value})}
+                    className="flex-1 w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all dark:text-white"
+                    placeholder="https://example.com/image.jpg"
+                    required
+                  />
+                </div>
               </div>
               
               <div>
@@ -389,6 +408,13 @@ export default function ProductsManager() {
                   className="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all dark:text-white h-24 resize-none"
                   placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg"
                 ></textarea>
+                {formData.gallery && (
+                  <div className="flex gap-2 mt-2 overflow-x-auto pb-2 custom-scrollbar">
+                    {formData.gallery.split('\n').map((url, idx) => url.trim() && (
+                      <img key={idx} src={url.trim()} alt="" className="w-16 h-16 object-cover rounded border border-gray-200" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none' }} />
+                    ))}
+                  </div>
+                )}
               </div>
 
               <div className="grid grid-cols-2 gap-4">
