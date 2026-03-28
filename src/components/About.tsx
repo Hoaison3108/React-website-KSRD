@@ -74,8 +74,8 @@ export default function About() {
           </div>
 
           <a 
-            href="/files/HoSoNangLuc_RangDong.pdf" 
-            download="HoSoNangLuc_RangDong.pdf"
+            href="/files/Ho-so-nang-luc-KSRĐ.pdf" 
+            download="Ho-so-nang-luc-KSRĐ.pdf"
             className="btn btn-primary gap-2"
           >
             <FileDown size={18} />
