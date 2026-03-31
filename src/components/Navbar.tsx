@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Moon, Sun } from 'lucide-react';
+import { Menu, X, Moon, Sun, Phone } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { useDarkMode } from '../hooks/useDarkMode';
 import { motion, useScroll, useSpring } from 'motion/react';
@@ -82,7 +82,18 @@ export default function Navbar() {
             );
           })}
           
-          <div className="flex items-center gap-2 border-l border-slate-300 pl-4">
+          <div className="flex items-center gap-4 border-l border-slate-300 pl-4 lg:pl-6 ml-2">
+            {/* Hotline */}
+            <a href="tel:0252652666" className="flex items-center gap-2 text-primary hover:text-secondary transition-colors group">
+              {/* <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all shadow-sm">
+                <Phone size={14} className="animate-pulse" />
+              </div> */}
+              <div className="flex flex-col">
+                <span className="text-[10px] font-bold text-slate-500 uppercase leading-none mb-1">Hotline</span>
+                <span className="text-sm font-extrabold leading-none tracking-wide">0252 652 666</span>
+              </div>
+            </a>
+
             <button
               onClick={toggle}
               className="p-2 rounded-full text-slate-700 hover:bg-primary/10 hover:text-primary transition-all"
@@ -131,9 +142,14 @@ export default function Navbar() {
               </Link>
             );
           })}
+
+          {/* Mobile Hotline */}
+          <a href="tel:0252652666" className="mt-2 flex items-center gap-2 bg-white/10 px-6 py-3 rounded-full text-white hover:bg-white/20 transition-colors shadow-sm">
+            <Phone size={18} className="animate-pulse" />
+            <span className="font-bold tracking-wider">0252 652 666</span>
+          </a>
         </div>
       </div>
     </nav>
   );
 }
-
