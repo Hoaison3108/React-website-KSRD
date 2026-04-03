@@ -16,6 +16,7 @@ const AdminRecruitment = lazy(() => import('../pages/admin/RecruitmentManager'))
 const AdminContact = lazy(() => import('../pages/admin/ContactManager'));
 const AdminSettings = lazy(() => import('../pages/admin/Settings'));
 const AdminUsers = lazy(() => import('../pages/admin/UserManager'));
+const MediaManager = lazy(() => import('../pages/admin/MediaManager'));
 
 export const adminRoutes = (
   <React.Fragment>
@@ -37,6 +38,7 @@ export const adminRoutes = (
       <Route path="contact" element={<Suspense fallback={<PageLoader />}><AdminContact /></Suspense>} />
       <Route path="settings" element={<Suspense fallback={<PageLoader />}><AdminSettings /></Suspense>} />
       <Route path="users" element={<Suspense fallback={<PageLoader />}><AdminUsers /></Suspense>} />
+      <Route path="media" element={<Suspense fallback={<PageLoader />}><MediaManager /></Suspense>} />
     </Route>
   </React.Fragment>
 );

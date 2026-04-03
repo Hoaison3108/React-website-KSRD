@@ -12,7 +12,8 @@ import {
   LogOut, 
   Menu, 
   X,
-  Users
+  Users,
+  Image as ImageIcon
 } from 'lucide-react';
 
 const AdminLayout = () => {
@@ -48,6 +49,7 @@ const AdminLayout = () => {
     { path: '/management/recruitment', label: 'Tuyển dụng', icon: <Briefcase size={20} /> },
     { path: '/management/messages', label: 'Tin nhắn', icon: <MessageSquare size={20} /> },
     { path: '/management/contact', label: 'Liên hệ', icon: <Phone size={20} /> },
+    { path: '/management/media', label: 'Kho Media', icon: <ImageIcon size={20} /> },
     { path: '/management/settings', label: 'Cài đặt', icon: <SettingsIcon size={20} /> },
   ];
 

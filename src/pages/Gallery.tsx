@@ -1,103 +1,102 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Breadcrumb from '../components/Breadcrumb';
 import SEO from '../components/SEO';
-import { Play, Image as ImageIcon, X, Filter } from 'lucide-react';
+import { Play, Image as ImageIcon, X, Filter, ExternalLink } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { Link } from 'react-router-dom';
+import { products } from '../data/products';
+import { projects } from '../data/projects';
+import { news } from '../data/news';
 
-const galleryItems = [
-  {
-    id: 1,
-    type: 'image',
-    category: 'Sản xuất',
-    src: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=1000&auto=format&fit=crop',
-    title: 'Dây chuyền sản xuất bê tông hiện đại'
-  },
-  {
-    id: 2,
-    type: 'image',
-    category: 'Sản xuất',
-    src: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=1000&auto=format&fit=crop',
-    title: 'Hệ thống kiểm soát chất lượng'
-  },
-  {
-    id: 3,
-    type: 'video',
-    category: 'Hoạt động',
-    src: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=1000&auto=format&fit=crop', // Placeholder for video thumbnail
-    title: 'Quy trình đổ bê tông tại công trình',
-    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' // Example video
-  },
-  {
-    id: 4,
-    type: 'image',
-    category: 'Dự án',
-    src: 'https://media-cdn-v2.laodong.vn/Storage/NewsPortal/2022/12/5/1124197/1.JPG',
-    title: 'Thi công cao tốc Vĩnh Hảo - Phan Thiết'
-  },
-  {
-    id: 5,
-    type: 'image',
-    category: 'Đội ngũ',
-    src: 'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?q=80&w=1000&auto=format&fit=crop',
-    title: 'Đội ngũ kỹ sư Rạng Đông'
-  },
-  {
-    id: 6,
-    type: 'image',
-    category: 'Sản xuất',
-    src: 'https://images.unsplash.com/photo-1545139224-79b176937ee9?q=80&w=1000&auto=format&fit=crop',
-    title: 'Trạm trộn bê tông nhựa nóng'
-  },
-  {
-    id: 7,
-    type: 'image',
-    category: 'Dự án',
-    src: 'https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=1000&auto=format&fit=crop',
-    title: 'Cung cấp vật liệu cho Centara Mirage Resort'
-  },
-  {
-    id: 8,
-    type: 'image',
-    category: 'Đội ngũ',
-    src: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1000&auto=format&fit=crop',
-    title: 'Họp giao ban công trường'
-  },
-  {
-    id: 9,
-    type: 'image',
-    category: 'Dự án',
-    src: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?q=80&w=1000&auto=format&fit=crop',
-    title: 'Hạ tầng khu công nghiệp VSIP III'
-  },
-  {
-    id: 10,
-    type: 'image',
-    category: 'Sản xuất',
-    src: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1000&auto=format&fit=crop',
-    title: 'Khai thác đá tại mỏ'
-  },
-  {
-    id: 11,
-    type: 'video',
-    category: 'Hoạt động',
-    src: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=1000&auto=format&fit=crop',
-    title: 'Giới thiệu năng lực sản xuất Rạng Đông',
-    videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ'
-  },
-  {
-    id: 12,
-    type: 'image',
-    category: 'Dự án',
-    src: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=1000&auto=format&fit=crop',
-    title: 'Móng trụ điện gió Hồng Phong'
-  }
+export type GalleryItemType = {
+  id: string | number;
+  type: 'image' | 'video';
+  category: string;
+  src: string;
+  title: string;
+  videoUrl?: string;
+  link?: string;
+};
+
+const staticGalleryItems: GalleryItemType[] = [
+  { id: 'static-1', type: 'image', category: 'Sản xuất', src: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=1000&auto=format&fit=crop', title: 'Dây chuyền sản xuất bê tông hiện đại' },
+  { id: 'static-2', type: 'image', category: 'Sản xuất', src: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=1000&auto=format&fit=crop', title: 'Hệ thống kiểm soát chất lượng' },
+  { id: 'static-3', type: 'video', category: 'Hoạt động', src: 'https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=1000&auto=format&fit=crop', title: 'Quy trình đổ bê tông tại công trình', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' },
+  { id: 'static-5', type: 'image', category: 'Đội ngũ', src: 'https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?q=80&w=1000&auto=format&fit=crop', title: 'Đội ngũ kỹ sư Rạng Đông' },
+  { id: 'static-6', type: 'image', category: 'Sản xuất', src: 'https://images.unsplash.com/photo-1545139224-79b176937ee9?q=80&w=1000&auto=format&fit=crop', title: 'Trạm trộn bê tông nhựa nóng' },
+  { id: 'static-8', type: 'image', category: 'Đội ngũ', src: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1000&auto=format&fit=crop', title: 'Họp giao ban công trường' },
+  { id: 'static-10', type: 'image', category: 'Sản xuất', src: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1000&auto=format&fit=crop', title: 'Khai thác đá tại mỏ' },
+  { id: 'static-11', type: 'video', category: 'Hoạt động', src: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=1000&auto=format&fit=crop', title: 'Giới thiệu năng lực sản xuất Rạng Đông', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' }
 ];
 
-const categories = ['Tất cả', 'Sản xuất', 'Dự án', 'Hoạt động', 'Đội ngũ'];
+const productGalleryItems: GalleryItemType[] = products.flatMap(product => {
+  const images = product.gallery && product.gallery.length > 0 
+    ? product.gallery 
+    : (product.image ? [product.image] : []);
+  
+  return images.map((src, index) => ({
+    id: `product-${product.id}-${index}`,
+    type: 'image',
+    category: 'Sản phẩm',
+    src,
+    title: product.title,
+    link: `/products/${product.slug}`
+  }));
+});
+
+const projectGalleryItems: GalleryItemType[] = projects.flatMap(project => {
+  const images = project.details?.gallery && project.details.gallery.length > 0 
+    ? project.details.gallery 
+    : (project.image ? [project.image] : []);
+    
+  return images.map((src, index) => ({
+    id: `project-${project.id}-${index}`,
+    type: 'image',
+    category: 'Dự án',
+    src,
+    title: project.title,
+    link: `/projects/${project.slug}`
+  }));
+});
+
+const newsGalleryItems: GalleryItemType[] = news.flatMap(item => {
+  const images = [item.image];
+  if (item.detailImages) {
+    images.push(...item.detailImages);
+  }
+  
+  return images.filter(Boolean).map((src, index) => ({
+    id: `news-${item.id}-${index}`,
+    type: 'image',
+    category: 'Tin tức',
+    src,
+    title: item.title,
+    link: `/news/${item.slug}`
+  }));
+});
+
+const allItems: GalleryItemType[] = [
+  ...staticGalleryItems,
+  ...productGalleryItems,
+  ...projectGalleryItems,
+  ...newsGalleryItems
+];
+
+// Deduplicate images by src
+const uniqueSrcs = new Set<string>();
+const galleryItems: GalleryItemType[] = [];
+for (const item of allItems) {
+  if (!uniqueSrcs.has(item.src)) {
+    uniqueSrcs.add(item.src);
+    galleryItems.push(item);
+  }
+}
+
+const categories = ['Tất cả', ...Array.from(new Set(galleryItems.map(item => item.category)))];
 
 export default function GalleryPage() {
   const [activeCategory, setActiveCategory] = useState('Tất cả');
-  const [selectedItem, setSelectedItem] = useState<typeof galleryItems[0] | null>(null);
+  const [selectedItem, setSelectedItem] = useState<GalleryItemType | null>(null);
   const [showFilters, setShowFilters] = useState(false);
   const filterRef = useRef<HTMLDivElement>(null);
 
@@ -255,16 +254,17 @@ export default function GalleryPage() {
             <button 
               className="absolute top-6 right-6 text-white/70 hover:text-white transition-colors"
               onClick={() => setSelectedItem(null)}
+              style={{ zIndex: 110 }}
             >
               <X size={40} />
             </button>
             
             <div 
-              className="max-w-5xl w-full max-h-[90vh] relative rounded-2xl overflow-hidden bg-black"
+              className="max-w-5xl w-full max-h-[90vh] relative rounded-2xl overflow-hidden bg-black flex flex-col items-center justify-center"
               onClick={(e) => e.stopPropagation()}
             >
               {selectedItem.type === 'video' && selectedItem.videoUrl ? (
-                <div className="aspect-video w-full">
+                <div className="aspect-video w-full h-auto">
                   <iframe 
                     width="100%" 
                     height="100%" 
@@ -279,13 +279,25 @@ export default function GalleryPage() {
                 <img 
                   src={selectedItem.src} 
                   alt={selectedItem.title} 
-                  className="w-full h-full object-contain max-h-[85vh]"
+                  className="w-full h-auto object-contain max-h-[85vh]"
                   referrerPolicy="no-referrer"
                 />
               )}
-              <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent text-white">
-                <h3 className="text-xl font-bold">{selectedItem.title}</h3>
-                <span className="text-secondary text-sm font-bold uppercase">{selectedItem.category}</span>
+              <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 via-black/50 to-transparent text-white flex justify-between items-end">
+                <div>
+                  <h3 className="text-xl font-bold">{selectedItem.title}</h3>
+                  <span className="text-secondary text-sm font-bold uppercase block mt-1">{selectedItem.category}</span>
+                </div>
+                {selectedItem.link && (
+                  <Link 
+                    to={selectedItem.link}
+                    className="flex items-center gap-2 bg-secondary hover:bg-orange-600 text-white px-5 py-2.5 rounded-xl font-bold transition-transform hover:-translate-y-1 ml-4 shadow-xl shadow-orange-900/20"
+                    onClick={() => setSelectedItem(null)}
+                  >
+                    <span>Xem bài viết</span>
+                    <ExternalLink size={18} />
+                  </Link>
+                )}
               </div>
             </div>
           </motion.div>
