@@ -118,7 +118,7 @@ export default function ContactPage() {
             Hỗ trợ 24/7
           </span>
           <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
-            Liên hệ với <span className="text-secondary">Rạng Đông</span>
+            Liên hệ <span className="text-secondary">tư vấn</span>
           </h1>
           <p className="text-lg text-gray-200 leading-relaxed">
             Chúng tôi luôn sẵn sàng lắng nghe và cung cấp những giải pháp vật liệu xây dựng tối ưu nhất cho công trình của bạn. Hãy kết nối ngay hôm nay!

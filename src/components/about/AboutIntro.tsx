@@ -22,7 +22,7 @@ export default function AboutIntro() {
               Khởi đầu từ một mỏ khai thác đá quy mô nhỏ tại Bình Thuận, Công ty TNHH Khoáng Sản Rạng Đông đã không ngừng nỗ lực để mở rộng quy mô và nâng cao chất lượng sản phẩm. Chúng tôi hiểu rằng, mỗi viên đá, mỗi mét khối bê tông đều là nền tảng cho sự an toàn và thịnh vượng của các công trình.
             </p>
             <p className="text-gray-600 dark:text-slate-300 mb-8 leading-relaxed text-justify">
-              Với phương châm 'Trao chất lượng - Nhận niềm tin', chúng tôi đã đầu tư mạnh mẽ vào dây chuyền nghiền sàng hiện đại của Nhật Bản và hệ thống trạm trộn bê tông tự động hóa hoàn toàn. Đến nay, Công ty TNHH Khoáng Sản Rạng Đông tự hào là đối tác chiến lược của nhiều dự án hạ tầng trọng điểm quốc gia.
+              Với phương châm 'Trao chất lượng - Nhận niềm tin', chúng tôi đã đầu tư mạnh mẽ vào dây chuyền nghiền sàng hiện đại và hệ thống trạm trộn bê tông tự động hóa hoàn toàn. Đến nay, Công ty TNHH Khoáng Sản Rạng Đông tự hào là đối tác chiến lược của nhiều dự án hạ tầng trọng điểm quốc gia.
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {[

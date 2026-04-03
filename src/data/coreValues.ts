@@ -4,12 +4,12 @@ export const coreValues = [
   {
     icon: ShieldCheck,
     title: "Chất Lượng",
-    desc: "Cam kết chất lượng sản phẩm vượt trội, đạt chuẩn quốc tế và độ bền vững theo thời gian."
+    desc: "Cam kết chất lượng sản phẩm vượt trội, đạt chuẩn kỹ thuật và độ bền vững theo thời gian."
   },
   {
     icon: Users,
     title: "Tận Tâm",
-    desc: "Đặt khách hàng làm trọng tâm, phục vụ với tinh tinh thần trách nhiệm và sự chuyên nghiệp cao nhất."
+    desc: "Đặt khách hàng làm trọng tâm, phục vụ với tinh thần trách nhiệm và sự chuyên nghiệp cao nhất."
   },
   {
     icon: Leaf,

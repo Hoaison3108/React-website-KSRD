@@ -38,7 +38,7 @@ export default function AboutPage() {
             Vững Bước & <span className="text-secondary">Vươn Xa</span>
           </h1>
           <p className="text-lg text-gray-200 leading-relaxed">
-            Hơn một thập kỷ đồng hành cùng sự phát triển của hạ tầng Việt Nam, chúng tôi không ngừng nỗ lực để mang đến những giá trị bền vững nhất.
+            Khoáng Sản Rạng Đông đồng hành cùng sự phát triển của hạ tầng Việt Nam, chúng tôi không ngừng nỗ lực để mang đến những giá trị bền vững nhất.
           </p>
         </div>
       </section>
