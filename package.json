@@ -4,7 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --port=3000 --host=0.0.0.0",
+    "dev": "concurrently \"npm run dev:react\" \"npm run dev:server\"",
+    "dev:react": "vite --port=3000 --host=0.0.0.0",
+    "dev:server": "cd upload-server && node server.js",
     "build": "vite build",
     "preview": "vite preview",
     "clean": "rm -rf dist",
@@ -34,10 +36,12 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@tanstack/react-query": "^5.96.2",
     "@types/node": "^22.14.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "autoprefixer": "^10.4.21",
+    "concurrently": "^9.2.1",
     "tailwindcss": "^4.1.14",
     "tsx": "^4.21.0",
     "typescript": "~5.8.2",

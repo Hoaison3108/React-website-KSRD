@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../../firebase';
 import SkeletonGrid from '../SkeletonGrid';
-import { projects as localProjects } from '../../data/projects';
 
 interface Project {
   id: string | number;
@@ -54,24 +53,15 @@ export default function ProjectGrid({ hideHeader = false }: ProjectGridProps) {
           } as Project;
         });
         
-        // Combine fetched projects with local projects (Firebase takes priority)
-        const combined = [...fetchedProjects];
-        localProjects.forEach(lp => {
-          if (!combined.find(fp => fp.title === lp.title)) {
-            combined.push(lp as any);
-          }
-        });
-
-        setProjects(combined as any);
+        setProjects(fetchedProjects);
 
         // Generate categories
-        const categories = Array.from(new Set(combined.map(p => p.category).filter(Boolean) as string[]));
+        const categories = Array.from(new Set(fetchedProjects.map(p => p.category).filter(Boolean) as string[]));
         setProjectCategories(['Tất cả', ...categories]);
       } catch (error) {
         console.error("Error fetching projects:", error);
-        setProjects(localProjects as any);
-        const categories = Array.from(new Set(localProjects.map(p => p.category)));
-        setProjectCategories(['Tất cả', ...categories]);
+        setProjects([]);
+        setProjectCategories(['Tất cả']);
       } finally {
         setLoading(false);
       }

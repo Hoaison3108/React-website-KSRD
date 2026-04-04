@@ -1,17 +1,74 @@
-import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
-import { storage } from '../firebase';
+import { auth } from '../firebase';
 
-export const uploadImage = async (file: File, path: string): Promise<string> => {
+export const uploadImage = async (file: File, folderName: string = 'uploads'): Promise<string> => {
   if (!file) throw new Error("No file provided");
 
-  const storageRef = ref(storage, `${path}/${Date.now()}_${file.name}`);
-  
+  const formData = new FormData();
+  formData.append('files', file);
+
   try {
-    const snapshot = await uploadBytes(storageRef, file);
-    const downloadURL = await getDownloadURL(snapshot.ref);
-    return downloadURL;
+    // Thử lấy token của admin hiện tại nếu có đăng nhập
+    let token = '';
+    if (auth.currentUser) {
+      token = await auth.currentUser.getIdToken();
+    }
+
+    const API_URL = (import.meta as any).env.VITE_UPLOAD_API_URL || 'http://localhost:5000';
+    const response = await fetch(`${API_URL}/api/upload?folder=${folderName}`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`
+        // Lưu ý: Không set 'Content-Type' vì fetch sẽ tự động sinh boundary cho FormData
+      },
+      body: formData
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.error || `Lỗi tải ảnh: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    if (data.urls && data.urls.length > 0) {
+      // Trả về URI ảnh đầu tiên. Frontend và backend cùng một ip nên ta lấy đường dẫn tương đối hoặc tuyệt đối local
+      const API_URL = (import.meta as any).env.VITE_UPLOAD_API_URL || 'http://localhost:5000';
+      return `${API_URL}${data.urls[0]}`; 
+    } else {
+      throw new Error("API không trả về đường dẫn ảnh");
+    }
+
   } catch (error) {
-    console.error("Error uploading image:", error);
+    console.error("Error uploading image (Node Backend):", error);
     throw error;
+  }
+};
+
+export const deleteImage = async (urls: string | string[]): Promise<void> => {
+  if (!urls) return;
+  const urlArray = Array.isArray(urls) ? urls : [urls];
+  if (urlArray.length === 0) return;
+
+  try {
+    let token = '';
+    if (auth.currentUser) {
+      token = await auth.currentUser.getIdToken();
+    }
+
+    const API_URL = (import.meta as any).env.VITE_UPLOAD_API_URL || 'http://localhost:5000';
+    const response = await fetch(`${API_URL}/api/delete-image`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({ urls: urlArray })
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.warn("Lưu ý: " + (errorData.error || response.statusText));
+    }
+  } catch (error) {
+    console.error("Error calling delete-image API (Node Backend):", error);
   }
 };

@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import { storage } from '../../firebase';
+import { uploadImage as apiUploadImage } from '../../utils/uploadImage';
 import { UploadCloud, Link as LinkIcon, Image as ImageIcon, X, CheckCircle2, Loader2, AlertCircle } from 'lucide-react';
 
 interface ImageUploadProps {
@@ -83,32 +82,23 @@ export default function ImageUpload({
     }
   };
 
-  const uploadSingleFile = (file: File, onProgress?: (p: number) => void): Promise<string> => {
-    return new Promise((resolve, reject) => {
-      const fileName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.]/g, '_')}`;
-      const storageRef = ref(storage, `${folder}/${fileName}`);
-      const uploadTask = uploadBytesResumable(storageRef, file);
-
-      uploadTask.on(
-        'state_changed',
-        (snapshot) => {
-          const p = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          if (onProgress) onProgress(p);
-          else setProgress(Math.round(p));
-        },
-        (error) => {
-          reject(error);
-        },
-        async () => {
-          try {
-            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-            resolve(downloadURL);
-          } catch (e) {
-            reject(e);
-          }
-        }
-      );
-    });
+  const uploadSingleFile = async (file: File, onProgress?: (p: number) => void): Promise<string> => {
+    // Local processing is generally fast, emit fake progress
+    if (onProgress) onProgress(30);
+    else setProgress(30);
+    
+    try {
+      const downloadURL = await apiUploadImage(file, folder);
+      
+      if (onProgress) onProgress(100);
+      else setProgress(100);
+      
+      return downloadURL;
+    } catch (e) {
+      if (onProgress) onProgress(0);
+      else setProgress(0);
+      throw e;
+    }
   };
 
   const urls = multiple ? (value ? value.split('\n').filter(u => u.trim() !== '') : []) : (value ? [value] : []);

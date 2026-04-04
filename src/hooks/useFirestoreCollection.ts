@@ -1,7 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { collection, query, onSnapshot, getDocs, QueryConstraint, QueryDocumentSnapshot, DocumentData } from 'firebase/firestore';
 import { db } from '../firebase';
 import { handleFirestoreError, OperationType } from '../utils/firestoreUtils';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 interface UseFirestoreCollectionOptions {
   realtime?: boolean;
@@ -12,9 +13,11 @@ export function useFirestoreCollection<T = DocumentData>(
   collectionName: string,
   options: UseFirestoreCollectionOptions = { realtime: false, queries: [] }
 ) {
-  const [data, setData] = useState<(T & { id: string })[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<Error | null>(null);
+  const queryClient = useQueryClient();
+  
+  // Memoize constraints signature for cache key (simplify by length for standard CMS cases)
+  const constraintsKey = options.queries ? options.queries.length.toString() : 'all';
+  const queryKey = ['firestore', collectionName, constraintsKey];
 
   const processSnapshot = (docs: QueryDocumentSnapshot<DocumentData>[]) => {
     return docs.map(doc => ({
@@ -24,58 +27,71 @@ export function useFirestoreCollection<T = DocumentData>(
   };
 
   const fetchCollection = async () => {
-    setLoading(true);
     try {
       const q = query(collection(db, collectionName), ...(options.queries || []));
       const querySnapshot = await getDocs(q);
-      setData(processSnapshot(querySnapshot.docs));
-      setError(null);
+      return processSnapshot(querySnapshot.docs);
     } catch (err) {
       console.error(`Error fetching collection ${collectionName}:`, err);
-      setError(err as Error);
       try {
          handleFirestoreError(err, OperationType.LIST, collectionName);
       } catch (e) {
          // Prevent crash
       }
-    } finally {
-      setLoading(false);
+      throw err;
     }
   };
 
-  // Sử dụng useRef để lưu trữ mảng queries và chỉ update khi có sự thay đổi thực sự
-  const queriesRef = useRef(options.queries);
-  useEffect(() => {
-    if (JSON.stringify(options.queries) !== JSON.stringify(queriesRef.current)) {
-      queriesRef.current = options.queries;
-    }
-  }, [options.queries]);
-  
-  useEffect(() => {
-    if (!options.realtime) {
-      fetchCollection();
-      return;
-    }
+  const { data: queryData, isLoading, error: queryError, refetch } = useQuery({
+    queryKey,
+    queryFn: fetchCollection,
+    enabled: !options.realtime, // Chỉ xài query chuẩn nếu không phải luồng Realtime
+    staleTime: 5 * 60 * 1000, // Cache 5 phút
+  });
 
-    setLoading(true);
-    const q = query(collection(db, collectionName), ...(queriesRef.current || []));
+  // Handle realtime fallback
+  const [realtimeData, setRealtimeData] = useState<(T & { id: string })[]>([]);
+  const [realtimeLoading, setRealtimeLoading] = useState(true);
+  const [realtimeError, setRealtimeError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    if (!options.realtime) return;
+
+    setRealtimeLoading(true);
+    const q = query(collection(db, collectionName), ...(options.queries || []));
     
     // Set up realtime listener
     const unsubscribe = onSnapshot(q, 
       (querySnapshot) => {
-        setData(processSnapshot(querySnapshot.docs));
-        setLoading(false);
-        setError(null);
+        const newData = processSnapshot(querySnapshot.docs);
+        setRealtimeData(newData);
+        queryClient.setQueryData(queryKey, newData); // Cập nhật cache ngầm
+        setRealtimeLoading(false);
+        setRealtimeError(null);
       },
       (err) => {
         console.error(`Error realtime fetching collection ${collectionName}:`, err);
-        setError(err as Error);
-        setLoading(false);
+        setRealtimeError(err as Error);
+        setRealtimeLoading(false);
       }
     );
 
     return () => unsubscribe();
-  }, [collectionName, queriesRef.current, options.realtime]); // Dependency dựa vào ref.current (đã memoized)
+  }, [collectionName, constraintsKey, options.realtime, queryClient]);
 
-  return { data, loading, error, refetch: fetchCollection };
+  if (options.realtime) {
+    return { 
+      data: realtimeData.length > 0 ? realtimeData : (queryData || []), 
+      loading: realtimeLoading && !queryData, 
+      error: realtimeError, 
+      refetch 
+    };
+  }
+
+  return { 
+    data: queryData || [], 
+    loading: isLoading, 
+    error: queryError as Error | null, 
+    refetch 
+  };
 }

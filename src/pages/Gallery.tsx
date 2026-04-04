@@ -4,9 +4,7 @@ import SEO from '../components/SEO';
 import { Play, Image as ImageIcon, X, Filter, ExternalLink } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Link } from 'react-router-dom';
-import { products } from '../data/products';
-import { projects } from '../data/projects';
-import { news } from '../data/news';
+import { useFirestoreCollection } from '../hooks/useFirestoreCollection';
 
 export type GalleryItemType = {
   id: string | number;
@@ -16,6 +14,7 @@ export type GalleryItemType = {
   title: string;
   videoUrl?: string;
   link?: string;
+  createdAt?: number;
 };
 
 const staticGalleryItems: GalleryItemType[] = [
@@ -29,72 +28,96 @@ const staticGalleryItems: GalleryItemType[] = [
   { id: 'static-11', type: 'video', category: 'Hoạt động', src: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?q=80&w=1000&auto=format&fit=crop', title: 'Giới thiệu năng lực sản xuất Rạng Đông', videoUrl: 'https://www.youtube.com/embed/dQw4w9WgXcQ' }
 ];
 
-const productGalleryItems: GalleryItemType[] = products.flatMap(product => {
-  const images = product.gallery && product.gallery.length > 0 
-    ? product.gallery 
-    : (product.image ? [product.image] : []);
-  
-  return images.map((src, index) => ({
-    id: `product-${product.id}-${index}`,
-    type: 'image',
-    category: 'Sản phẩm',
-    src,
-    title: product.title,
-    link: `/products/${product.slug}`
-  }));
-});
-
-const projectGalleryItems: GalleryItemType[] = projects.flatMap(project => {
-  const images = project.details?.gallery && project.details.gallery.length > 0 
-    ? project.details.gallery 
-    : (project.image ? [project.image] : []);
-    
-  return images.map((src, index) => ({
-    id: `project-${project.id}-${index}`,
-    type: 'image',
-    category: 'Dự án',
-    src,
-    title: project.title,
-    link: `/projects/${project.slug}`
-  }));
-});
-
-const newsGalleryItems: GalleryItemType[] = news.flatMap(item => {
-  const images = [item.image];
-  if (item.detailImages) {
-    images.push(...item.detailImages);
-  }
-  
-  return images.filter(Boolean).map((src, index) => ({
-    id: `news-${item.id}-${index}`,
-    type: 'image',
-    category: 'Tin tức',
-    src,
-    title: item.title,
-    link: `/news/${item.slug}`
-  }));
-});
-
-const allItems: GalleryItemType[] = [
-  ...staticGalleryItems,
-  ...productGalleryItems,
-  ...projectGalleryItems,
-  ...newsGalleryItems
-];
-
-// Deduplicate images by src
-const uniqueSrcs = new Set<string>();
-const galleryItems: GalleryItemType[] = [];
-for (const item of allItems) {
-  if (!uniqueSrcs.has(item.src)) {
-    uniqueSrcs.add(item.src);
-    galleryItems.push(item);
-  }
-}
-
-const categories = ['Tất cả', ...Array.from(new Set(galleryItems.map(item => item.category)))];
-
 export default function GalleryPage() {
+  const { data: fbProducts } = useFirestoreCollection('products');
+  const { data: fbProjects } = useFirestoreCollection('projects');
+  const { data: fbNews } = useFirestoreCollection('news');
+
+  const galleryItems = React.useMemo(() => {
+    // Use only firebase data
+    const mergedProducts = fbProducts || [];
+    const mergedProjects = fbProjects || [];
+    const mergedNews = fbNews || [];
+
+    const productGalleryItems: GalleryItemType[] = mergedProducts.flatMap((product: any) => {
+      const images = product.gallery && product.gallery.length > 0 
+        ? product.gallery 
+        : (product.image ? [product.image] : []);
+      
+      const slug = product.slug || '';
+      return images.map((src: string, index: number) => ({
+        id: `product-${product.id || Math.random()}-${index}`,
+        type: 'image' as const,
+        category: 'Sản phẩm',
+        src,
+        title: product.title || product.name || '',
+        link: slug ? `/products/${slug}` : undefined,
+        createdAt: product.createdAt?.seconds || Date.now()
+      }));
+    });
+
+    const projectGalleryItems: GalleryItemType[] = mergedProjects.flatMap((project: any) => {
+      const images = project.details?.gallery && project.details.gallery.length > 0 
+        ? project.details.gallery 
+        : (project.image ? [project.image] : []);
+        
+      const slug = project.slug || '';
+      return images.map((src: string, index: number) => ({
+        id: `project-${project.id || Math.random()}-${index}`,
+        type: 'image' as const,
+        category: 'Dự án',
+        src,
+        title: project.title || '',
+        link: slug ? `/projects/${slug}` : undefined,
+        createdAt: project.createdAt?.seconds || Date.now()
+      }));
+    });
+
+    const newsGalleryItems: GalleryItemType[] = mergedNews.flatMap((item: any) => {
+      const images = [item.image];
+      if (item.detailImages) images.push(...item.detailImages);
+      
+      const slug = item.slug || '';
+      return images.filter(Boolean).map((src: string, index: number) => ({
+        id: `news-${item.id || Math.random()}-${index}`,
+        type: 'image' as const,
+        category: 'Tin tức',
+        src,
+        title: item.title || '',
+        link: slug ? `/news/${slug}` : undefined,
+        createdAt: item.createdAt?.seconds || Date.now()
+      }));
+    });
+
+    const allItems: GalleryItemType[] = [
+      ...staticGalleryItems,
+      ...productGalleryItems,
+      ...projectGalleryItems,
+      ...newsGalleryItems
+    ];
+
+    // Deduplicate by src, prioritizing fb data which should be newer
+    const uniqueMap = new Map<string, GalleryItemType>();
+    allItems.forEach(item => {
+      if (item.src && item.src !== '') {
+        // If it exists, keep the one with a link instead of no link
+        if (uniqueMap.has(item.src)) {
+           const existing = uniqueMap.get(item.src)!;
+           if (!existing.link && item.link) {
+             uniqueMap.set(item.src, item);
+           }
+        } else {
+           uniqueMap.set(item.src, item);
+        }
+      }
+    });
+
+    // Option to sort by created date if desired, here just returning the array
+    return Array.from(uniqueMap.values());
+  }, [fbProducts, fbProjects, fbNews]);
+
+  const categories = ['Tất cả', ...Array.from(new Set(galleryItems.map(item => item.category)))];
+
   const [activeCategory, setActiveCategory] = useState('Tất cả');
   const [selectedItem, setSelectedItem] = useState<GalleryItemType | null>(null);
   const [showFilters, setShowFilters] = useState(false);

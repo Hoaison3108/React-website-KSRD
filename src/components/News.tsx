@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from 'motion/react';
 import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 import { db } from '../firebase';
 import SkeletonGrid from './SkeletonGrid';
-import { news as localNews, newsCategories as localCategories } from '../data/news';
 
 interface NewsItem {
   id: string | number;
@@ -61,26 +60,18 @@ export default function News({ isPaginationEnabled = false, hideHeader = false }
           } as NewsItem;
         });
         
-        // Combine fetched news with local news (Firebase takes priority)
-        const combined = [...fetchedNews];
-        localNews.forEach(ln => {
-          if (!combined.find(fn => fn.title === ln.title)) {
-            combined.push(ln as any);
-          }
-        });
-        
         // Sort by date desc
-        combined.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        fetchedNews.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
         
-        setNews(combined as any);
+        setNews(fetchedNews);
 
         // Generate categories
-        const categories = Array.from(new Set(combined.map(n => n.category).filter(Boolean) as string[]));
+        const categories = Array.from(new Set(fetchedNews.map(n => n.category).filter(Boolean) as string[]));
         setNewsCategories(['Tất cả', ...categories]);
       } catch (error) {
         console.error("Error fetching news:", error);
-        setNews(localNews as any);
-        setNewsCategories(localCategories);
+        setNews([]);
+        setNewsCategories(['Tất cả']);
       } finally {
         setLoading(false);
       }

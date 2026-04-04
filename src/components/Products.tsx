@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'motion/react';
 import { useFirestoreCollection } from '../hooks/useFirestoreCollection';
 import SkeletonGrid from './SkeletonGrid';
-import { products as localProducts, productCategories as localCategories } from '../data/products';
 
 // Import Swiper styles
 import 'swiper/css';
@@ -69,7 +68,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, index = 0 }) => {
           <h3 className="text-xl font-extrabold text-slate-900 dark:text-white mb-4 line-clamp-1 group-hover:text-primary transition-colors">
             {product.title}
           </h3>
-          <p className="text-gray-600 dark:text-slate-400 text-sm mb-6 line-clamp-3">
+          <p className="text-gray-600 dark:text-slate-400 text-sm mb-6 line-clamp-3 min-h-[60px]">
             {product.desc}
           </p>
           
@@ -131,16 +130,9 @@ export default function Products({ viewMode = 'slider', hideHeader = false }: Pr
         }
       })) as Product[];
       
-      // Merge unique based on Title (Firebase takes priority)
-      const combined = [...formattedProducts];
-      localProducts.forEach(lp => {
-        if (!combined.find(fp => fp.title === lp.title)) {
-          combined.push(lp as any);
-        }
-      });
-      setProducts(combined as any);
+      setProducts(formattedProducts);
     } else if (!loading) {
-      setProducts(localProducts as any);
+      setProducts([]);
     }
   }, [rawProducts, loading]);
 

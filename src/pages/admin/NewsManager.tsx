@@ -8,6 +8,7 @@ import { useFirestoreCollection } from '../../hooks/useFirestoreCollection';
 import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../../contexts/ToastContext';
 import ImageUpload from '../../components/admin/ImageUpload';
+import { deleteImage } from '../../utils/uploadImage';
 
 interface News {
   id: string;
@@ -167,8 +168,20 @@ export default function NewsManager() {
   };
 
   const handleDelete = async (id: string) => {
-    if (window.confirm('Chắc chắn muốn xóa tin tức này?')) {
+    if (window.confirm('Chắc chắn muốn xóa tin tức này? (Các ảnh liên quan cũng sẽ bị xóa khỏi máy chủ)')) {
       try {
+        const itemToDelete = newsList.find(n => n.id === id);
+        if (itemToDelete) {
+          const urlsToDelete: string[] = [];
+          if (itemToDelete.image) urlsToDelete.push(itemToDelete.image);
+          if (itemToDelete.detailImages && itemToDelete.detailImages.length > 0) {
+            urlsToDelete.push(...itemToDelete.detailImages);
+          }
+          if (urlsToDelete.length > 0) {
+            await deleteImage(urlsToDelete);
+          }
+        }
+
         await deleteDoc(doc(db, 'news', id));
       } catch (error) {
         console.error(error);

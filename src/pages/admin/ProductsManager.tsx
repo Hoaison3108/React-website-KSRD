@@ -8,6 +8,7 @@ import { useFirestoreCollection } from '../../hooks/useFirestoreCollection';
 import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../../contexts/ToastContext';
 import ImageUpload from '../../components/admin/ImageUpload';
+import { deleteImage } from '../../utils/uploadImage';
 
 interface Product {
   id: string;
@@ -205,8 +206,20 @@ export default function ProductsManager() {
   };
 
   const handleDelete = async (id: string) => {
-    if (window.confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')) {
+    if (window.confirm('Bạn có chắc chắn muốn xóa sản phẩm này? (Các ảnh liên quan cũng sẽ bị xóa khỏi máy chủ)')) {
       try {
+        const productToDelete = products.find(p => p.id === id);
+        if (productToDelete) {
+          const urlsToDelete: string[] = [];
+          if (productToDelete.image) urlsToDelete.push(productToDelete.image);
+          if (productToDelete.gallery && productToDelete.gallery.length > 0) {
+            urlsToDelete.push(...productToDelete.gallery);
+          }
+          if (urlsToDelete.length > 0) {
+            await deleteImage(urlsToDelete);
+          }
+        }
+
         await deleteDoc(doc(db, 'products', id));
         fetchProducts();
       } catch (error) {

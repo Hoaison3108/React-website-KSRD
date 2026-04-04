@@ -8,6 +8,7 @@ import { useFirestoreCollection } from '../../hooks/useFirestoreCollection';
 import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../../contexts/ToastContext';
 import ImageUpload from '../../components/admin/ImageUpload';
+import { deleteImage } from '../../utils/uploadImage';
 
 interface Project {
   id: string;
@@ -181,8 +182,20 @@ export default function ProjectsManager() {
   };
 
   const handleDelete = async (id: string) => {
-    if (window.confirm('Chắc chắn muốn xóa dự án này?')) {
+    if (window.confirm('Chắc chắn muốn xóa dự án này? (Các ảnh liên quan cũng sẽ bị xóa khỏi máy chủ)')) {
       try {
+        const itemToDelete = projects.find(p => p.id === id);
+        if (itemToDelete) {
+          const urlsToDelete: string[] = [];
+          if (itemToDelete.image) urlsToDelete.push(itemToDelete.image);
+          if (itemToDelete.details?.gallery && itemToDelete.details?.gallery.length > 0) {
+            urlsToDelete.push(...itemToDelete.details.gallery);
+          }
+          if (urlsToDelete.length > 0) {
+            await deleteImage(urlsToDelete);
+          }
+        }
+
         await deleteDoc(doc(db, 'projects', id));
       } catch (error) {
         console.error(error);
