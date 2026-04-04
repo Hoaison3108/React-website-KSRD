@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { addDoc, updateDoc, deleteDoc, doc, Timestamp, collection } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { Plus, Edit, Trash2, X, Save, Image as ImageIcon, RotateCcw } from 'lucide-react';
-import { news as localNews } from '../../data/news';
 import { generateSlug } from '../../utils/stringUtils';
 import { useFirestoreCollection } from '../../hooks/useFirestoreCollection';
 import { useAuth } from '../../contexts/AuthContext';
@@ -66,38 +65,7 @@ export default function NewsManager() {
   });
 
   const handleRestoreDefaults = async () => {
-    if (!window.confirm('Khôi phục dữ liệu mẫu (Tin tức xuất khẩu xỉ than, khai trương...)?')) {
-      return;
-    }
-    
-    setIsImporting(true);
-    try {
-      for (const item of localNews) {
-          const exists = newsList.find(n => n.title === item.title);
-        if (!exists) {
-          const cleanData = {
-            slug: item.slug || generateSlug(item.title || ''),
-            title: item.title || '',
-            summary: item.excerpt || (item as any).summary || '',
-            content: item.content || (item.excerpt ? [item.excerpt] : ['']),
-            image: item.image || '',
-            detailImages: (item as any).detailImages || [],
-            author: 'Ban Biên Tập',
-            date: item.date || new Date().toISOString().split('T')[0],
-            category: item.category || 'Tin tức công ty',
-            createdAt: Timestamp.now()
-          };
-          await addDoc(collection(db, 'news'), cleanData);
-        }
-      }
-      showToast('Đã khôi phục dữ liệu mẫu thành công!', 'success');
-      refetch();
-    } catch (error) {
-      console.error(error);
-      showToast('Có lỗi xảy ra', 'error');
-    } finally {
-      setIsImporting(false);
-    }
+    showToast('Chức năng này hiện đã được thay thế bằng hệ thống CMS Firestore.', 'info');
   };
 
   const handleOpenModal = (item?: News) => {
@@ -226,7 +194,7 @@ export default function NewsManager() {
           ) : (
             newsList.map((item) => (
               <div key={item.id} className="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-gray-200 dark:border-slate-700 p-4 flex flex-col md:flex-row gap-4 hover:shadow-md transition-shadow group relative z-10">
-                <div className="h-32 w-full md:w-48 bg-gray-100 dark:bg-slate-700 rounded-lg overflow-hidden flex-shrink-0 relative">
+                <div className="h-32 w-full md:w-48 bg-gray-100 dark:bg-slate-700 rounded-lg overflow-hidden shrink-0 relative">
                   {item.image && item.image.trim() !== '' ? (
                     <img src={item.image} alt={item.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                   ) : (
@@ -239,7 +207,7 @@ export default function NewsManager() {
                   <div className="flex justify-between items-start">
                     <h4 className="font-bold text-lg text-gray-900 dark:text-white truncate pr-4">{item.title}</h4>
                     {isAdmin && (
-                      <div className="flex gap-2 flex-shrink-0 opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity absolute right-4 md:relative">
+                      <div className="flex gap-2 shrink-0 opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity absolute right-4 md:relative">
                         <button 
                           onClick={() => handleOpenModal(item)}
                           className="p-2 bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-800/60 rounded-lg transition-colors shadow-sm"

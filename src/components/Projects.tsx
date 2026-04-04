@@ -3,7 +3,6 @@ import { ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { collection, getDocs, query, limit, where } from 'firebase/firestore';
 import { db } from '../firebase';
-import { projects as localProjects } from '../data/projects';
 
 interface Project {
   id: string | number;
@@ -66,20 +65,10 @@ export default function Projects() {
           } as Project;
         });
 
-        // Combine local projects with fetched projects
-        const combined = [...localProjects];
-        fetchedProjects.forEach(fp => {
-          if (!combined.find(lp => lp.title === fp.title)) {
-            combined.push(fp as any);
-          }
-        });
-
-        // Filter for featured projects to display on home
-        const featured = combined.filter(p => p.featured).slice(0, 3);
-        setProjects(featured as any);
+        setProjects(fetchedProjects);
       } catch (error) {
         console.error("Error fetching projects:", error);
-        setProjects(localProjects.filter(p => p.featured).slice(0, 3) as any);
+        setProjects([]);
       } finally {
         setLoading(false);
       }
@@ -147,7 +136,7 @@ export default function Projects() {
                 alt="Project Large" 
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+              <div className="absolute inset-0 bg-linear-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
                 <span className="text-white font-bold text-lg mb-2">{projects[0].title}</span>
                 <span className="text-white text-sm opacity-50 line-clamp-3">{projects[0].desc}</span>
               </div>
@@ -161,7 +150,7 @@ export default function Projects() {
                   alt="Project Small 1" 
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                <div className="absolute inset-0 bg-linear-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
                   <span className="text-white font-bold text-lg mb-2">{projects[1].title}</span>
                   <span className="text-white text-sm opacity-50 line-clamp-3">{projects[1].desc}</span>
                 </div>
@@ -174,7 +163,7 @@ export default function Projects() {
                   alt="Project Small 2" 
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                <div className="absolute inset-0 bg-linear-to-t from-black/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
                   <span className="text-white font-bold text-lg mb-2">{projects[2].title}</span>
                   <span className="text-white text-sm opacity-50 line-clamp-3">{projects[2].desc}</span>
                 </div>

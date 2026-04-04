@@ -9,7 +9,6 @@ import SEO from '../components/SEO';
 import { doc, getDoc, collection, getDocs, query, limit, where } from 'firebase/firestore';
 import { db } from '../firebase';
 import { saveContactMessage } from '../utils/firestoreUtils';
-import { products as localProducts } from '../data/products';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -79,45 +78,30 @@ export default function ProductDetail() {
       if (!slug) return;
       setLoading(true);
       try {
-        // Try fetching from Firestore first
         const productsCollectionRef = collection(db, 'products');
         const qProduct = query(productsCollectionRef, where("slug", "==", slug), limit(1));
         const querySnapshotProduct = await getDocs(qProduct);
 
-        let fetchedProduct: Product | null = null;
-
         if (!querySnapshotProduct.empty) {
           const docSnap = querySnapshotProduct.docs[0];
           const data = docSnap.data();
-          fetchedProduct = {
+          const fetchedProduct = {
             id: docSnap.id,
             slug: data.slug || slug,
-            title: data.title || data.name,
-            desc: data.desc || data.description,
+            title: data.title || data.name || '',
+            desc: data.desc || data.description || '',
             image: data.image || (data.images && data.images.length > 0 ? data.images[0] : ''),
             gallery: data.gallery || data.images || [],
             badge: data.badge || 'Mới',
             color: data.color || 'blue',
-            category: data.category,
+            category: data.category || '',
             details: data.details || {
               features: data.features || [],
               specifications: data.specifications ? Object.entries(data.specifications).map(([key, value]) => ({ label: key, value: String(value) })) : [],
               applications: data.applications || ''
             }
-          };
-        } else {
-          // Fallback to local data
-          const local = localProducts.find(p => p.slug === slug);
-          if (local) {
-            fetchedProduct = {
-              ...local,
-              id: local.id.toString(),
-              slug: local.slug
-            } as any;
-          }
-        }
+          } as Product;
 
-        if (fetchedProduct) {
           setProduct(fetchedProduct);
 
           // Fetch related products
@@ -130,36 +114,23 @@ export default function ProductDetail() {
               return {
                 id: d.id,
                 slug: dData.slug || '',
-                title: dData.title || dData.name,
-                desc: dData.desc || dData.description,
+                title: dData.title || dData.name || '',
+                desc: dData.desc || dData.description || '',
                 image: dData.image || (dData.images && dData.images.length > 0 ? dData.images[0] : ''),
                 badge: dData.badge || 'Mới',
                 color: dData.color || 'blue',
-                category: dData.category
+                category: dData.category || ''
               } as Product;
             })
             .filter(p => p.slug !== slug);
           
-          // Combine with local products for "Related Products"
-          const combinedRelated = [...relatedFromFirestore];
-          localProducts.forEach(lp => {
-            if (lp.slug !== slug && !combinedRelated.find(cr => cr.title === lp.title)) {
-              combinedRelated.push({ ...lp, id: lp.id.toString(), slug: lp.slug } as any);
-            }
-          });
-
-          setRelatedProducts(combinedRelated.slice(0, 4));
+          setRelatedProducts(relatedFromFirestore.slice(0, 4));
         } else {
           setProduct(null);
         }
       } catch (error) {
         console.error("Error fetching product:", error);
-        // Fallback to local data on error
-        const local = localProducts.find(p => p.slug === slug);
-        if (local) {
-          setProduct({ ...local, id: local.id.toString(), slug: local.slug } as any);
-          setRelatedProducts(localProducts.filter(p => p.slug !== slug).slice(0, 4) as any);
-        }
+        setProduct(null);
       } finally {
         setLoading(false);
       }

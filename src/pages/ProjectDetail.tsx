@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from 'motion/react';
 import Breadcrumb from '../components/Breadcrumb';
 import { doc, getDoc, collection, getDocs, query, limit, where } from 'firebase/firestore';
 import { db } from '../firebase';
-import { projects as localProjects } from '../data/projects';
 
 interface Project {
   id: string | number;
@@ -45,26 +44,23 @@ export default function ProjectDetailPage() {
       if (!slug) return;
       setLoading(true);
       try {
-        // Try fetching from Firestore first
         const projectsRefCol = collection(db, 'projects');
         const qProject = query(projectsRefCol, where("slug", "==", slug), limit(1));
         const querySnapshotCol = await getDocs(qProject);
 
-        let fetchedProject: Project | null = null;
-
         if (!querySnapshotCol.empty) {
           const docSnap = querySnapshotCol.docs[0];
           const data = docSnap.data();
-          fetchedProject = {
+          const fetchedProject = {
             id: docSnap.id,
             slug: data.slug || slug,
-            title: data.title,
-            category: data.category,
-            location: data.location,
-            year: data.year,
-            scale: data.scale,
-            desc: data.description || data.desc,
-            image: data.image,
+            title: data.title || '',
+            category: data.category || '',
+            location: data.location || '',
+            year: data.year || '',
+            scale: data.scale || '',
+            desc: data.description || data.desc || '',
+            image: data.image || '',
             featured: data.featured || false,
             details: data.details || {
               client: data.client || '',
@@ -73,20 +69,8 @@ export default function ProjectDetailPage() {
               solution: data.solution || '',
               gallery: data.gallery || []
             }
-          };
-        } else {
-          // Fallback to local data
-          const local = localProjects.find(p => p.slug === slug);
-          if (local) {
-            fetchedProject = {
-              ...local,
-              id: local.id.toString(),
-              slug: local.slug
-            } as any;
-          }
-        }
+          } as Project;
 
-        if (fetchedProject) {
           setProject(fetchedProject);
 
           // Fetch other projects
@@ -99,38 +83,25 @@ export default function ProjectDetailPage() {
               return {
                 id: d.id,
                 slug: dData.slug || '',
-                title: dData.title,
-                category: dData.category,
-                location: dData.location,
-                year: dData.year,
-                scale: dData.scale,
-                desc: dData.description || dData.desc,
-                image: dData.image,
+                title: dData.title || '',
+                category: dData.category || '',
+                location: dData.location || '',
+                year: dData.year || '',
+                scale: dData.scale || '',
+                desc: dData.description || dData.desc || '',
+                image: dData.image || '',
                 featured: dData.featured || false
               } as Project;
             })
             .filter(p => p.slug !== slug);
           
-          // Combine with local projects for "Other Projects"
-          const combinedOthers = [...othersFromFirestore];
-          localProjects.forEach(lp => {
-            if (lp.slug !== slug && !combinedOthers.find(co => co.title === lp.title)) {
-              combinedOthers.push({ ...lp, id: lp.id.toString(), slug: lp.slug } as any);
-            }
-          });
-
-          setOtherProjects(combinedOthers.slice(0, 5));
+          setOtherProjects(othersFromFirestore.slice(0, 5));
         } else {
           setProject(null);
         }
       } catch (error) {
         console.error("Error fetching project:", error);
-        // Fallback to local data on error
-        const local = localProjects.find(p => p.slug === slug);
-        if (local) {
-          setProject({ ...local, id: local.id.toString(), slug: local.slug } as any);
-          setOtherProjects(localProjects.filter(p => p.slug !== slug).slice(0, 5) as any);
-        }
+        setProject(null);
       } finally {
         setLoading(false);
         setCurrentImageIndex(0);

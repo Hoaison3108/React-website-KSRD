@@ -50,16 +50,6 @@ export default function RecruitmentDetail() {
         if (!qs.empty) {
           const docSnap = qs.docs[0];
           fetchedJob = { ...docSnap.data(), id: docSnap.id, slug: docSnap.data().slug || slug } as Job;
-        } else {
-          // Fallback to local data
-          const local = localJobs.find(j => j.slug === slug);
-          if (local) {
-            fetchedJob = {
-              ...local,
-              id: local.id.toString(),
-              slug: local.slug
-            } as any;
-          }
         }
 
         if (fetchedJob) {
@@ -72,26 +62,13 @@ export default function RecruitmentDetail() {
             .map(doc => ({ ...doc.data(), id: doc.id, slug: doc.data().slug || '' } as Job))
             .filter(j => j.slug !== slug);
           
-          // Combine with local jobs for "Other Jobs"
-          const combinedOthers = [...listFromFirestore];
-          localJobs.forEach(lj => {
-            if (lj.slug !== slug && !combinedOthers.find(cr => cr.title === lj.title)) {
-              combinedOthers.push({ ...lj, id: lj.id.toString(), slug: lj.slug } as any);
-            }
-          });
-
-          setOtherJobs(combinedOthers.slice(0, 5));
+          setOtherJobs(listFromFirestore.slice(0, 5));
         } else {
           setJob(null);
         }
       } catch (error) {
         console.error("Error fetching job detail:", error);
-        // Fallback to local data on error
-        const local = localJobs.find(j => j.slug === slug);
-        if (local) {
-          setJob({ ...local, id: local.id.toString(), slug: local.slug } as any);
-          setOtherJobs(localJobs.filter(j => j.slug !== slug).slice(0, 5) as any);
-        }
+        setJob(null);
       } finally {
         setLoading(false);
       }

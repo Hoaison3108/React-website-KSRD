@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { addDoc, updateDoc, deleteDoc, doc, Timestamp, collection } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { Plus, Edit, Trash2, X, Save, Image as ImageIcon, RotateCcw } from 'lucide-react';
-import { projects as localProjects } from '../../data/projects';
 import { generateSlug } from '../../utils/stringUtils';
 import { useFirestoreCollection } from '../../hooks/useFirestoreCollection';
 import { useAuth } from '../../contexts/AuthContext';
@@ -75,26 +74,7 @@ export default function ProjectsManager() {
   });
 
   const handleRestoreDefaults = async () => {
-    if (!window.confirm('Khôi phục dữ liệu mẫu (Nhà máy Bỉm Sơn, Sân bay Long Thành...)?')) return;
-    setIsImporting(true);
-    try {
-      for (const project of localProjects) {
-        const exists = projects.find(p => p.title === project.title);
-        if (!exists) {
-          const { id, ...projectData } = project;
-          const cleanData = JSON.parse(JSON.stringify(projectData)); // Remove all undefined fields safely
-          cleanData.slug = cleanData.slug || generateSlug(cleanData.title || '');
-          await addDoc(collection(db, 'projects'), { ...cleanData, createdAt: Timestamp.now() });
-        }
-      }
-      showToast('Đã khôi phục dữ liệu mẫu thành công!', 'success');
-      refetch();
-    } catch (error) {
-      console.error(error);
-      showToast('Có lỗi xảy ra', 'error');
-    } finally {
-      setIsImporting(false);
-    }
+    showToast('Dữ liệu hiện được đồng bộ trực tiếp từ Firestore.', 'info');
   };
 
   const handleOpenModal = (project?: Project) => {

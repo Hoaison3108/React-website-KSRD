@@ -5,7 +5,6 @@ import SEO from '../components/SEO';
 import { Briefcase, MapPin, Clock, DollarSign, Send, Phone, ArrowRight } from 'lucide-react';
 import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 import { db } from '../firebase';
-import { jobs as localJobs } from '../data/recruitment';
 
 interface Job {
   id: string | number;
@@ -42,18 +41,10 @@ export default function RecruitmentPage() {
           slug: doc.data().slug || ''
         })) as Job[];
         
-        // Combine fetched jobs with local jobs (Firebase takes priority)
-        const combined = [...fetchedJobs];
-        localJobs.forEach(lj => {
-          if (!combined.find(fj => fj.title === lj.title)) {
-            combined.push(lj as any);
-          }
-        });
-
-        setJobs(combined as any);
+        setJobs(fetchedJobs);
       } catch (error) {
         console.error("Error fetching jobs:", error);
-        setJobs(localJobs as any);
+        setJobs([]);
       } finally {
         setLoading(false);
       }

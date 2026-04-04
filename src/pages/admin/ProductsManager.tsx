@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { collection, addDoc, updateDoc, deleteDoc, doc, Timestamp } from 'firebase/firestore';
 import { db } from '../../firebase';
 import { Plus, Edit, Trash2, X, Save, Image as ImageIcon, RotateCcw } from 'lucide-react';
-import { products as localProducts } from '../../data/products';
 import { generateSlug } from '../../utils/stringUtils';
 import { useFirestoreCollection } from '../../hooks/useFirestoreCollection';
 import { useAuth } from '../../contexts/AuthContext';
@@ -76,33 +75,7 @@ export default function ProductsManager() {
 
 
   const handleRestoreDefaults = async () => {
-    if (!window.confirm('Khôi phục dữ liệu mẫu (Xi măng Bỉm Sơn, Thép Hòa Phát...)?')) {
-      return;
-    }
-
-    setIsImporting(true);
-    try {
-      for (const product of localProducts) {
-        // Check if product already exists by title
-        const exists = products.find(p => p.title === product.title);
-        if (!exists) {
-          const { id, ...productData } = product;
-          const cleanData = JSON.parse(JSON.stringify(productData)); // Remove undefined
-          cleanData.slug = cleanData.slug || generateSlug(cleanData.title || cleanData.name || '');
-          await addDoc(collection(db, 'products'), {
-            ...cleanData,
-            createdAt: Timestamp.now()
-          });
-        }
-      }
-      showToast('Đã khôi phục dữ liệu mẫu thành công!', 'success');
-      fetchProducts();
-    } catch (error) {
-      console.error("Error restoring defaults: ", error);
-      showToast('Có lỗi xảy ra khi khôi phục dữ liệu', 'error');
-    } finally {
-      setIsImporting(false);
-    }
+    showToast('Chức năng này hiện đã được thay thế bằng hệ thống CMS Firestore.', 'info');
   };
 
   const handleOpenModal = (product?: Product) => {
@@ -259,8 +232,8 @@ export default function ProductsManager() {
           <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-primary mx-auto"></div>
         </div>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full bg-white border border-gray-200 rounded-lg overflow-hidden">
+        <div className="overflow-x-auto rounded-xl border border-gray-200 dark:border-slate-700">
+          <table className="w-full bg-white dark:bg-slate-800">
             <thead className="bg-gray-50 dark:bg-gray-800 border-b dark:border-gray-700">
               <tr>
                 <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Hình ảnh</th>

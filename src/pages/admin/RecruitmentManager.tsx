@@ -3,7 +3,6 @@ import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, orderBy,
 import { db } from '../../firebase';
 import { Briefcase, Plus, Search, Edit2, Trash2, X, Save, RefreshCw, RotateCcw, MapPin, Clock, DollarSign, Calendar } from 'lucide-react';
 import Pagination from '../../components/Pagination';
-import { jobs as defaultJobs } from '../../data/recruitment';
 import { generateSlug } from '../../utils/stringUtils';
 import { useAuth } from '../../contexts/AuthContext';
 import { useToast } from '../../contexts/ToastContext';
@@ -170,32 +169,7 @@ const RecruitmentManager = () => {
   };
 
   const handleRestoreDefaults = async () => {
-    if (!window.confirm('Khôi phục dữ liệu mẫu (Tuyển Kỹ sư xây dựng, Lái xe tải...)?')) {
-      return;
-    }
-    
-    setIsImporting(true);
-    try {
-      for (const job of defaultJobs) {
-        const exists = jobs.find(j => j.title === job.title);
-        if (!exists) {
-          const { id, ...jobWithoutId } = job;
-          const cleanData = JSON.parse(JSON.stringify(jobWithoutId));
-          cleanData.slug = cleanData.slug || generateSlug(cleanData.title || '');
-          await addDoc(collection(db, 'recruitment'), {
-            ...cleanData,
-            createdAt: Timestamp.now()
-          });
-        }
-      }
-      showToast('Đã khôi phục dữ liệu mẫu thành công!', 'success');
-      fetchJobs();
-    } catch (error) {
-      console.error("Error restoring defaults:", error);
-      showToast('Có lỗi xảy ra khi khôi phục dữ liệu', 'error');
-    } finally {
-      setIsImporting(false);
-    }
+    showToast('Hệ thống hiện quản lý dữ liệu trực tiếp trên Firestore.', 'info');
   };
 
   const filteredJobs = jobs.filter(j => 
@@ -272,7 +246,7 @@ const RecruitmentManager = () => {
                     <td className="px-6 py-4">
                       <div className="text-sm font-bold text-gray-900 dark:text-white max-w-[250px] truncate" title={job.title}>{job.title}</div>
                       <div className="text-xs text-gray-500 dark:text-gray-400 flex items-center gap-1 mt-1 max-w-[250px] truncate" title={job.location}>
-                        <MapPin size={12} className="flex-shrink-0" /> <span className="truncate">{job.location}</span>
+                        <MapPin size={12} className="shrink-0" /> <span className="truncate">{job.location}</span>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">

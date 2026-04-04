@@ -158,7 +158,7 @@ export default function GalleryPage() {
             loading="lazy"
             referrerPolicy="no-referrer"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-900/90 to-black/70" />
+          <div className="absolute inset-0 bg-linear-to-r from-blue-900/90 to-black/70" />
         </div>
         <div className="relative z-10 text-center text-white px-4 max-w-3xl mx-auto">
           <span className="inline-block py-1 px-3 rounded-full bg-secondary/20 border border-secondary/50 text-secondary text-xs font-bold uppercase tracking-wider mb-4 backdrop-blur-sm">
@@ -271,7 +271,7 @@ export default function GalleryPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4"
+            className="fixed inset-0 z-100 bg-black/90 backdrop-blur-sm flex items-center justify-center p-4"
             onClick={() => setSelectedItem(null)}
           >
             <button 
@@ -306,7 +306,7 @@ export default function GalleryPage() {
                   referrerPolicy="no-referrer"
                 />
               )}
-              <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 via-black/50 to-transparent text-white flex justify-between items-end">
+              <div className="absolute bottom-0 left-0 right-0 p-6 bg-linear-to-t from-black/80 via-black/50 to-transparent text-white flex justify-between items-end">
                 <div>
                   <h3 className="text-xl font-bold">{selectedItem.title}</h3>
                   <span className="text-secondary text-sm font-bold uppercase block mt-1">{selectedItem.category}</span>

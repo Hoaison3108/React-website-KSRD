@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Calendar, User, ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
+import { ArrowLeft, Calendar, User, ChevronLeft, ChevronRight, ArrowRight, MapPin, DollarSign } from 'lucide-react';
 import Breadcrumb from '../components/Breadcrumb';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Autoplay } from 'swiper/modules';
 import SEO from '../components/SEO';
-import { doc, getDoc, collection, getDocs, query, limit, where } from 'firebase/firestore';
+import { collection, getDocs, query, limit, where } from 'firebase/firestore';
 import { db } from '../firebase';
-import { news as localNews } from '../data/news';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -37,12 +36,9 @@ export default function NewsDetail() {
       if (!slug) return;
       setLoading(true);
       try {
-        // Try fetching from Firestore first
         const refCol = collection(db, 'news');
         const qNews = query(refCol, where("slug", "==", slug), limit(1));
         const qs = await getDocs(qNews);
-
-        let fetchedNews: NewsItem | null = null;
 
         if (!qs.empty) {
           const docSnap = qs.docs[0];
@@ -50,37 +46,25 @@ export default function NewsDetail() {
           const dateObj = new Date(data.date);
           const displayDate = `${dateObj.getDate()} Th${dateObj.getMonth() + 1}`;
 
-          fetchedNews = {
+          const fetchedNews = {
             id: docSnap.id,
             slug: data.slug || slug,
-            title: data.title,
-            date: data.date,
+            title: data.title || '',
+            date: data.date || '',
             displayDate: displayDate,
-            image: data.image,
-            excerpt: data.summary || data.title,
+            image: data.image || '',
+            excerpt: data.summary || data.title || '',
             content: Array.isArray(data.content) ? data.content : (data.content ? [data.content] : []),
             detailImages: data.detailImages || []
-          };
-        } else {
-          // Fallback to local data
-          const local = localNews.find(n => n.slug === slug);
-          if (local) {
-            fetchedNews = {
-              ...local,
-              id: local.id.toString(),
-              slug: local.slug
-            } as any;
-          }
-        }
+          } as NewsItem;
 
-        if (fetchedNews) {
           setNewsItem(fetchedNews);
 
           // Fetch related news
           const newsRef = collection(db, 'news');
           const q = query(newsRef, limit(4));
           const querySnapshot = await getDocs(q);
-          const relatedFromFirestore = querySnapshot.docs
+          const relatedItems = querySnapshot.docs
             .map(d => {
               const dData = d.data();
               const dDateObj = new Date(dData.date);
@@ -90,36 +74,23 @@ export default function NewsDetail() {
               return {
                 id: d.id,
                 slug: dData.slug || '',
-                title: dData.title,
-                date: dData.date,
+                title: dData.title || '',
+                date: dData.date || '',
                 displayDate: dDisplayDate,
-                image: dData.image,
-                excerpt: dData.summary || dData.excerpt || (contentData.length > 0 ? contentData[0] : dData.title),
+                image: dData.image || '',
+                excerpt: dData.summary || dData.excerpt || (contentData.length > 0 ? contentData[0] : (dData.title || '')),
                 content: contentData,
               } as NewsItem;
             })
             .filter(n => n.slug !== slug);
           
-          // Combine with local news for "Related News"
-          const combinedRelated = [...relatedFromFirestore];
-          localNews.forEach(ln => {
-            if (ln.slug !== slug && !combinedRelated.find(cr => cr.title === ln.title)) {
-              combinedRelated.push({ ...ln, id: ln.id.toString(), slug: ln.slug } as any);
-            }
-          });
-
-          setRelatedNews(combinedRelated.slice(0, 4));
+          setRelatedNews(relatedItems.slice(0, 4));
         } else {
           setNewsItem(null);
         }
       } catch (error) {
         console.error("Error fetching news:", error);
-        // Fallback to local data on error
-        const local = localNews.find(n => n.slug === slug);
-        if (local) {
-          setNewsItem({ ...local, id: local.id.toString(), slug: local.slug } as any);
-          setRelatedNews(localNews.filter(n => n.slug !== slug).slice(0, 4) as any);
-        }
+        setNewsItem(null);
       } finally {
         setLoading(false);
       }
@@ -170,7 +141,7 @@ export default function NewsDetail() {
               loading="lazy"
               referrerPolicy="no-referrer"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+            <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent"></div>
             <div className="absolute bottom-0 left-0 p-8 text-white">
               <div className="flex items-center gap-4 mb-4 text-sm font-medium">
                 <span className="bg-primary px-3 py-1 rounded text-xs font-bold uppercase">
