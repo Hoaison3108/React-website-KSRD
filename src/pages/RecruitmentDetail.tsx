@@ -5,7 +5,6 @@ import { doc, getDoc, collection, getDocs, query, limit, where } from 'firebase/
 import { db } from '../firebase';
 import Breadcrumb from '../components/Breadcrumb';
 import SEO from '../components/SEO';
-import { jobs as localJobs } from '../data/recruitment';
 
 interface Job {
   id: string | number;
