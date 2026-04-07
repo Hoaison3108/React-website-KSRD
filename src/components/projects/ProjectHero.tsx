@@ -2,10 +2,57 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { Calendar, MapPin, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { projects } from '../../data/projects';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../../firebase';
+
+interface Project {
+  id: string;
+  slug: string;
+  title: string;
+  category: string;
+  image: string;
+  location: string;
+  year: string;
+  desc: string;
+  featured?: boolean;
+}
 
 export default function ProjectHero() {
-  const featured = projects.find(p => p.featured) || projects[0];
+  const [featured, setFeatured] = React.useState<Project | null>(null);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    const fetchFeaturedProject = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, 'projects'));
+        const allProjects = querySnapshot.docs.map(doc => ({
+          ...doc.data(),
+          id: doc.id,
+          slug: doc.data().slug || '',
+          desc: doc.data().description || doc.data().desc || ''
+        })) as Project[];
+
+        const featuredProject = allProjects.find(p => p.featured) || allProjects[0];
+        setFeatured(featuredProject || null);
+      } catch (error) {
+        console.error("Error fetching featured project:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFeaturedProject();
+  }, []);
+
+  if (loading) {
+    return (
+      <section className="relative h-[70vh] min-h-[500px] bg-slate-100 animate-pulse flex items-center justify-center">
+        <div className="w-12 h-12 border-4 border-primary/10 border-t-primary rounded-full animate-spin"></div>
+      </section>
+    );
+  }
+
+  if (!featured) return null;
 
   return (
     <section className="relative h-[70vh] min-h-[500px] overflow-hidden">
