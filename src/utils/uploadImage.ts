@@ -30,9 +30,9 @@ export const uploadImage = async (file: File, folderName: string = 'uploads'): P
 
     const data = await response.json();
     if (data.urls && data.urls.length > 0) {
-      // Trả về URI ảnh đầu tiên. Frontend và backend cùng một ip nên ta lấy đường dẫn tương đối hoặc tuyệt đối local
-      const API_URL = (import.meta as any).env.VITE_UPLOAD_API_URL || 'http://localhost:5000';
-      return `${API_URL}${data.urls[0]}`; 
+      // Trả về URI ảnh tương đối (ví dụ: /uploads/...) thay vì dính cứng với localhost
+      // Giúp dễ dàng đồng bộ khi deploy frontend và backend cùng chung một domain
+      return data.urls[0]; 
     } else {
       throw new Error("API không trả về đường dẫn ảnh");
     }
